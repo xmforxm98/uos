@@ -7,6 +7,8 @@ import {
 } from '@/data/primitives'
 import { semanticTokens } from '@/data/semantic'
 import { componentDefs } from '@/data/components'
+import { interactionTokens, interactionProfiles } from '@/data/interactions'
+import type { InteractionToken, InteractionProfile } from '@/data/interactions'
 import type { PrimitiveToken } from '@/types'
 import * as LucideIcons from 'lucide-react'
 import { useState } from 'react'
@@ -575,7 +577,7 @@ function LiquidGlassView() {
       {/* Vibrancy formula */}
       <div>
         <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 12 }}>
-          Vibrancy Formula — Apple's backdrop-filter secret
+          Vibrancy Formula — Apple&apos;s backdrop-filter secret
         </div>
         {special.map(t => (
           <div key={t.id} style={{
@@ -625,11 +627,389 @@ function LiquidGlassView() {
   )
 }
 
+// ─── Interaction Tokens View ─────────────────────────────────────────────────
+
+const intensityMeta: Record<string, { label: string; chipClass: string; color: string }> = {
+  none:       { label: 'none',       chipClass: 'default', color: 'var(--text-subtle)' },
+  subtle:     { label: 'subtle',     chipClass: 'accent',  color: 'var(--accent)' },
+  standard:   { label: 'standard',   chipClass: 'green',   color: 'var(--green)' },
+  expressive: { label: 'expressive', chipClass: 'purple',  color: 'var(--purple)' },
+}
+
+const productFitMeta: Record<string, { color: string; bg: string }> = {
+  all:  { color: 'var(--text-muted)', bg: 'var(--surface-high)' },
+  b2b:  { color: '#2563eb', bg: 'rgba(37,99,235,0.08)' },
+  b2c:  { color: '#007AFF', bg: 'rgba(0,122,255,0.08)' },
+  'b2b+': { color: '#2563eb', bg: 'rgba(37,99,235,0.08)' },
+  'b2c+': { color: '#007AFF', bg: 'rgba(0,122,255,0.08)' },
+}
+
+function MotionTokenCard({ token }: { token: InteractionToken }) {
+  const [hovered, setHovered] = useState(false)
+  const [pressed, setPressed] = useState(false)
+
+  const isActive = token.id === 'motion/press' ? pressed : hovered
+  const im = intensityMeta[token.intensity]
+  const fm = productFitMeta[token.productFit] ?? productFitMeta.all
+
+  const demoBoxStyle: React.CSSProperties = {
+    width: 52,
+    height: 52,
+    flexShrink: 0,
+    borderRadius: 10,
+    background: isActive ? 'var(--accent)' : 'var(--surface-high)',
+    border: `1.5px solid ${isActive ? 'var(--accent)' : 'var(--border-mid)'}`,
+    cursor: 'pointer',
+    transition: token.cssTransition ?? 'all 100ms',
+    transform: isActive && token.cssTransform ? token.cssTransform : 'none',
+    opacity: token.id === 'motion/fade-in' ? (isActive ? 1 : 0.15) : 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    userSelect: 'none',
+  }
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'flex-start', gap: 14, padding: '14px 16px',
+      background: 'var(--surface-mid)', border: '1px solid var(--border)',
+      borderRadius: 'var(--radius-lg)', transition: 'border-color 120ms',
+    }}>
+      {/* Live demo box */}
+      <div
+        style={demoBoxStyle}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => { setHovered(false); setPressed(false) }}
+        onMouseDown={() => setPressed(true)}
+        onMouseUp={() => setPressed(false)}
+        title="Hover / click to preview"
+      >
+        <div style={{
+          width: 18, height: 18, borderRadius: 4,
+          background: isActive ? 'rgba(255,255,255,0.4)' : 'var(--border-mid)',
+          transition: 'inherit',
+        }} />
+      </div>
+
+      {/* Info */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5, flexWrap: 'wrap' }}>
+          <code style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', fontFamily: 'monospace' }}>
+            {token.id}
+          </code>
+          <span className={`chip ${im.chipClass}`}>{im.label}</span>
+          <span style={{
+            fontSize: 9.5, fontWeight: 600, padding: '2px 6px', borderRadius: 99,
+            background: fm.bg, color: fm.color,
+          }}>
+            {token.productFit}
+          </span>
+        </div>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8, lineHeight: 1.55 }}>
+          {token.description}
+        </p>
+        {token.cssTransition && (
+          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
+            <code style={{ fontSize: 10.5, fontFamily: 'monospace', background: 'var(--surface-high)', border: '1px solid var(--border-mid)', color: 'var(--accent)', padding: '2px 7px', borderRadius: 4 }}>
+              {token.cssTransition}
+            </code>
+            {token.cssTransform && (
+              <code style={{ fontSize: 10.5, fontFamily: 'monospace', background: 'var(--surface-high)', border: '1px solid var(--border-mid)', color: 'var(--green)', padding: '2px 7px', borderRadius: 4 }}>
+                {token.cssTransform}
+              </code>
+            )}
+          </div>
+        )}
+        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+          {token.usage.map(u => (
+            <span key={u} className="chip default" style={{ fontSize: 10 }}>{u}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Platform support */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, marginTop: 2 }}>
+        {(Object.entries(token.platformSupport) as [string, string][]).map(([platform, support]) => (
+          <div key={platform} style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+            <div style={{
+              width: 6, height: 6, borderRadius: '50%',
+              background: support === 'full' ? 'var(--green)' : support === 'partial' ? 'var(--yellow)' : 'var(--border-strong)',
+              flexShrink: 0,
+            }} />
+            <span style={{ fontSize: 9.5, color: 'var(--text-subtle)', textTransform: 'capitalize' }}>{platform}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function FeedbackCard({ token }: { token: InteractionToken }) {
+  const im = intensityMeta[token.intensity]
+  const profileForToken = interactionProfiles.find(p => p.feedbackToken === token.id)
+  const profileColor = profileForToken?.color ?? 'var(--text-muted)'
+
+  return (
+    <div style={{
+      padding: '16px', background: 'var(--surface-mid)',
+      border: `1.5px solid ${profileColor}33`,
+      borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: 10,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ width: 8, height: 8, borderRadius: '50%', background: profileColor, flexShrink: 0 }} />
+        <code style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', fontFamily: 'monospace' }}>
+          {token.id}
+        </code>
+        <span className={`chip ${im.chipClass}`}>{im.label}</span>
+      </div>
+      <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+        {token.description}
+      </p>
+      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        {token.usage.map(u => (
+          <span key={u} className="chip default" style={{ fontSize: 10 }}>{u}</span>
+        ))}
+      </div>
+      {profileForToken && (
+        <div style={{ fontSize: 10.5, color: 'var(--text-subtle)', marginTop: 2 }}>
+          Used by <span style={{ color: profileColor, fontWeight: 600 }}>{profileForToken.name}</span> profile
+        </div>
+      )}
+    </div>
+  )
+}
+
+function DensityCard({ token }: { token: InteractionToken }) {
+  const densityScales: Record<string, number[]> = {
+    'density/compact': [4, 6, 8, 12, 16],
+    'density/normal':  [8, 12, 16, 20, 28],
+    'density/relaxed': [12, 20, 24, 32, 48],
+  }
+  const scale = densityScales[token.id] ?? [8, 12, 16, 20, 28]
+  const profileForToken = interactionProfiles.find(p => p.densityToken === token.id)
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'flex-start', gap: 20, padding: '14px 16px',
+      background: 'var(--surface-mid)', border: '1px solid var(--border)',
+      borderRadius: 'var(--radius-lg)',
+    }}>
+      {/* Visual spacing bars */}
+      <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 48, flexShrink: 0 }}>
+        {scale.map((px, i) => (
+          <div key={i} style={{
+            width: 10,
+            height: Math.min(px * 0.85, 48),
+            background: 'var(--accent)',
+            borderRadius: 3,
+            opacity: 0.5 + i * 0.1,
+          }} />
+        ))}
+      </div>
+
+      <div style={{ flex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
+          <code style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', fontFamily: 'monospace' }}>
+            {token.id}
+          </code>
+          {profileForToken && (
+            <span style={{
+              fontSize: 9.5, fontWeight: 600, padding: '2px 7px', borderRadius: 99,
+              background: `${profileForToken.color}18`, color: profileForToken.color,
+            }}>
+              {profileForToken.name}
+            </span>
+          )}
+        </div>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8, lineHeight: 1.55 }}>
+          {token.description}
+        </p>
+        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+          {token.usage.map(u => (
+            <span key={u} className="chip default" style={{ fontSize: 10 }}>{u}</span>
+          ))}
+        </div>
+
+        {/* Platform support dots */}
+        <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+          {(Object.entries(token.platformSupport) as [string, string][]).map(([platform, support]) => (
+            <div key={platform} style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+              <div style={{
+                width: 5, height: 5, borderRadius: '50%',
+                background: support === 'full' ? 'var(--green)' : support === 'partial' ? 'var(--yellow)' : 'var(--border-strong)',
+              }} />
+              <span style={{ fontSize: 9.5, color: 'var(--text-subtle)', textTransform: 'capitalize' }}>{platform}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function InteractionProfileCard({ profile }: { profile: InteractionProfile }) {
+  const tokenEntries: [string, string][] = [
+    ['hover', profile.hoverToken],
+    ['press', profile.pressToken],
+    ['enter', profile.enterToken],
+    ['exit', profile.exitToken],
+  ]
+
+  return (
+    <div style={{
+      padding: '18px', background: 'var(--surface-mid)',
+      border: `2px solid ${profile.color}40`,
+      borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: 12,
+    }}>
+      {/* Header */}
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{ width: 10, height: 10, borderRadius: '50%', background: profile.color, flexShrink: 0, boxShadow: `0 0 0 3px ${profile.color}25` }} />
+          <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
+            {profile.name}
+          </span>
+        </div>
+        <p style={{ fontSize: 11.5, color: 'var(--text-subtle)', fontStyle: 'italic', marginBottom: 4 }}>
+          &ldquo;{profile.tagline}&rdquo;
+        </p>
+        <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>{profile.persona}</p>
+      </div>
+
+      {/* Token assignments */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5 }}>
+        {tokenEntries.map(([label, tokenId]) => (
+          <div key={label} style={{
+            background: 'var(--surface-high)', borderRadius: 'var(--radius-md)',
+            padding: '6px 10px',
+          }}>
+            <div style={{ fontSize: 9, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 2 }}>
+              {label}
+            </div>
+            <div style={{ fontSize: 10.5, color: 'var(--text)', fontFamily: 'monospace' }}>
+              {tokenId.replace('motion/', '')}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Meta badges */}
+      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        <span className="chip default">{profile.motion} motion</span>
+        <span className="chip default">{profile.density}</span>
+        <span className="chip default">{profile.gestureModel}</span>
+      </div>
+
+      {/* Theme association */}
+      <div style={{ fontSize: 10.5, color: 'var(--text-subtle)', display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+        <span>Themes:</span>
+        {profile.themeIds.map(id => (
+          <span key={id} style={{
+            padding: '1px 6px', borderRadius: 99, fontSize: 10,
+            background: `${profile.color}18`, color: profile.color, fontWeight: 600,
+          }}>
+            {id}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function InteractionTokensView() {
+  const motionTokens = interactionTokens.filter(t => t.group === 'motion')
+  const feedbackTokens = interactionTokens.filter(t => t.group === 'feedback')
+  const densityTokens = interactionTokens.filter(t => t.group === 'density')
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 44 }}>
+      {/* Intro callout */}
+      <div style={{
+        background: 'var(--accent-subtle)', border: '1px solid var(--accent-border)',
+        borderRadius: 'var(--radius-lg)', padding: '14px 18px',
+      }}>
+        <div style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent)', marginBottom: 6 }}>
+          Behavioral Semantic Primitives
+        </div>
+        <p style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.65, margin: 0 }}>
+          Interaction tokens define <em>how it feels</em> — not how it looks. They sit above primitive motion tokens
+          and map interaction contexts (hover, press, enter, exit) to concrete CSS values.{' '}
+          <span style={{ color: 'var(--text-muted)' }}>
+            Components consume tokens. Profiles bundle tokens into B2B or B2C personalities.
+            Gesture tokens and layout patterns are NOT here — this layer defines values, not behaviors.
+          </span>
+        </p>
+      </div>
+
+      {/* Interaction Profiles */}
+      <div>
+        <div className="inspector-label" style={{ marginBottom: 12 }}>
+          Interaction Profiles — {interactionProfiles.length} profiles
+        </div>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16, lineHeight: 1.6 }}>
+          Profiles bundle tokens into cohesive behavioral personalities. Each theme maps to exactly one profile.
+          Switch themes in the sidebar to see how interaction personality changes across B2B ↔ B2C.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          {interactionProfiles.map(profile => (
+            <InteractionProfileCard key={profile.id} profile={profile} />
+          ))}
+        </div>
+      </div>
+
+      {/* Motion Tokens */}
+      <div>
+        <div className="inspector-label" style={{ marginBottom: 12 }}>
+          Motion Tokens — {motionTokens.length} tokens · hover the demo box to preview
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {motionTokens.map(token => (
+            <MotionTokenCard key={token.id} token={token} />
+          ))}
+        </div>
+      </div>
+
+      {/* Feedback Tokens */}
+      <div>
+        <div className="inspector-label" style={{ marginBottom: 12 }}>
+          Feedback Personalities — {feedbackTokens.length} tokens
+        </div>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14, lineHeight: 1.6 }}>
+          Feedback tokens define the overall interaction philosophy — how &ldquo;alive&rdquo; the UI feels.
+          Not a CSS value, but a behavioral contract.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          {feedbackTokens.map(token => (
+            <FeedbackCard key={token.id} token={token} />
+          ))}
+        </div>
+      </div>
+
+      {/* Density Tokens */}
+      <div>
+        <div className="inspector-label" style={{ marginBottom: 12 }}>
+          Density Scale — {densityTokens.length} tokens
+        </div>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14, lineHeight: 1.6 }}>
+          Density tokens control spacing intensity — how tight or generous the UI breathes.
+          Compact for power users, relaxed for touch-first consumer experiences.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {densityTokens.map(token => (
+            <DensityCard key={token.id} token={token} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export function FoundationsView({ category }: { category: string }) {
   const titles: Record<string, string> = {
     color: 'Colors', spacing: 'Spacing', typography: 'Typography',
     radius: 'Border Radius', motion: 'Motion', shadow: 'Shadows', icons: 'Icons',
-    glass: 'Liquid Glass',
+    glass: 'Liquid Glass', interaction: 'Interaction Tokens',
   }
 
   const subtitles: Record<string, string> = {
@@ -641,6 +1021,7 @@ export function FoundationsView({ category }: { category: string }) {
     shadow: 'Elevation shadows — from flat to floating.',
     icons: 'Lucide icon library — click any icon to copy the JSX.',
     glass: 'Frosted glass primitives — blur, opacity, border and shadow values for liquid glass surfaces.',
+    interaction: 'Behavioral semantic primitives — motion, feedback, and density tokens that define how the UI feels.',
   }
 
   const totalCounts: Record<string, number> = {
@@ -652,17 +1033,19 @@ export function FoundationsView({ category }: { category: string }) {
     shadow: primitiveShadows.length,
     icons: Object.values(ICON_CATEGORIES).flat().length,
     glass: primitiveGlass.length,
+    interaction: interactionTokens.length,
   }
 
   const content: Record<string, React.ReactNode> = {
-    color:      <ColorGrid tokens={primitiveColors} />,
-    spacing:    <SpacingGrid tokens={primitiveSpacing} />,
-    typography: <TypographyList tokens={primitiveTypography} />,
-    radius:     <RadiusGrid tokens={primitiveRadius} />,
-    motion:     <MotionList tokens={primitiveMotion} />,
-    shadow:     <ShadowGrid tokens={primitiveShadows} />,
-    icons:      <IconsView />,
-    glass:      <LiquidGlassView />,
+    color:       <ColorGrid tokens={primitiveColors} />,
+    spacing:     <SpacingGrid tokens={primitiveSpacing} />,
+    typography:  <TypographyList tokens={primitiveTypography} />,
+    radius:      <RadiusGrid tokens={primitiveRadius} />,
+    motion:      <MotionList tokens={primitiveMotion} />,
+    shadow:      <ShadowGrid tokens={primitiveShadows} />,
+    icons:       <IconsView />,
+    glass:       <LiquidGlassView />,
+    interaction: <InteractionTokensView />,
   }
 
   return (
@@ -678,6 +1061,7 @@ export function FoundationsView({ category }: { category: string }) {
             {titles[category] ?? category}
           </h1>
           <span className="chip default">{totalCounts[category] ?? '—'} {category === 'icons' ? 'icons' : 'tokens'}</span>
+          {category === 'interaction' && <span className="chip accent">Behavioral</span>}
           <span className="chip accent">Primitive</span>
         </div>
         <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>

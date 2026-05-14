@@ -166,7 +166,7 @@ function DashboardPreview({ theme }: { theme: string }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>Good morning, Alex 👋</div>
-          <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>Here's what's happening today.</div>
+          <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>Here&apos;s what&apos;s happening today.</div>
         </div>
         <button style={{
           padding: '7px 14px', borderRadius: rBtn,
@@ -384,7 +384,7 @@ function BillingPreview({ theme }: { theme: string }) {
       {/* Header */}
       <div style={{ textAlign: 'center' }}>
         <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>Choose your plan</div>
-        <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>Start free. Scale when you're ready.</div>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>Start free. Scale when you&apos;re ready.</div>
       </div>
 
       {/* Trial banner */}
