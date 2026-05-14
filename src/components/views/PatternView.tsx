@@ -973,9 +973,10 @@ We're looking for an exceptional Product Design Lead to shape the interfaces tha
 function AICommandPreview({ theme }: { theme: string }) {
   const accent = themeAccent(theme)
   const subtle = themeAccentSubtle(theme)
-  const rCard = resolveRadius('radius/lg', theme)
+  // Command palettes are always rounded rectangles — use radius/md (never radius/lg which is full for Brand B)
+  const rCard = resolveRadius('radius/md', theme)
   const rFull = resolveRadius('radius/full', theme)
-  const rBtn  = resolveRadius('radius/sm', theme)
+  const rBtn  = resolveRadius('radius/xs', theme)
   const isApple = theme === 'brand-b'
 
   const groups = [
