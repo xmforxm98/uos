@@ -1003,106 +1003,129 @@ function AICommandPreview({ theme }: { theme: string }) {
   return (
     <div style={{
       display: 'flex', justifyContent: 'center', alignItems: 'flex-start',
-      paddingTop: 40, minHeight: 500, padding: '40px 24px',
+      padding: '32px 24px', minHeight: 500, position: 'relative',
       background: isApple
-        ? 'linear-gradient(160deg, #e8f4ff 0%, #f8eeff 50%, #e8fff4 100%)'
+        ? 'linear-gradient(135deg, #1a0533 0%, #0d1a40 35%, #003366 65%, #001a2e 100%)'
         : 'var(--surface-mid)',
+      overflow: 'hidden',
     }}>
+      {/* Brand B: floating color blobs behind glass */}
+      {isApple && (
+        <>
+          <div style={{
+            position: 'absolute', width: 280, height: 280, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(0,122,255,0.55) 0%, transparent 70%)',
+            top: -60, left: -40, filter: 'blur(50px)',
+            animation: 'blob-a 8s ease-in-out infinite',
+          }} />
+          <div style={{
+            position: 'absolute', width: 240, height: 240, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(140,80,255,0.5) 0%, transparent 70%)',
+            bottom: -40, right: 20, filter: 'blur(45px)',
+            animation: 'blob-b 10s ease-in-out infinite',
+          }} />
+          <div style={{
+            position: 'absolute', width: 180, height: 180, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(0,200,180,0.4) 0%, transparent 70%)',
+            top: 60, right: 80, filter: 'blur(35px)',
+            animation: 'blob-c 12s ease-in-out infinite',
+          }} />
+        </>
+      )}
+
       {/* Backdrop scrim */}
-      <div style={{
-        position: 'relative', width: '100%', maxWidth: 520,
-      }}>
+      <div style={{ position: 'relative', width: '100%', maxWidth: 520, zIndex: 1 }}>
         {/* Hint badge */}
-        <div style={{
-          display: 'flex', justifyContent: 'center', marginBottom: 12,
-        }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
           <div style={{
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '5px 12px', borderRadius: rFull,
-            background: isApple ? 'rgba(255,255,255,0.55)' : 'var(--surface)',
-            border: `1px solid ${isApple ? 'rgba(255,255,255,0.6)' : 'var(--border-mid)'}`,
+            background: isApple ? 'rgba(255,255,255,0.15)' : 'var(--surface)',
+            border: `1px solid ${isApple ? 'rgba(255,255,255,0.25)' : 'var(--border-mid)'}`,
             backdropFilter: isApple ? 'blur(12px)' : 'none',
-            boxShadow: isApple ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
+            WebkitBackdropFilter: isApple ? 'blur(12px)' : 'none',
           }}>
             <kbd style={{
-              background: isApple ? 'rgba(0,0,0,0.07)' : 'var(--surface-high)',
-              border: `1px solid ${isApple ? 'rgba(0,0,0,0.1)' : 'var(--border-mid)'}`,
+              background: isApple ? 'rgba(255,255,255,0.2)' : 'var(--surface-high)',
+              border: `1px solid ${isApple ? 'rgba(255,255,255,0.3)' : 'var(--border-mid)'}`,
               borderRadius: 5, padding: '1px 6px', fontSize: 11, fontFamily: 'monospace',
-              color: isApple ? '#3c3c43' : 'var(--text-muted)',
+              color: isApple ? 'rgba(255,255,255,0.9)' : 'var(--text-muted)',
             }}>⌘K</kbd>
-            <span style={{ fontSize: 11, color: isApple ? 'rgba(60,60,67,0.6)' : 'var(--text-muted)' }}>AI Command</span>
+            <span style={{ fontSize: 11, color: isApple ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}>AI Command</span>
           </div>
         </div>
 
         {/* Palette */}
         <div style={{
-          background: isApple ? 'rgba(255,255,255,0.82)' : 'var(--surface)',
-          backdropFilter: isApple ? 'saturate(180%) blur(28px)' : 'none',
-          WebkitBackdropFilter: isApple ? 'saturate(180%) blur(28px)' : 'none',
-          border: `1px solid ${isApple ? 'rgba(255,255,255,0.65)' : 'var(--border-mid)'}`,
+          background: isApple ? 'rgba(255,255,255,0.14)' : 'var(--surface)',
+          backdropFilter: isApple ? 'saturate(200%) blur(32px)' : 'none',
+          WebkitBackdropFilter: isApple ? 'saturate(200%) blur(32px)' : 'none',
+          border: `1px solid ${isApple ? 'rgba(255,255,255,0.22)' : 'var(--border-mid)'}`,
           borderRadius: rCard,
           boxShadow: isApple
-            ? '0 24px 60px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)'
+            ? '0 24px 60px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3)'
             : '0 20px 40px rgba(0,0,0,0.15)',
           overflow: 'hidden',
         }}>
           {/* Search input */}
           <div style={{
             display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px',
-            borderBottom: `1px solid ${isApple ? 'rgba(0,0,0,0.06)' : 'var(--border)'}`,
+            borderBottom: `1px solid ${isApple ? 'rgba(255,255,255,0.1)' : 'var(--border)'}`,
           }}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={isApple ? '#8e8e93' : 'var(--text-subtle)'} strokeWidth="2" strokeLinecap="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={isApple ? 'rgba(255,255,255,0.5)' : 'var(--text-subtle)'} strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
             </svg>
             <input readOnly defaultValue="Summarize selected" style={{
               flex: 1, background: 'none', border: 'none', outline: 'none',
-              fontSize: 15, color: isApple ? '#1c1c1e' : 'var(--text)',
-              fontWeight: 400,
+              fontSize: 15, color: isApple ? 'rgba(255,255,255,0.92)' : 'var(--text)',
+              fontWeight: 300,
             }} />
             <kbd style={{
               fontSize: 10, fontFamily: 'monospace',
-              background: isApple ? 'rgba(0,0,0,0.06)' : 'var(--surface-high)',
-              border: `1px solid ${isApple ? 'rgba(0,0,0,0.08)' : 'var(--border-mid)'}`,
-              borderRadius: 5, padding: '2px 6px', color: isApple ? '#8e8e93' : 'var(--text-subtle)',
+              background: isApple ? 'rgba(255,255,255,0.12)' : 'var(--surface-high)',
+              border: `1px solid ${isApple ? 'rgba(255,255,255,0.18)' : 'var(--border-mid)'}`,
+              borderRadius: 5, padding: '2px 6px',
+              color: isApple ? 'rgba(255,255,255,0.55)' : 'var(--text-subtle)',
             }}>ESC</kbd>
           </div>
 
           {/* Results */}
-          <div style={{ maxHeight: 320, overflowY: 'auto' }}>
+          <div style={{ maxHeight: 300, overflowY: 'auto' }}>
             {groups.map((g, gi) => (
               <div key={gi}>
                 <div style={{
                   padding: '8px 16px 4px', fontSize: 10.5, fontWeight: 600,
                   textTransform: 'uppercase', letterSpacing: '0.06em',
-                  color: isApple ? 'rgba(60,60,67,0.45)' : 'var(--text-subtle)',
+                  color: isApple ? 'rgba(255,255,255,0.35)' : 'var(--text-subtle)',
                 }}>{g.label}</div>
                 {g.items.map((item, ii) => (
                   <div key={ii} style={{
                     display: 'flex', alignItems: 'center', gap: 12, padding: '9px 16px',
-                    background: gi === 0 && ii === 0 ? (isApple ? `rgba(0,122,255,0.08)` : subtle) : 'transparent',
+                    background: gi === 0 && ii === 0 ? (isApple ? 'rgba(0,122,255,0.25)' : subtle) : 'transparent',
                     cursor: 'pointer', transition: 'background 60ms',
+                    borderLeft: gi === 0 && ii === 0 && isApple ? `2px solid ${accent}` : '2px solid transparent',
                   }}
-                    onMouseEnter={e => e.currentTarget.style.background = isApple ? 'rgba(0,0,0,0.04)' : 'var(--surface-mid)'}
-                    onMouseLeave={e => e.currentTarget.style.background = gi === 0 && ii === 0 ? (isApple ? 'rgba(0,122,255,0.08)' : subtle) : 'transparent'}
+                    onMouseEnter={e => e.currentTarget.style.background = isApple ? 'rgba(255,255,255,0.08)' : 'var(--surface-mid)'}
+                    onMouseLeave={e => e.currentTarget.style.background = gi === 0 && ii === 0 ? (isApple ? 'rgba(0,122,255,0.25)' : subtle) : 'transparent'}
                   >
                     <div style={{
-                      width: 28, height: 28, borderRadius: item.accent ? rFull : rBtn,
-                      background: item.accent ? accent : (isApple ? 'rgba(0,0,0,0.06)' : 'var(--surface-high)'),
+                      width: 30, height: 30, borderRadius: item.accent ? rFull : rBtn,
+                      background: item.accent ? accent : (isApple ? 'rgba(255,255,255,0.1)' : 'var(--surface-high)'),
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 13, color: item.accent ? '#fff' : (isApple ? '#3c3c43' : 'var(--text-muted)'),
-                      flexShrink: 0, boxShadow: item.accent ? `0 2px 8px ${accent}44` : 'none',
+                      fontSize: 13, color: item.accent ? '#fff' : (isApple ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)'),
+                      flexShrink: 0, boxShadow: item.accent ? `0 2px 12px ${accent}66` : 'none',
                     }}>{item.icon}</div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, color: isApple ? '#1c1c1e' : 'var(--text)', fontWeight: item.accent ? 500 : 400 }}>{item.text}</div>
-                      {item.sub && <div style={{ fontSize: 11, color: isApple ? 'rgba(60,60,67,0.5)' : 'var(--text-subtle)', marginTop: 1 }}>{item.sub}</div>}
+                      <div style={{ fontSize: 13, color: isApple ? 'rgba(255,255,255,0.92)' : 'var(--text)', fontWeight: item.accent ? 500 : 400 }}>{item.text}</div>
+                      {item.sub && <div style={{ fontSize: 11, color: isApple ? 'rgba(255,255,255,0.4)' : 'var(--text-subtle)', marginTop: 1 }}>{item.sub}</div>}
                     </div>
                     {item.sub && item.sub.startsWith('⌘') && (
                       <kbd style={{
                         fontSize: 11, fontFamily: 'monospace',
-                        background: isApple ? 'rgba(0,0,0,0.06)' : 'var(--surface-high)',
-                        border: `1px solid ${isApple ? 'rgba(0,0,0,0.08)' : 'var(--border-mid)'}`,
+                        background: isApple ? 'rgba(255,255,255,0.1)' : 'var(--surface-high)',
+                        border: `1px solid ${isApple ? 'rgba(255,255,255,0.15)' : 'var(--border-mid)'}`,
                         borderRadius: 5, padding: '2px 7px',
-                        color: isApple ? '#8e8e93' : 'var(--text-subtle)',
+                        color: isApple ? 'rgba(255,255,255,0.5)' : 'var(--text-subtle)',
                       }}>{item.sub}</kbd>
                     )}
                   </div>
@@ -1113,18 +1136,19 @@ function AICommandPreview({ theme }: { theme: string }) {
 
           {/* Footer */}
           <div style={{
-            padding: '8px 16px', borderTop: `1px solid ${isApple ? 'rgba(0,0,0,0.06)' : 'var(--border)'}`,
+            padding: '8px 16px', borderTop: `1px solid ${isApple ? 'rgba(255,255,255,0.1)' : 'var(--border)'}`,
             display: 'flex', gap: 14,
           }}>
             {[['↵', 'Select'], ['↑↓', 'Navigate'], ['⌘↵', 'Ask AI']].map(([key, label]) => (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <kbd style={{
-                  fontSize: 10, background: isApple ? 'rgba(0,0,0,0.06)' : 'var(--surface-high)',
-                  border: `1px solid ${isApple ? 'rgba(0,0,0,0.08)' : 'var(--border-mid)'}`,
+                  fontSize: 10,
+                  background: isApple ? 'rgba(255,255,255,0.1)' : 'var(--surface-high)',
+                  border: `1px solid ${isApple ? 'rgba(255,255,255,0.15)' : 'var(--border-mid)'}`,
                   borderRadius: 4, padding: '1px 5px', fontFamily: 'monospace',
-                  color: isApple ? '#8e8e93' : 'var(--text-subtle)',
+                  color: isApple ? 'rgba(255,255,255,0.5)' : 'var(--text-subtle)',
                 }}>{key}</kbd>
-                <span style={{ fontSize: 10.5, color: isApple ? 'rgba(60,60,67,0.45)' : 'var(--text-subtle)' }}>{label}</span>
+                <span style={{ fontSize: 10.5, color: isApple ? 'rgba(255,255,255,0.35)' : 'var(--text-subtle)' }}>{label}</span>
               </div>
             ))}
           </div>

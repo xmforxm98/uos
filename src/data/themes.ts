@@ -29,8 +29,8 @@ const RADIUS_SHARP = [
 ]
 
 const RADIUS_ROUNDED = [
-  { semanticId: 'radius/xs',   primitiveRef: 'radius-md',   value: '6px' },
-  { semanticId: 'radius/sm',   primitiveRef: 'radius-xl',   value: '12px' },
+  { semanticId: 'radius/xs',   primitiveRef: 'radius-lg',   value: '8px' },
+  { semanticId: 'radius/sm',   primitiveRef: 'radius-full', value: '9999px' },
   { semanticId: 'radius/md',   primitiveRef: 'radius-2xl',  value: '16px' },
   { semanticId: 'radius/lg',   primitiveRef: 'radius-full', value: '9999px' },
   { semanticId: 'radius/xl',   primitiveRef: 'radius-full', value: '9999px' },
@@ -141,12 +141,34 @@ export const themes: BrandTheme[] = [
       { semanticId: 'interactive/hover',   primitiveRef: 'blue-700', value: '#1d4ed8' },
       ...RADIUS_SHARP,
     ],
+    direction: {
+      moodWords: ['Precise', 'Trustworthy', 'Enterprise', 'Structured', 'Bold'],
+      photography: 'Real-world photography — architectural interiors, product close-ups, professionals in context. High contrast, desaturated or cool-toned. No filters, no gradients. Grid layouts, data visualizations, B&W portraits.',
+      motion: 'Linear or ease-out only. No spring, no bounce. Duration under 200ms for interactions. Transitions are purposeful and invisible — the UI should never draw attention to itself moving.',
+      typography: 'Heavy weights (700–800) for headings. Tight letter-spacing. Clear hierarchy with strong contrast between levels. Mono for data/code. System-UI or Inter only.',
+      assets: [
+        // Add your own GIF/image URLs here. Example:
+        // { url: 'https://media.giphy.com/media/xxx/giphy.gif', label: 'Data viz', type: 'gif' },
+      ],
+    },
   },
   {
     id: 'brand-b',
     name: 'Brand B',
-    description: 'Apple-inspired — iOS blue, liquid glass surfaces, maximum radius. Clean, minimal, premium.',
+    description: 'Apple-inspired — iOS blue, liquid glass, pill shapes. Clean, premium, alive.',
     accentColor: '#007AFF',
+    direction: {
+      moodWords: ['Fluid', 'Premium', 'Alive', 'Abstract', 'Tactile'],
+      photography: 'Abstract and generative — fluid simulations, macro water/light refraction, CGI renders, mesh gradients. No real people. Colors should bleed, blend, and glow. Particle systems, soap bubble iridescence, frosted glass textures.',
+      motion: 'Spring physics everywhere. Morphing shapes, liquid transitions, elements that feel alive. Overshoot slightly, settle gently. Parallax depth. Staggered reveals. Never abrupt — always fluid.',
+      typography: 'Light weights (300–400) for body. Generous tracking. Large display text. SF Pro or Inter Light. Contrast through size and space, not weight.',
+      assets: [
+        // Add your own animated GIF/video URLs here. Examples:
+        // { url: 'https://media.giphy.com/media/xxx/giphy.gif', label: 'Fluid sim', type: 'gif' },
+        // { url: '/assets/mesh-gradient.gif', label: 'Mesh gradient', type: 'gif' },
+        // { url: '/assets/particle-system.gif', label: 'Particles', type: 'gif' },
+      ],
+    },
     overrides: [
       { semanticId: 'bg/brand',            primitiveRef: 'ios-blue-500', value: '#007AFF' },
       { semanticId: 'bg/brand-subtle',     primitiveRef: 'ios-blue-50',  value: 'rgba(0,122,255,0.08)' },

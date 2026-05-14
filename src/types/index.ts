@@ -86,12 +86,28 @@ export type ThemeToken = {
   value: string
 }
 
+export type ThemeDirectionAsset = {
+  url: string        // GIF / image URL — can be external CDN or /public path
+  label: string
+  type?: 'gif' | 'img'
+}
+
+export type ThemeDirection = {
+  moodWords: string[]
+  photography: string           // photography/imagery direction note
+  motion: string                // motion & animation direction note
+  typography: string            // type direction note
+  // Add animated GIFs or images here — they render in the Direction mood board
+  assets: ThemeDirectionAsset[]
+}
+
 export type BrandTheme = {
   id: string
   name: string
   description: string
   accentColor: string
   overrides: ThemeToken[]
+  direction?: ThemeDirection
 }
 
 export type PatternDef = {
