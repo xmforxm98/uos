@@ -3,7 +3,7 @@
 import {
   Type, Ruler, Shapes, Zap, Circle,
   Component, Square, ToggleLeft, FormInput, LayoutDashboard,
-  Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search
+  Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search, Layers, Wind
 } from 'lucide-react'
 import { useDesignSystem } from '@/context/DesignSystemContext'
 import { themes } from '@/data/themes'
@@ -189,10 +189,11 @@ export function Sidebar() {
             <NavItemRow icon={<Zap size={12} />}     label="Motion"      selected={isSelected({ type: 'primitive', id: 'motion' })}     onClick={() => setSelected({ type: 'primitive', id: 'motion' })} />
             <NavItemRow icon={<Shapes size={12} />}  label="Shadows"     selected={isSelected({ type: 'primitive', id: 'shadow' })}     onClick={() => setSelected({ type: 'primitive', id: 'shadow' })} />
             <NavItemRow icon={<Zap size={12} />}     label="Icons"       selected={isSelected({ type: 'primitive', id: 'icons' })}      onClick={() => setSelected({ type: 'primitive', id: 'icons' })} />
+            <NavItemRow icon={<Wind size={12} />}    label="Liquid Glass" selected={isSelected({ type: 'primitive', id: 'glass' })}     onClick={() => setSelected({ type: 'primitive', id: 'glass' })} />
           </NavSection>
 
           <NavSection label="Semantic Tokens">
-            {['background', 'text', 'border', 'surface', 'interactive', 'radius'].map(g => (
+            {['background', 'text', 'border', 'surface', 'interactive', 'radius', 'glass'].map(g => (
               <NavItemRow
                 key={g}
                 icon={<Circle size={12} />}

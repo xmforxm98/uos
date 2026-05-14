@@ -6,6 +6,7 @@ export type TokenCategory =
   | 'shadow'
   | 'motion'
   | 'opacity'
+  | 'glass'
 
 export type PrimitiveToken = {
   id: string

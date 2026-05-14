@@ -83,6 +83,62 @@ export const patterns: PatternDef[] = [
       'Each step has a single clear objective',
     ],
   },
+
+  // ── AI Product Patterns ────────────────────────────────────
+  {
+    id: 'ai-chat',
+    name: 'AI Chat',
+    category: 'AI Product',
+    description: 'Conversational chat UI — user and assistant message threads with streaming responses.',
+    components: ['input', 'button', 'avatar', 'badge'],
+    semanticPurpose: 'Turn-based dialogue between user and AI model',
+    aiConstraints: [
+      'Assistant messages always have a distinct visual container — never plain text',
+      'User messages are right-aligned; assistant messages are left-aligned',
+      'Streaming responses show a blinking cursor or typing indicator',
+      'Never disable the input during streaming — allow interrupt / stop generation',
+      'Markdown in responses must be rendered, not shown as raw syntax',
+      'Copy, regenerate, and thumbs up/down actions on every assistant message',
+      'Model name / version shown near response — users need to know what they\'re talking to',
+      'Conversation history is scrollable, new messages anchor to bottom',
+    ],
+  },
+  {
+    id: 'ai-generation',
+    name: 'AI Generation',
+    category: 'AI Product',
+    description: 'Prompt composer with streaming output — structured prompt input and live generation result.',
+    components: ['input', 'button', 'card', 'badge'],
+    semanticPurpose: 'Single-turn AI generation with visible prompt and streaming output',
+    aiConstraints: [
+      'Separate visual zones for System Prompt, User Prompt, and Output',
+      'Generate button is primary and becomes a Stop button during streaming',
+      'Token count displayed in real-time next to prompt fields',
+      'Output area shows streaming text with a typewriter cursor',
+      'Regenerate and Copy actions always visible after generation completes',
+      'Model selector near the Generate button, not buried in settings',
+      'Temperature / parameter controls accessible but not prominent by default',
+      'Empty state instructs — never a blank white box',
+    ],
+  },
+  {
+    id: 'ai-command',
+    name: 'AI Command',
+    category: 'AI Product',
+    description: 'AI-powered command palette — instant search, actions, and AI responses in a single overlay.',
+    components: ['input', 'button', 'badge'],
+    semanticPurpose: 'Keyboard-first AI interface for power users and quick actions',
+    aiConstraints: [
+      'Triggered by ⌘K / Ctrl+K — keyboard shortcut always visible as a hint',
+      'Input focus is immediate — no extra click required after open',
+      'Results grouped by type: AI Answers, Actions, Navigation, Recent',
+      'AI response preview inline in palette, not a new page',
+      'ESC always closes — no trapping focus without escape',
+      'Results update as user types — debounced at 150ms',
+      'Highlight the matched substring in each result',
+      'No more than 8 visible results without scrolling',
+    ],
+  },
 ]
 
 export function getPattern(id: string) {

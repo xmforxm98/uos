@@ -10,14 +10,14 @@ import { CheckCircle, Layers, Sparkles, Eye } from 'lucide-react'
 function themeAccent(theme: string) {
   if (theme === 'dark')    return '#3b82f6'
   if (theme === 'brand-a') return '#2563eb'
-  if (theme === 'brand-b') return '#9333ea'
+  if (theme === 'brand-b') return '#007AFF'
   return '#CC5536'
 }
 
 function themeAccentSubtle(theme: string) {
   if (theme === 'dark')    return 'rgba(59,130,246,0.12)'
   if (theme === 'brand-a') return 'rgba(37,99,235,0.10)'
-  if (theme === 'brand-b') return 'rgba(147,51,234,0.12)'
+  if (theme === 'brand-b') return 'rgba(0,122,255,0.10)'
   return 'rgba(204,85,54,0.12)'
 }
 
@@ -646,6 +646,494 @@ function OnboardingPreview({ theme }: { theme: string }) {
   )
 }
 
+/* ── AI Chat Preview ───────────────────────────────────────────── */
+function AIChatPreview({ theme }: { theme: string }) {
+  const accent = themeAccent(theme)
+  const subtle = themeAccentSubtle(theme)
+  const rCard  = resolveRadius('radius/md', theme)
+  const rFull  = resolveRadius('radius/full', theme)
+  const rBtn   = resolveRadius('radius/sm', theme)
+
+  const isApple = theme === 'brand-b'
+  const glassBg = isApple ? 'rgba(255,255,255,0.72)' : 'var(--surface)'
+  const glassBackdrop = isApple ? 'saturate(180%) blur(20px)' : 'none'
+  const glassBorder = isApple ? '1px solid rgba(255,255,255,0.55)' : '1px solid var(--border-mid)'
+  const glassShadow = isApple ? '0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.65)' : '0 2px 8px rgba(0,0,0,0.08)'
+
+  const messages = [
+    { role: 'user',      text: 'Summarize the Q3 financial report in 3 bullet points.' },
+    { role: 'assistant', text: '• Revenue grew **18% YoY** to $48.3M, driven by enterprise expansion.\n• Operating margin improved to **24%** (+4pp) through headcount efficiency.\n• Cash reserves at **$120M** — 2× burn rate coverage for 18 months.' },
+    { role: 'user',      text: 'What were the main risks mentioned?' },
+  ]
+
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', height: 500,
+      background: isApple
+        ? 'linear-gradient(160deg, #e8f4ff 0%, #f0e8ff 50%, #e8fff0 100%)'
+        : 'var(--surface-mid)',
+    }}>
+      {/* Header */}
+      <div style={{
+        padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        background: glassBg, backdropFilter: glassBackdrop, WebkitBackdropFilter: glassBackdrop,
+        borderBottom: glassBorder, boxShadow: isApple ? '0 1px 0 rgba(255,255,255,0.5)' : 'none',
+        flexShrink: 0,
+      } as React.CSSProperties}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: rFull,
+            background: isApple ? `linear-gradient(135deg, ${accent}, ${accent}aa)` : accent,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 14, flexShrink: 0,
+            boxShadow: isApple ? `0 2px 8px ${accent}55` : 'none',
+          }}>✦</div>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: isApple ? '#1c1c1e' : 'var(--text)' }}>AI Assistant</div>
+            <div style={{ fontSize: 10.5, color: isApple ? 'rgba(60,60,67,0.6)' : 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#30d158', display: 'inline-block' }} />
+              GPT-4o · Ready
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 6 }}>
+          {['⋯', '+'].map(s => (
+            <button key={s} style={{
+              width: 28, height: 28, borderRadius: rFull,
+              background: isApple ? 'rgba(0,0,0,0.05)' : 'var(--surface-high)',
+              border: 'none', cursor: 'pointer', fontSize: 14,
+              color: isApple ? '#3c3c43' : 'var(--text-muted)',
+            }}>{s}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 8px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {messages.map((m, i) => (
+          <div key={i} style={{ display: 'flex', flexDirection: m.role === 'user' ? 'row-reverse' : 'row', gap: 8, alignItems: 'flex-end' }}>
+            {m.role === 'assistant' && (
+              <div style={{
+                width: 26, height: 26, borderRadius: rFull, flexShrink: 0,
+                background: isApple ? `linear-gradient(135deg, ${accent}, ${accent}aa)` : accent,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11,
+              }}>✦</div>
+            )}
+            <div style={{
+              maxWidth: '72%',
+              background: m.role === 'user'
+                ? (isApple ? accent : accent)
+                : (isApple ? 'rgba(255,255,255,0.75)' : 'var(--surface)'),
+              backdropFilter: m.role === 'assistant' && isApple ? 'blur(16px)' : 'none',
+              WebkitBackdropFilter: m.role === 'assistant' && isApple ? 'blur(16px)' : 'none',
+              border: m.role === 'assistant'
+                ? (isApple ? '1px solid rgba(255,255,255,0.6)' : '1px solid var(--border-mid)')
+                : 'none',
+              boxShadow: m.role === 'assistant' && isApple ? glassShadow : (m.role === 'user' ? `0 2px 8px ${accent}44` : 'none'),
+              borderRadius: m.role === 'user' ? `${rCard} ${rCard} 4px ${rCard}` : `4px ${rCard} ${rCard} ${rCard}`,
+              padding: '10px 14px',
+              color: m.role === 'user' ? '#fff' : (isApple ? '#1c1c1e' : 'var(--text)'),
+            } as React.CSSProperties}>
+              <div style={{ fontSize: 12.5, lineHeight: 1.55, whiteSpace: 'pre-wrap' }}>
+                {m.text.replace(/\*\*(.*?)\*\*/g, '$1')}
+              </div>
+              {m.role === 'assistant' && (
+                <div style={{ display: 'flex', gap: 10, marginTop: 8, opacity: 0.5 }}>
+                  {['↺', '📋', '👍', '👎'].map(a => (
+                    <button key={a} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, padding: 0 }}>{a}</button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+
+        {/* Typing indicator */}
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+          <div style={{
+            width: 26, height: 26, borderRadius: rFull, flexShrink: 0,
+            background: isApple ? `linear-gradient(135deg, ${accent}, ${accent}aa)` : accent,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11,
+          }}>✦</div>
+          <div style={{
+            background: isApple ? 'rgba(255,255,255,0.75)' : 'var(--surface)',
+            backdropFilter: isApple ? 'blur(16px)' : 'none',
+            border: isApple ? '1px solid rgba(255,255,255,0.6)' : '1px solid var(--border-mid)',
+            borderRadius: `4px ${rCard} ${rCard} ${rCard}`,
+            padding: '12px 16px', display: 'flex', gap: 4, alignItems: 'center',
+          }}>
+            {[0, 1, 2].map(d => (
+              <div key={d} style={{
+                width: 7, height: 7, borderRadius: '50%',
+                background: accent, opacity: 0.6 + d * 0.2,
+                animation: `pulse 1.2s ease-in-out ${d * 0.2}s infinite`,
+              }} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Input bar */}
+      <div style={{
+        padding: '10px 12px',
+        background: glassBg, backdropFilter: glassBackdrop, WebkitBackdropFilter: glassBackdrop,
+        borderTop: glassBorder, flexShrink: 0,
+      } as React.CSSProperties}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          background: isApple ? 'rgba(255,255,255,0.65)' : 'var(--surface-mid)',
+          border: isApple ? '1px solid rgba(255,255,255,0.55)' : '1px solid var(--border-mid)',
+          borderRadius: rFull, padding: '8px 10px 8px 16px',
+          boxShadow: isApple ? '0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)' : 'none',
+        }}>
+          <input readOnly placeholder="Ask anything..." style={{
+            flex: 1, background: 'none', border: 'none', outline: 'none',
+            fontSize: 13, color: isApple ? '#1c1c1e' : 'var(--text)',
+          }} />
+          <button style={{
+            width: 32, height: 32, borderRadius: rFull,
+            background: accent, border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0, boxShadow: isApple ? `0 2px 8px ${accent}55` : 'none',
+          }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
+            </svg>
+          </button>
+        </div>
+        <p style={{ fontSize: 9.5, color: isApple ? 'rgba(60,60,67,0.4)' : 'var(--text-subtle)', textAlign: 'center', marginTop: 6 }}>
+          AI can make mistakes — verify important information.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/* ── AI Generation Preview ─────────────────────────────────────── */
+function AIGenerationPreview({ theme }: { theme: string }) {
+  const accent = themeAccent(theme)
+  const subtle = themeAccentSubtle(theme)
+  const [streaming, setStreaming] = useState(false)
+  const [output, setOutput] = useState('')
+  const rCard = resolveRadius('radius/md', theme)
+  const rBtn  = resolveRadius('radius/sm', theme)
+  const rFull = resolveRadius('radius/full', theme)
+  const isApple = theme === 'brand-b'
+
+  const fullOutput = `Product Design Lead at Anthropic
+
+We're looking for an exceptional Product Design Lead to shape the interfaces that millions of people use to interact with AI every day.
+
+**What you'll do:**
+• Own end-to-end design for Claude.ai — from concept to shipped product
+• Define interaction patterns for novel AI capabilities
+• Partner closely with research, engineering, and product teams
+• Build and mentor a world-class design team`
+
+  function handleGenerate() {
+    if (streaming) { setStreaming(false); return }
+    setOutput('')
+    setStreaming(true)
+    let i = 0
+    const words = fullOutput.split('')
+    const iv = setInterval(() => {
+      if (i < words.length) {
+        setOutput(p => p + words[i])
+        i++
+      } else {
+        clearInterval(iv)
+        setStreaming(false)
+      }
+    }, 18)
+  }
+
+  const glassBg = isApple ? 'rgba(255,255,255,0.72)' : 'var(--surface)'
+  const glassBackdrop = isApple ? 'saturate(180%) blur(20px)' : 'none'
+  const glassBorder = isApple ? 'rgba(255,255,255,0.55)' : 'var(--border-mid)'
+
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', gap: 14, padding: 20,
+      background: isApple ? 'linear-gradient(160deg, #f0f8ff 0%, #f8f0ff 100%)' : 'var(--surface-mid)',
+      minHeight: 480,
+    }}>
+      {/* Model + controls bar */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
+        background: glassBg, backdropFilter: glassBackdrop, WebkitBackdropFilter: glassBackdrop,
+        border: `1px solid ${glassBorder}`, borderRadius: rCard, padding: '10px 14px',
+        boxShadow: isApple ? '0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)' : 'none',
+      } as React.CSSProperties}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <select style={{
+            padding: '5px 10px', borderRadius: rBtn, fontSize: 12, fontWeight: 500,
+            border: `1px solid ${glassBorder}`, cursor: 'pointer',
+            background: isApple ? 'rgba(255,255,255,0.6)' : 'var(--surface-mid)',
+            color: isApple ? '#1c1c1e' : 'var(--text)',
+          }}>
+            <option>gpt-4o</option>
+            <option>claude-3.5-sonnet</option>
+            <option>gemini-1.5-pro</option>
+          </select>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 11, color: isApple ? 'rgba(60,60,67,0.5)' : 'var(--text-subtle)' }}>Temp</span>
+            <div style={{ width: 60, height: 4, background: isApple ? 'rgba(0,0,0,0.1)' : 'var(--border-mid)', borderRadius: 2, position: 'relative' }}>
+              <div style={{ width: '40%', height: '100%', background: accent, borderRadius: 2 }} />
+              <div style={{ width: 10, height: 10, borderRadius: '50%', background: accent, position: 'absolute', top: -3, left: '38%', boxShadow: `0 0 0 2px ${isApple ? 'white' : 'var(--surface)'}` }} />
+            </div>
+            <span style={{ fontSize: 11, fontFamily: 'monospace', color: accent }}>0.7</span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <span style={{ fontSize: 10.5, color: isApple ? 'rgba(60,60,67,0.5)' : 'var(--text-subtle)' }}>342 / 4096 tokens</span>
+        </div>
+      </div>
+
+      {/* Prompt area */}
+      <div style={{
+        background: glassBg, backdropFilter: glassBackdrop, WebkitBackdropFilter: glassBackdrop,
+        border: `1px solid ${glassBorder}`, borderRadius: rCard,
+        overflow: 'hidden',
+        boxShadow: isApple ? '0 4px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7)' : 'none',
+      } as React.CSSProperties}>
+        <div style={{ padding: '8px 12px', borderBottom: `1px solid ${isApple ? 'rgba(0,0,0,0.06)' : 'var(--border)'}`, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: isApple ? 'rgba(60,60,67,0.5)' : 'var(--text-subtle)' }}>System</span>
+        </div>
+        <textarea readOnly defaultValue="You are a professional copywriter specializing in tech job descriptions. Write compelling, concise, and inclusive job postings."
+          style={{
+            width: '100%', resize: 'none', border: 'none', outline: 'none', padding: '10px 14px',
+            background: 'transparent', color: isApple ? '#1c1c1e' : 'var(--text)', fontSize: 12.5, lineHeight: 1.55,
+            fontFamily: 'inherit',
+          }} rows={2} />
+        <div style={{ padding: '8px 12px', borderTop: `1px solid ${isApple ? 'rgba(0,0,0,0.06)' : 'var(--border)'}`, borderBottom: `1px solid ${isApple ? 'rgba(0,0,0,0.06)' : 'var(--border)'}`, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: accent }}>User</span>
+        </div>
+        <textarea readOnly defaultValue="Write a job description for a Product Design Lead role at an AI company."
+          style={{
+            width: '100%', resize: 'none', border: 'none', outline: 'none', padding: '10px 14px',
+            background: 'transparent', color: isApple ? '#1c1c1e' : 'var(--text)', fontSize: 12.5, lineHeight: 1.55,
+            fontFamily: 'inherit',
+          }} rows={2} />
+      </div>
+
+      {/* Generate button */}
+      <button onClick={handleGenerate} style={{
+        padding: '10px 0', borderRadius: rBtn,
+        background: streaming ? 'rgba(239,68,68,0.9)' : accent, color: '#fff',
+        fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+        boxShadow: isApple ? `0 4px 16px ${streaming ? 'rgba(239,68,68,0.4)' : accent + '44'}` : 'none',
+        transition: 'background 200ms, box-shadow 200ms',
+      }}>
+        {streaming ? (
+          <><span style={{ width: 10, height: 10, borderRadius: 2, background: '#fff', display: 'inline-block' }} /> Stop Generation</>
+        ) : (
+          <><span>▶</span> Generate</>
+        )}
+      </button>
+
+      {/* Output */}
+      {(output || streaming) && (
+        <div style={{
+          background: glassBg, backdropFilter: glassBackdrop, WebkitBackdropFilter: glassBackdrop,
+          border: `1px solid ${glassBorder}`, borderRadius: rCard, padding: '14px 16px',
+          boxShadow: isApple ? '0 4px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7)' : 'none',
+        } as React.CSSProperties}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: streaming ? '#30d158' : accent, boxShadow: streaming ? '0 0 6px rgba(48,209,88,0.8)' : 'none' }} />
+              <span style={{ fontSize: 11, fontWeight: 600, color: isApple ? 'rgba(60,60,67,0.6)' : 'var(--text-muted)' }}>
+                {streaming ? 'Generating…' : 'Output'}
+              </span>
+            </div>
+            {!streaming && (
+              <div style={{ display: 'flex', gap: 6 }}>
+                {['📋 Copy', '↺ Retry'].map(a => (
+                  <button key={a} style={{
+                    padding: '4px 10px', borderRadius: rBtn, fontSize: 11,
+                    background: isApple ? 'rgba(0,0,0,0.05)' : 'var(--surface-high)',
+                    border: `1px solid ${isApple ? 'rgba(0,0,0,0.08)' : 'var(--border-mid)'}`,
+                    color: isApple ? '#3c3c43' : 'var(--text-muted)', cursor: 'pointer',
+                  }}>{a}</button>
+                ))}
+              </div>
+            )}
+          </div>
+          <div style={{ fontSize: 13, lineHeight: 1.65, color: isApple ? '#1c1c1e' : 'var(--text)', whiteSpace: 'pre-wrap' }}>
+            {output}
+            {streaming && <span style={{ display: 'inline-block', width: 2, height: 14, background: accent, marginLeft: 2, verticalAlign: 'text-bottom', animation: 'pulse 1s ease-in-out infinite' }} />}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ── AI Command Preview ─────────────────────────────────────────── */
+function AICommandPreview({ theme }: { theme: string }) {
+  const accent = themeAccent(theme)
+  const subtle = themeAccentSubtle(theme)
+  const rCard = resolveRadius('radius/lg', theme)
+  const rFull = resolveRadius('radius/full', theme)
+  const rBtn  = resolveRadius('radius/sm', theme)
+  const isApple = theme === 'brand-b'
+
+  const groups = [
+    {
+      label: 'AI Answer',
+      items: [{ icon: '✦', text: 'Summarize selected text', sub: 'Ask AI · Shift+Enter for full response', accent: true }],
+    },
+    {
+      label: 'Actions',
+      items: [
+        { icon: '⊕', text: 'New Project',           sub: '⌘N', accent: false },
+        { icon: '⟲', text: 'Share with team…',     sub: '⌘⇧S', accent: false },
+        { icon: '⊘', text: 'Archive current space', sub: '', accent: false },
+      ],
+    },
+    {
+      label: 'Recent',
+      items: [
+        { icon: '⊙', text: 'Q3 Financial Report',  sub: 'Document · 2h ago', accent: false },
+        { icon: '⊙', text: 'Design System v2',     sub: 'Project · yesterday', accent: false },
+      ],
+    },
+  ]
+
+  return (
+    <div style={{
+      display: 'flex', justifyContent: 'center', alignItems: 'flex-start',
+      paddingTop: 40, minHeight: 500, padding: '40px 24px',
+      background: isApple
+        ? 'linear-gradient(160deg, #e8f4ff 0%, #f8eeff 50%, #e8fff4 100%)'
+        : 'var(--surface-mid)',
+    }}>
+      {/* Backdrop scrim */}
+      <div style={{
+        position: 'relative', width: '100%', maxWidth: 520,
+      }}>
+        {/* Hint badge */}
+        <div style={{
+          display: 'flex', justifyContent: 'center', marginBottom: 12,
+        }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '5px 12px', borderRadius: rFull,
+            background: isApple ? 'rgba(255,255,255,0.55)' : 'var(--surface)',
+            border: `1px solid ${isApple ? 'rgba(255,255,255,0.6)' : 'var(--border-mid)'}`,
+            backdropFilter: isApple ? 'blur(12px)' : 'none',
+            boxShadow: isApple ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
+          }}>
+            <kbd style={{
+              background: isApple ? 'rgba(0,0,0,0.07)' : 'var(--surface-high)',
+              border: `1px solid ${isApple ? 'rgba(0,0,0,0.1)' : 'var(--border-mid)'}`,
+              borderRadius: 5, padding: '1px 6px', fontSize: 11, fontFamily: 'monospace',
+              color: isApple ? '#3c3c43' : 'var(--text-muted)',
+            }}>⌘K</kbd>
+            <span style={{ fontSize: 11, color: isApple ? 'rgba(60,60,67,0.6)' : 'var(--text-muted)' }}>AI Command</span>
+          </div>
+        </div>
+
+        {/* Palette */}
+        <div style={{
+          background: isApple ? 'rgba(255,255,255,0.82)' : 'var(--surface)',
+          backdropFilter: isApple ? 'saturate(180%) blur(28px)' : 'none',
+          WebkitBackdropFilter: isApple ? 'saturate(180%) blur(28px)' : 'none',
+          border: `1px solid ${isApple ? 'rgba(255,255,255,0.65)' : 'var(--border-mid)'}`,
+          borderRadius: rCard,
+          boxShadow: isApple
+            ? '0 24px 60px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)'
+            : '0 20px 40px rgba(0,0,0,0.15)',
+          overflow: 'hidden',
+        }}>
+          {/* Search input */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px',
+            borderBottom: `1px solid ${isApple ? 'rgba(0,0,0,0.06)' : 'var(--border)'}`,
+          }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={isApple ? '#8e8e93' : 'var(--text-subtle)'} strokeWidth="2" strokeLinecap="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input readOnly defaultValue="Summarize selected" style={{
+              flex: 1, background: 'none', border: 'none', outline: 'none',
+              fontSize: 15, color: isApple ? '#1c1c1e' : 'var(--text)',
+              fontWeight: 400,
+            }} />
+            <kbd style={{
+              fontSize: 10, fontFamily: 'monospace',
+              background: isApple ? 'rgba(0,0,0,0.06)' : 'var(--surface-high)',
+              border: `1px solid ${isApple ? 'rgba(0,0,0,0.08)' : 'var(--border-mid)'}`,
+              borderRadius: 5, padding: '2px 6px', color: isApple ? '#8e8e93' : 'var(--text-subtle)',
+            }}>ESC</kbd>
+          </div>
+
+          {/* Results */}
+          <div style={{ maxHeight: 320, overflowY: 'auto' }}>
+            {groups.map((g, gi) => (
+              <div key={gi}>
+                <div style={{
+                  padding: '8px 16px 4px', fontSize: 10.5, fontWeight: 600,
+                  textTransform: 'uppercase', letterSpacing: '0.06em',
+                  color: isApple ? 'rgba(60,60,67,0.45)' : 'var(--text-subtle)',
+                }}>{g.label}</div>
+                {g.items.map((item, ii) => (
+                  <div key={ii} style={{
+                    display: 'flex', alignItems: 'center', gap: 12, padding: '9px 16px',
+                    background: gi === 0 && ii === 0 ? (isApple ? `rgba(0,122,255,0.08)` : subtle) : 'transparent',
+                    cursor: 'pointer', transition: 'background 60ms',
+                  }}
+                    onMouseEnter={e => e.currentTarget.style.background = isApple ? 'rgba(0,0,0,0.04)' : 'var(--surface-mid)'}
+                    onMouseLeave={e => e.currentTarget.style.background = gi === 0 && ii === 0 ? (isApple ? 'rgba(0,122,255,0.08)' : subtle) : 'transparent'}
+                  >
+                    <div style={{
+                      width: 28, height: 28, borderRadius: item.accent ? rFull : rBtn,
+                      background: item.accent ? accent : (isApple ? 'rgba(0,0,0,0.06)' : 'var(--surface-high)'),
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 13, color: item.accent ? '#fff' : (isApple ? '#3c3c43' : 'var(--text-muted)'),
+                      flexShrink: 0, boxShadow: item.accent ? `0 2px 8px ${accent}44` : 'none',
+                    }}>{item.icon}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, color: isApple ? '#1c1c1e' : 'var(--text)', fontWeight: item.accent ? 500 : 400 }}>{item.text}</div>
+                      {item.sub && <div style={{ fontSize: 11, color: isApple ? 'rgba(60,60,67,0.5)' : 'var(--text-subtle)', marginTop: 1 }}>{item.sub}</div>}
+                    </div>
+                    {item.sub && item.sub.startsWith('⌘') && (
+                      <kbd style={{
+                        fontSize: 11, fontFamily: 'monospace',
+                        background: isApple ? 'rgba(0,0,0,0.06)' : 'var(--surface-high)',
+                        border: `1px solid ${isApple ? 'rgba(0,0,0,0.08)' : 'var(--border-mid)'}`,
+                        borderRadius: 5, padding: '2px 7px',
+                        color: isApple ? '#8e8e93' : 'var(--text-subtle)',
+                      }}>{item.sub}</kbd>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div style={{
+            padding: '8px 16px', borderTop: `1px solid ${isApple ? 'rgba(0,0,0,0.06)' : 'var(--border)'}`,
+            display: 'flex', gap: 14,
+          }}>
+            {[['↵', 'Select'], ['↑↓', 'Navigate'], ['⌘↵', 'Ask AI']].map(([key, label]) => (
+              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <kbd style={{
+                  fontSize: 10, background: isApple ? 'rgba(0,0,0,0.06)' : 'var(--surface-high)',
+                  border: `1px solid ${isApple ? 'rgba(0,0,0,0.08)' : 'var(--border-mid)'}`,
+                  borderRadius: 4, padding: '1px 5px', fontFamily: 'monospace',
+                  color: isApple ? '#8e8e93' : 'var(--text-subtle)',
+                }}>{key}</kbd>
+                <span style={{ fontSize: 10.5, color: isApple ? 'rgba(60,60,67,0.45)' : 'var(--text-subtle)' }}>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ── Pattern preview router ────────────────────────────────────── */
 function PatternPreview({ id, theme }: { id: string; theme: string }) {
   if (id === 'authentication') return <AuthPreview theme={theme} />
@@ -653,6 +1141,9 @@ function PatternPreview({ id, theme }: { id: string; theme: string }) {
   if (id === 'settings')       return <SettingsPreview theme={theme} />
   if (id === 'billing')        return <BillingPreview theme={theme} />
   if (id === 'onboarding')     return <OnboardingPreview theme={theme} />
+  if (id === 'ai-chat')        return <AIChatPreview theme={theme} />
+  if (id === 'ai-generation')  return <AIGenerationPreview theme={theme} />
+  if (id === 'ai-command')     return <AICommandPreview theme={theme} />
   return <div style={{ padding: 32, color: 'var(--text-muted)', fontSize: 13 }}>Preview not available for this pattern.</div>
 }
 

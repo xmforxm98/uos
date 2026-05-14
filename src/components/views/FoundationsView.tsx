@@ -3,7 +3,7 @@
 import { useDesignSystem } from '@/context/DesignSystemContext'
 import {
   primitiveColors, primitiveSpacing, primitiveRadius,
-  primitiveTypography, primitiveMotion, primitiveShadows,
+  primitiveTypography, primitiveMotion, primitiveShadows, primitiveGlass,
 } from '@/data/primitives'
 import { semanticTokens } from '@/data/semantic'
 import { componentDefs } from '@/data/components'
@@ -393,10 +393,243 @@ function IconsView() {
   )
 }
 
+function LiquidGlassView() {
+  const blurs = primitiveGlass.filter(t => t.id.startsWith('blur-'))
+  const fills = primitiveGlass.filter(t => t.id.startsWith('glass-white') || t.id.startsWith('glass-dark'))
+  const borders = primitiveGlass.filter(t => t.id.startsWith('glass-border'))
+  const shadows = primitiveGlass.filter(t => t.id.startsWith('glass-shadow'))
+  const special = primitiveGlass.filter(t => t.id === 'glass-vibrancy')
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+
+      {/* Live demo */}
+      <div>
+        <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 12 }}>
+          Live Demo — Glass Cards
+        </div>
+        <div style={{
+          borderRadius: 'var(--radius-xl)',
+          overflow: 'hidden',
+          position: 'relative',
+          padding: '40px 32px',
+          minHeight: 260,
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 40%, #f093fb 80%, #4facfe 100%)',
+          display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', justifyContent: 'center',
+        }}>
+          {/* Decorative blobs */}
+          <div style={{ position: 'absolute', width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,200,100,0.35)', top: -40, right: -40, filter: 'blur(40px)' }} />
+          <div style={{ position: 'absolute', width: 150, height: 150, borderRadius: '50%', background: 'rgba(100,200,255,0.3)', bottom: -30, left: 20, filter: 'blur(30px)' }} />
+
+          {/* Card 1 — thin */}
+          <div style={{
+            background: 'rgba(255,255,255,0.35)',
+            backdropFilter: 'saturate(180%) blur(16px)',
+            WebkitBackdropFilter: 'saturate(180%) blur(16px)',
+            border: '1px solid rgba(255,255,255,0.55)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)',
+            borderRadius: 20, padding: '20px 24px', width: 200,
+            position: 'relative', zIndex: 1,
+          }}>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.75)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>glass/surface</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', marginBottom: 4 }}>$12,480</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>Revenue this week</div>
+            <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(100,255,150,0.9)' }} />
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', fontWeight: 500 }}>+8.4% vs last week</span>
+            </div>
+          </div>
+
+          {/* Card 2 — thick */}
+          <div style={{
+            background: 'rgba(255,255,255,0.65)',
+            backdropFilter: 'saturate(200%) blur(24px)',
+            WebkitBackdropFilter: 'saturate(200%) blur(24px)',
+            border: '1px solid rgba(255,255,255,0.75)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.85)',
+            borderRadius: 20, padding: '20px 24px', width: 200,
+            position: 'relative', zIndex: 1,
+          }}>
+            <div style={{ fontSize: 10, color: 'rgba(80,80,100,0.7)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>glass/surface-thick</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#1c1c1e', letterSpacing: '-0.03em', marginBottom: 4 }}>3,291</div>
+            <div style={{ fontSize: 11, color: 'rgba(60,60,80,0.7)' }}>Active users</div>
+            <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#007AFF' }} />
+              <span style={{ fontSize: 11, color: '#007AFF', fontWeight: 500 }}>92 online now</span>
+            </div>
+          </div>
+
+          {/* Pill chip */}
+          <div style={{
+            background: 'rgba(255,255,255,0.25)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,0.45)',
+            borderRadius: 9999, padding: '8px 18px',
+            display: 'flex', alignItems: 'center', gap: 8, position: 'relative', zIndex: 1,
+          }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(100,255,150,0.9)', boxShadow: '0 0 8px rgba(100,255,150,0.8)' }} />
+            <span style={{ fontSize: 12, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>AI is generating…</span>
+          </div>
+        </div>
+        <p style={{ fontSize: 11, color: 'var(--text-subtle)', marginTop: 8 }}>
+          ↑ Background gradient visible through the glass — demonstrates true transparency with depth.
+        </p>
+      </div>
+
+      {/* Blur scale */}
+      <div>
+        <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 12 }}>
+          Blur Scale — backdrop-filter values
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+          {blurs.map(t => (
+            <div key={t.id} style={{
+              display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center',
+              padding: 16, background: 'var(--surface-mid)', border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-lg)', minWidth: 120,
+            }}>
+              <div style={{
+                width: 64, height: 64, borderRadius: 12, position: 'relative', overflow: 'hidden',
+                background: 'linear-gradient(135deg, #667eea, #f093fb)',
+              }}>
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: 'rgba(255,255,255,0.5)',
+                  backdropFilter: t.value,
+                  WebkitBackdropFilter: t.value,
+                  borderRadius: 12,
+                }} />
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 11.5, fontFamily: 'monospace', color: 'var(--text)', fontWeight: 500, marginBottom: 2 }}>{t.name}</div>
+                <CopyOnClick id={t.id} value={t.value} />
+                {t.description && <div style={{ fontSize: 10, color: 'var(--text-subtle)', marginTop: 4 }}>{t.description}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Fill opacity */}
+      <div>
+        <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 12 }}>
+          Glass Fill Colors — background-color with opacity
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+          {[...fills, ...borders].map(t => (
+            <div key={t.id} style={{
+              display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center',
+              padding: '14px 16px', background: 'var(--surface-mid)', border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-lg)', minWidth: 130,
+            }}>
+              {/* Color swatch on gradient */}
+              <div style={{
+                width: 56, height: 32, borderRadius: 8, position: 'relative', overflow: 'hidden',
+                background: 'linear-gradient(90deg, #667eea, #f093fb)',
+              }}>
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: t.value,
+                  borderRadius: 8,
+                }} />
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 10.5, fontFamily: 'monospace', color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
+                <CopyOnClick id={t.id} value={t.value} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Shadows */}
+      <div>
+        <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 12 }}>
+          Glass Shadows — box-shadow with inner top highlight
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+          {shadows.map(t => (
+            <div key={t.id} style={{
+              display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center',
+              padding: '20px', background: 'var(--surface-mid)', border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-lg)', minWidth: 160,
+            }}>
+              <div style={{
+                width: 72, height: 72, borderRadius: 16,
+                background: 'rgba(255,255,255,0.75)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                boxShadow: t.value,
+              }} />
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 11.5, fontFamily: 'monospace', color: 'var(--text)', marginBottom: 4 }}>{t.name}</div>
+                <CopyOnClick id={t.id} value={t.value} />
+                {t.description && <div style={{ fontSize: 10, color: 'var(--text-subtle)', marginTop: 4, maxWidth: 160 }}>{t.description}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Vibrancy formula */}
+      <div>
+        <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 12 }}>
+          Vibrancy Formula — Apple's backdrop-filter secret
+        </div>
+        {special.map(t => (
+          <div key={t.id} style={{
+            padding: '16px 20px',
+            background: 'var(--accent-subtle)', border: '1px solid var(--accent-border)',
+            borderRadius: 'var(--radius-lg)', display: 'flex', alignItems: 'flex-start', gap: 14,
+          }}>
+            <div style={{ fontSize: 20 }}>🍎</div>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', marginBottom: 4 }}>
+                {t.name}
+              </div>
+              <code style={{ fontSize: 12, fontFamily: 'monospace', color: 'var(--accent)', background: 'var(--accent-subtle)', padding: '2px 8px', borderRadius: 4 }}>
+                backdrop-filter: {t.value}
+              </code>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 8, lineHeight: 1.6 }}>
+                {t.description} — This is the formula Apple uses for macOS Menubar, iOS Navigation Bar, and every glass surface in visionOS.
+                Apply to an element with a <code style={{ fontSize: 11, background: 'var(--surface-high)', padding: '1px 4px', borderRadius: 3 }}>rgba()</code> background that has transparency.
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* CSS snippet */}
+      <div>
+        <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 10 }}>
+          CSS Snippet — Copy-paste recipe
+        </div>
+        <div className="code-block">{`.glass-surface {
+  background: rgba(255, 255, 255, 0.72);           /* glass/surface */
+  backdrop-filter: saturate(180%) blur(20px);      /* glass/vibrancy */
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.60);     /* glass/border */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10),
+              inset 0 1px 0 rgba(255,255,255,0.65); /* glass/shadow */
+  border-radius: 20px;
+}
+
+/* Dark mode */
+.dark .glass-surface {
+  background: rgba(28, 28, 30, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}`}</div>
+      </div>
+    </div>
+  )
+}
+
 export function FoundationsView({ category }: { category: string }) {
   const titles: Record<string, string> = {
     color: 'Colors', spacing: 'Spacing', typography: 'Typography',
     radius: 'Border Radius', motion: 'Motion', shadow: 'Shadows', icons: 'Icons',
+    glass: 'Liquid Glass',
   }
 
   const subtitles: Record<string, string> = {
@@ -407,6 +640,7 @@ export function FoundationsView({ category }: { category: string }) {
     motion: 'Animation durations and easing curves.',
     shadow: 'Elevation shadows — from flat to floating.',
     icons: 'Lucide icon library — click any icon to copy the JSX.',
+    glass: 'Frosted glass primitives — blur, opacity, border and shadow values for liquid glass surfaces.',
   }
 
   const totalCounts: Record<string, number> = {
@@ -417,6 +651,7 @@ export function FoundationsView({ category }: { category: string }) {
     motion: primitiveMotion.length,
     shadow: primitiveShadows.length,
     icons: Object.values(ICON_CATEGORIES).flat().length,
+    glass: primitiveGlass.length,
   }
 
   const content: Record<string, React.ReactNode> = {
@@ -427,6 +662,7 @@ export function FoundationsView({ category }: { category: string }) {
     motion:     <MotionList tokens={primitiveMotion} />,
     shadow:     <ShadowGrid tokens={primitiveShadows} />,
     icons:      <IconsView />,
+    glass:      <LiquidGlassView />,
   }
 
   return (

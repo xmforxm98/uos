@@ -86,6 +86,15 @@ export const primitiveColors: PrimitiveToken[] = [
   { id: 'purple-700', name: 'purple-700', category: 'color', value: '#7e22ce' },
   { id: 'purple-900', name: 'purple-900', category: 'color', value: '#581c87' },
 
+  // iOS Blue (Apple / Brand B)
+  { id: 'ios-blue-50',  name: 'ios-blue-50',  category: 'color', value: '#e8f1ff', description: 'Lightest Apple blue tint' },
+  { id: 'ios-blue-100', name: 'ios-blue-100', category: 'color', value: '#c3d9ff' },
+  { id: 'ios-blue-300', name: 'ios-blue-300', category: 'color', value: '#6aabff' },
+  { id: 'ios-blue-500', name: 'ios-blue-500', category: 'color', value: '#007AFF', description: 'Apple iOS blue' },
+  { id: 'ios-blue-600', name: 'ios-blue-600', category: 'color', value: '#0066DD' },
+  { id: 'ios-blue-700', name: 'ios-blue-700', category: 'color', value: '#0055BB' },
+  { id: 'ios-blue-900', name: 'ios-blue-900', category: 'color', value: '#003380' },
+
   // Transparent
   { id: 'transparent', name: 'transparent', category: 'color', value: 'transparent' },
   { id: 'white',        name: 'white',       category: 'color', value: '#ffffff' },
@@ -159,6 +168,31 @@ export const primitiveMotion: PrimitiveToken[] = [
   { id: 'ease-spring',      name: 'ease-spring',      category: 'motion', value: 'cubic-bezier(0.34, 1.56, 0.64, 1)' },
 ]
 
+// ── Liquid Glass Primitives ───────────────────────────────────
+export const primitiveGlass: PrimitiveToken[] = [
+  // Blur levels
+  { id: 'blur-sm',  name: 'blur-sm',  category: 'glass', value: 'blur(8px)',  description: 'Subtle frost — barely visible blur' },
+  { id: 'blur-md',  name: 'blur-md',  category: 'glass', value: 'blur(16px)', description: 'Standard glass blur' },
+  { id: 'blur-lg',  name: 'blur-lg',  category: 'glass', value: 'blur(24px)', description: 'Deep frosted glass' },
+  { id: 'blur-xl',  name: 'blur-xl',  category: 'glass', value: 'blur(40px)', description: 'Heavy glass — maximum blur' },
+  // Glass fill colors (opacity variants)
+  { id: 'glass-white-40', name: 'glass-white-40', category: 'glass', value: 'rgba(255,255,255,0.40)', description: 'Light translucent — subtle frost' },
+  { id: 'glass-white-60', name: 'glass-white-60', category: 'glass', value: 'rgba(255,255,255,0.60)', description: 'Medium light glass' },
+  { id: 'glass-white-72', name: 'glass-white-72', category: 'glass', value: 'rgba(255,255,255,0.72)', description: 'Standard light glass surface — Apple navbars' },
+  { id: 'glass-white-88', name: 'glass-white-88', category: 'glass', value: 'rgba(255,255,255,0.88)', description: 'Thick light glass — popovers, modals' },
+  { id: 'glass-dark-50',  name: 'glass-dark-50',  category: 'glass', value: 'rgba(28,28,30,0.50)',   description: 'Dark glass — medium opacity' },
+  { id: 'glass-dark-72',  name: 'glass-dark-72',  category: 'glass', value: 'rgba(28,28,30,0.72)',   description: 'Thick dark glass surface' },
+  // Glass borders
+  { id: 'glass-border-light', name: 'glass-border-light', category: 'glass', value: 'rgba(255,255,255,0.60)', description: 'Glass border for light surfaces — inner white edge' },
+  { id: 'glass-border-dark',  name: 'glass-border-dark',  category: 'glass', value: 'rgba(255,255,255,0.14)', description: 'Glass border for dark surfaces' },
+  // Glass shadow
+  { id: 'glass-shadow-sm', name: 'glass-shadow-sm', category: 'glass', value: '0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.55)', description: 'Subtle glass shadow with top highlight' },
+  { id: 'glass-shadow-md', name: 'glass-shadow-md', category: 'glass', value: '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.60)', description: 'Standard glass shadow — Apple cards' },
+  { id: 'glass-shadow-lg', name: 'glass-shadow-lg', category: 'glass', value: '0 20px 60px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.65)', description: 'Elevated glass shadow — floating panels' },
+  // Vibrancy formula
+  { id: 'glass-vibrancy', name: 'glass-vibrancy', category: 'glass', value: 'saturate(180%) blur(20px)', description: 'Apple vibrancy formula — saturate + blur for backdrop-filter' },
+]
+
 export const allPrimitives = [
   ...primitiveColors,
   ...primitiveSpacing,
@@ -166,6 +200,7 @@ export const allPrimitives = [
   ...primitiveTypography,
   ...primitiveShadows,
   ...primitiveMotion,
+  ...primitiveGlass,
 ]
 
 export function getPrimitive(id: string) {

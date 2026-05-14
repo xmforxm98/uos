@@ -7,7 +7,7 @@ import type { ComponentDef } from '@/types'
 function themeAccent(theme: string) {
   if (theme === 'dark')    return '#3b82f6'
   if (theme === 'brand-a') return '#2563eb'
-  if (theme === 'brand-b') return '#9333ea'
+  if (theme === 'brand-b') return '#007AFF'
   return '#CC5536'
 }
 
