@@ -3,7 +3,7 @@
 import {
   Type, Ruler, Shapes, Zap, Circle,
   Component, Square, ToggleLeft, FormInput, LayoutDashboard,
-  Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search, Layers, Wind, MousePointer2
+  Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search, Layers, Wind, MousePointer2, Fingerprint
 } from 'lucide-react'
 import { useDesignSystem } from '@/context/DesignSystemContext'
 import { themes } from '@/data/themes'
@@ -203,6 +203,16 @@ export function Sidebar() {
                 onClick={() => setSelected({ type: 'semantic', id: g })}
               />
             ))}
+          </NavSection>
+
+          <NavSection label="Interaction Styles">
+            <NavItemRow
+              icon={<Fingerprint size={12} />}
+              label="Style Gallery"
+              selected={isSelected({ type: 'primitive', id: 'interaction-styles' })}
+              onClick={() => setSelected({ type: 'primitive', id: 'interaction-styles' })}
+              badge="6"
+            />
           </NavSection>
 
           <NavSection label="Components">

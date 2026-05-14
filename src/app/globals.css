@@ -311,6 +311,37 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* ─── Interaction Style animations ───────────────────────────── */
+/* Cyber — particle float */
+@keyframes cyberFloat {
+  0%   { transform: translateY(0px) translateX(0px); opacity: 0.8; }
+  33%  { transform: translateY(-5px) translateX(2px); opacity: 1; }
+  66%  { transform: translateY(-2px) translateX(-2px); opacity: 0.6; }
+  100% { transform: translateY(-6px) translateX(1px); opacity: 0.9; }
+}
+@keyframes cyberPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(3,233,244,0.4), 0 0 20px rgba(3,233,244,0.2); }
+  50%       { box-shadow: 0 0 14px rgba(3,233,244,0.7), 0 0 30px rgba(3,233,244,0.35); }
+}
+/* Playful — bounce */
+@keyframes playfulBounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.18); }
+  55%  { transform: scale(0.94); }
+  75%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+/* Premium — shimmer sweep */
+@keyframes premiumShimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+/* Native — ripple */
+@keyframes nativeRipple {
+  0%   { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
 /* Apple-style chip / pill */
 .chip.glass {
   background: rgba(255, 255, 255, 0.72);

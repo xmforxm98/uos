@@ -7,8 +7,10 @@ import { TokenChain } from '@/components/TokenChain'
 import { useDesignSystem } from '@/context/DesignSystemContext'
 import { getComponent } from '@/data/components'
 import { getProfileForTheme, getInteractionToken, interactionProfiles } from '@/data/interactions'
+import { interactionStyles, getStyleForTheme } from '@/data/interactionStyles'
+import { ToggleStyleGallery } from '@/components/styleVariants/ToggleVariants'
 
-const TABS = ['Preview', 'Token Deps', 'Accessibility', 'AI Rules', 'Interaction', 'Code'] as const
+const TABS = ['Preview', 'Token Deps', 'Accessibility', 'AI Rules', 'Interaction', 'Styles', 'Code'] as const
 type Tab = typeof TABS[number]
 
 function CodeBlock({ code }: { code: string }) {
@@ -260,6 +262,115 @@ function InteractionTab({ componentId: _componentId }: { componentId: string }) 
           ))}
         </div>
       </div>
+    </div>
+  )
+}
+
+// ─── Styles Tab ───────────────────────────────────────────────────────────────
+
+function StylesTab({ componentId }: { componentId: string }) {
+  const { activeTheme } = useDesignSystem()
+  const activeStyle = getStyleForTheme(activeTheme.id)
+
+  const isToggle = componentId === 'toggle'
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {/* Active style banner */}
+      <div style={{
+        padding: '14px 16px',
+        background: activeStyle ? `${activeStyle.color}10` : 'var(--surface-mid)',
+        border: `1.5px solid ${activeStyle ? activeStyle.color + '40' : 'var(--border)'}`,
+        borderRadius: 'var(--radius-lg)',
+        display: 'flex', alignItems: 'center', gap: 12,
+      }}>
+        {activeStyle ? (
+          <>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: activeStyle.color, flexShrink: 0, boxShadow: `0 0 8px ${activeStyle.color}60` }} />
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>
+                Active Style: <span style={{ color: activeStyle.color }}>{activeStyle.name}</span>
+                <span style={{ fontWeight: 400, color: 'var(--text-muted)', marginLeft: 8, fontSize: 12 }}>via {activeTheme.name} theme</span>
+              </div>
+              <div style={{ fontSize: 11.5, color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                &ldquo;{activeStyle.tagline}&rdquo;
+              </div>
+            </div>
+          </>
+        ) : (
+          <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+            No interaction style assigned to <strong>{activeTheme.name}</strong> theme yet.
+            Switch to Brand A or Brand B to see style assignment.
+          </div>
+        )}
+      </div>
+
+      {/* Style compatibility matrix */}
+      <div>
+        <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+          All Interaction Styles — compatibility matrix
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {interactionStyles.map(style => {
+            const isActive = activeStyle?.id === style.id
+            return (
+              <div key={style.id} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '10px 14px',
+                background: isActive ? `${style.color}0e` : 'var(--surface-mid)',
+                border: `1.5px solid ${isActive ? style.color + '50' : 'var(--border)'}`,
+                borderRadius: 'var(--radius-md)',
+                borderLeft: `3px solid ${style.color}`,
+              }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: style.color, flexShrink: 0 }} />
+                <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', width: 110 }}>{style.name}</span>
+                <div style={{ display: 'flex', gap: 5, flex: 1, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 99, background: 'var(--surface-high)', color: 'var(--text-muted)', fontFamily: 'monospace' }}>
+                    {style.animationIntensity}
+                  </span>
+                  <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 99, background: 'var(--surface-high)', color: 'var(--text-muted)' }}>
+                    {style.decoration} deco
+                  </span>
+                  <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 99, background: 'var(--surface-high)', color: 'var(--text-muted)' }}>
+                    {style.feedback}
+                  </span>
+                </div>
+                {isActive && (
+                  <span style={{ fontSize: 9.5, fontWeight: 700, color: style.color, background: `${style.color}15`, padding: '2px 8px', borderRadius: 99 }}>
+                    ACTIVE
+                  </span>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Toggle: full live gallery */}
+      {isToggle && (
+        <div>
+          <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+            Toggle · Live Style Variants · click to interact
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14, lineHeight: 1.6 }}>
+            Same component, 6 behavioral identities. Motion, decoration, and personality change entirely based on the active Interaction Style.
+          </p>
+          <ToggleStyleGallery />
+        </div>
+      )}
+
+      {!isToggle && (
+        <div style={{
+          padding: '16px',
+          background: 'var(--surface-mid)', border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-lg)',
+          fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6,
+        }}>
+          💡 Full style variant gallery available for <strong>Toggle</strong> — the reference component for behavioral identity.
+          More components (Button, Input, Card) will follow as the system evolves.
+          See <strong>Interaction Styles → Gallery</strong> in the sidebar for the full showcase.
+        </div>
+      )}
     </div>
   )
 }
@@ -638,6 +749,10 @@ export function ComponentView({ id }: { id: string }) {
 
         {tab === 'Interaction' && (
           <InteractionTab componentId={id} />
+        )}
+
+        {tab === 'Styles' && (
+          <StylesTab componentId={id} />
         )}
 
         {tab === 'Code' && (
