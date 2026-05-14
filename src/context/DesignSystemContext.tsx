@@ -20,7 +20,7 @@ const DesignSystemContext = createContext<DesignSystemContextValue | null>(null)
 
 export function DesignSystemProvider({ children }: { children: ReactNode }) {
   const [selected, setSelected] = useState<SelectedItem>({ type: 'component', id: 'button' })
-  const [activeThemeId, setActiveThemeId] = useState('light')
+  const [activeThemeId, setActiveThemeId] = useState('utopia')
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
 

@@ -112,8 +112,12 @@ function ChainRow({
 }
 
 export function TokenChain({ dep }: { dep: ComponentTokenDef }) {
-  const primitive = getPrimitive(dep.primitiveRef)
+  const { activeTheme } = useDesignSystem()
+  const themeOverride = activeTheme.overrides.find(o => o.semanticId === dep.semanticRef)
+  const resolvedPrimitiveRef = themeOverride?.primitiveRef ?? dep.primitiveRef
+  const primitive = getPrimitive(resolvedPrimitiveRef)
   const semantic = getSemanticToken(dep.semanticRef)
+  const resolvedValue = themeOverride?.value ?? primitive?.value ?? dep.currentValue
 
   return (
     <div style={{
@@ -138,7 +142,7 @@ export function TokenChain({ dep }: { dep: ComponentTokenDef }) {
           level={0}
           label="Component token"
           tokenId={dep.tokenId}
-          value={dep.currentValue}
+          value={resolvedValue}
           role="component"
         />
         {/* Level 1: Semantic token */}
@@ -147,17 +151,17 @@ export function TokenChain({ dep }: { dep: ComponentTokenDef }) {
             level={1}
             label={semantic?.description ?? 'Semantic token'}
             tokenId={dep.semanticRef}
-            value={dep.currentValue}
+            value={resolvedValue}
             role="semantic"
           />
         )}
         {/* Level 2: Primitive token */}
-        {dep.primitiveRef !== 'transparent' && (
+        {resolvedPrimitiveRef !== 'transparent' && (
           <ChainRow
             level={2}
-            label={primitive?.description ?? `Primitive: ${dep.primitiveRef}`}
-            tokenId={dep.primitiveRef}
-            value={dep.currentValue}
+            label={primitive?.description ?? `Primitive: ${resolvedPrimitiveRef}`}
+            tokenId={resolvedPrimitiveRef}
+            value={resolvedValue}
             role="primitive"
           />
         )}

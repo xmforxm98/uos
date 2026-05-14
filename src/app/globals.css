@@ -1,32 +1,79 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-/* ─── App Chrome Variables ─────────────────────────────────── */
+/* ─── OpenAI Design System ─────────────────────────────────── */
+@custom-variant dark (&:is(.dark *));
+
 :root {
-  --bg:            #0a0a0c;
-  --surface:       #111115;
-  --surface-mid:   #17171d;
-  --surface-high:  #1f1f28;
-  --border:        #1e1e28;
-  --border-mid:    #2a2a38;
-  --border-strong: #3a3a50;
-  --text:          #e8e8f0;
-  --text-muted:    #888898;
-  --text-subtle:   #50505e;
-  --accent:        #5b6ef7;
-  --accent-hover:  #4d5fe6;
-  --accent-subtle: rgba(91, 110, 247, 0.12);
-  --green:         #2dd578;
-  --green-subtle:  rgba(45, 213, 120, 0.12);
-  --red:           #f56565;
-  --red-subtle:    rgba(245, 101, 101, 0.12);
-  --yellow:        #f6c90e;
-  --yellow-subtle: rgba(246, 201, 14, 0.12);
-  --purple:        #c084fc;
-  --purple-subtle: rgba(192, 132, 252, 0.12);
-  --radius-sm:     4px;
-  --radius-md:     6px;
-  --radius-lg:     10px;
-  --radius-xl:     14px;
+  /* Background */
+  --background:       #ffffff;
+  --surface:          #f9f9f9;
+  --surface-mid:      #f4f4f4;
+  --surface-high:     #ebebeb;
+
+  /* Border */
+  --border:           #e5e5e5;
+  --border-mid:       #d4d4d4;
+  --border-strong:    #a3a3a3;
+
+  /* Text */
+  --text:             #0d0d0d;
+  --text-muted:       #6b6b6b;
+  --text-subtle:      #a3a3a3;
+
+  /* OpenAI Green Accent */
+  --accent:           #10a37f;
+  --accent-hover:     #0d8f6f;
+  --accent-subtle:    rgba(16, 163, 127, 0.08);
+  --accent-border:    rgba(16, 163, 127, 0.25);
+
+  /* Status */
+  --green:            #16a34a;
+  --green-subtle:     rgba(22, 163, 74, 0.08);
+  --red:              #dc2626;
+  --red-subtle:       rgba(220, 38, 38, 0.08);
+  --yellow:           #ca8a04;
+  --yellow-subtle:    rgba(202, 138, 4, 0.08);
+  --purple:           #9333ea;
+  --purple-subtle:    rgba(147, 51, 234, 0.08);
+
+  /* Radius */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+
+  /* Shadcn compat */
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background:       #0d0d0d;
+  --surface:          #171717;
+  --surface-mid:      #1f1f1f;
+  --surface-high:     #2a2a2a;
+
+  --border:           #2a2a2a;
+  --border-mid:       #3a3a3a;
+  --border-strong:    #525252;
+
+  --text:             #ececec;
+  --text-muted:       #8e8e8e;
+  --text-subtle:      #525252;
+
+  --accent:           #10a37f;
+  --accent-hover:     #12b890;
+  --accent-subtle:    rgba(16, 163, 127, 0.1);
+  --accent-border:    rgba(16, 163, 127, 0.3);
+
+  --green:            #22c55e;
+  --green-subtle:     rgba(34, 197, 94, 0.1);
+  --red:              #f87171;
+  --red-subtle:       rgba(248, 113, 113, 0.1);
+  --yellow:           #facc15;
+  --yellow-subtle:    rgba(250, 204, 21, 0.1);
+  --purple:           #c084fc;
+  --purple-subtle:    rgba(192, 132, 252, 0.1);
 }
 
 /* ─── Reset ─────────────────────────────────────────────────── */
@@ -38,7 +85,7 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background: var(--background);
   color: var(--text);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 13px;
@@ -50,29 +97,21 @@ body {
 /* ─── Scrollbars ─────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: var(--border-mid);
-  border-radius: 3px;
-}
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
 
-/* ─── Typography ─────────────────────────────────────────────── */
-.font-mono {
-  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace !important;
-}
-
-/* ─── Syntax Highlight ─────────────────────────────────────────── */
+/* ─── Syntax highlight ─────────────────────────────────────────── */
 .code-block {
   background: var(--surface-mid);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 16px;
-  font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
   font-size: 11.5px;
   line-height: 1.75;
   overflow-x: auto;
   white-space: pre;
-  color: #abb2bf;
+  color: var(--text-muted);
 }
 
 /* ─── Sidebar nav ────────────────────────────────────────────────── */
@@ -87,6 +126,8 @@ body {
   transition: background 80ms, color 80ms;
   user-select: none;
   font-size: 12.5px;
+  width: 100%;
+  text-align: left;
 }
 .nav-item:hover { background: var(--surface-mid); color: var(--text); }
 .nav-item.active { background: var(--accent-subtle); color: var(--accent); }
@@ -110,6 +151,10 @@ body {
   margin-bottom: -1px;
   transition: color 80ms;
   white-space: nowrap;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
 }
 .tab:hover { color: var(--text); }
 .tab.active { color: var(--text); border-bottom-color: var(--accent); }
@@ -126,14 +171,14 @@ body {
   white-space: nowrap;
   flex-shrink: 0;
 }
-.chip.default  { background: var(--surface-high); color: var(--text-muted); border: 1px solid var(--border); }
-.chip.accent   { background: var(--accent-subtle); color: var(--accent); }
+.chip.default  { background: var(--surface-high); color: var(--text-muted); border: 1px solid var(--border-mid); }
+.chip.accent   { background: var(--accent-subtle); color: var(--accent); border: 1px solid var(--accent-border); }
 .chip.green    { background: var(--green-subtle);  color: var(--green); }
 .chip.red      { background: var(--red-subtle);    color: var(--red); }
 .chip.yellow   { background: var(--yellow-subtle); color: var(--yellow); }
 .chip.purple   { background: var(--purple-subtle); color: var(--purple); }
 
-/* ─── Inspector ─────────────────────────────────────────────────── */
+/* ─── Inspector label ─────────────────────────────────────────────── */
 .inspector-label {
   font-size: 10px;
   font-weight: 600;
@@ -148,7 +193,7 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   background: var(--surface-high);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-mid);
   color: var(--text-muted);
   padding: 2px 7px;
   border-radius: var(--radius-sm);
@@ -157,17 +202,13 @@ body {
   user-select: none;
 }
 .value-pill:hover { background: var(--border-mid); color: var(--text); }
-.value-pill.copied { background: var(--green-subtle); color: var(--green); border-color: rgba(45, 213, 120, 0.2); }
+.value-pill.copied { background: var(--green-subtle); color: var(--green); border-color: rgba(34,197,94,0.2); }
 
 /* ─── Component preview canvas ──────────────────────────────────── */
 .preview-canvas {
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    rgba(255,255,255,0.015) 10px,
-    rgba(255,255,255,0.015) 11px
-  );
+  background-color: var(--surface-mid);
+  background-image: radial-gradient(circle, var(--border-mid) 1px, transparent 1px);
+  background-size: 20px 20px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   padding: 40px 32px;
@@ -190,3 +231,8 @@ body {
 .status-dot.pass { background: var(--green); }
 .status-dot.fail { background: var(--red); }
 .status-dot.warn { background: var(--yellow); }
+
+/* ─── font-mono utility ──────────────────────────────────────────── */
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}

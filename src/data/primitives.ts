@@ -1,6 +1,27 @@
 import type { PrimitiveToken } from '@/types'
 
 export const primitiveColors: PrimitiveToken[] = [
+  // ── Utopia Terracotta (Brand) ──────────────────────────
+  { id: 'terra-50',  name: 'terra-50',  category: 'color', value: '#f6e2d7', description: 'Palest terracotta tint' },
+  { id: 'terra-100', name: 'terra-100', category: 'color', value: '#f0c6af' },
+  { id: 'terra-200', name: 'terra-200', category: 'color', value: '#e3a385' },
+  { id: 'terra-300', name: 'terra-300', category: 'color', value: '#d77a59' },
+  { id: 'terra-500', name: 'terra-500', category: 'color', value: '#CC5536', description: 'Utopia brand terracotta' },
+  { id: 'terra-700', name: 'terra-700', category: 'color', value: '#a8391e' },
+  { id: 'terra-900', name: 'terra-900', category: 'color', value: '#7a1f08' },
+
+  // ── Utopia Warm Gray (UI Neutrals) ────────────────────
+  { id: 'warm-0',   name: 'warm-0',   category: 'color', value: '#efeae8', description: 'Warm near-white' },
+  { id: 'warm-100', name: 'warm-100', category: 'color', value: '#e3e1e2' },
+  { id: 'warm-200', name: 'warm-200', category: 'color', value: '#bdb7b9' },
+  { id: 'warm-300', name: 'warm-300', category: 'color', value: '#8f898b' },
+  { id: 'warm-400', name: 'warm-400', category: 'color', value: '#635b5e' },
+  { id: 'warm-500', name: 'warm-500', category: 'color', value: '#3c3235', description: 'Mid warm gray' },
+  { id: 'warm-600', name: 'warm-600', category: 'color', value: '#1d1816' },
+  { id: 'warm-700', name: 'warm-700', category: 'color', value: '#1a1416', description: 'Deep warm dark surface' },
+  { id: 'warm-800', name: 'warm-800', category: 'color', value: '#0f0c0d' },
+  { id: 'warm-900', name: 'warm-900', category: 'color', value: '#0d0a0b', description: 'Utopia background black' },
+
   // Blues
   { id: 'blue-50',  name: 'blue-50',  category: 'color', value: '#eff6ff', description: 'Lightest blue tint' },
   { id: 'blue-100', name: 'blue-100', category: 'color', value: '#dbeafe' },

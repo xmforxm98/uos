@@ -40,7 +40,15 @@ function WhereUsed({ semanticId }: { semanticId: string }) {
 
 function ComponentInspector({ id }: { id: string }) {
   const comp = getComponent(id)
+  const { activeTheme } = useDesignSystem()
   if (!comp) return null
+
+  function resolveDepValue(semanticRef: string, primitiveRef: string, fallback: string) {
+    const override = activeTheme.overrides.find(o => o.semanticId === semanticRef)
+    if (override) return override.value
+    const prim = getPrimitive(primitiveRef)
+    return prim?.value ?? fallback
+  }
 
   const passCount = comp.accessibility.filter(a => a.passes).length
 
@@ -68,7 +76,9 @@ function ComponentInspector({ id }: { id: string }) {
       <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
         <div className="inspector-label">Token Dependencies</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {comp.tokenDeps.map(dep => (
+          {comp.tokenDeps.map(dep => {
+            const resolvedValue = resolveDepValue(dep.semanticRef, dep.primitiveRef, dep.currentValue)
+            return (
             <div key={dep.tokenId} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '5px 8px',
@@ -86,18 +96,19 @@ function ComponentInspector({ id }: { id: string }) {
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                {dep.currentValue !== 'transparent' && (
+                {resolvedValue !== 'transparent' && (
                   <div style={{
                     width: 12, height: 12, borderRadius: 3,
-                    background: dep.currentValue,
+                    background: resolvedValue,
                     border: '1px solid rgba(255,255,255,0.1)',
                     flexShrink: 0,
                   }} />
                 )}
-                <CopyPill id={dep.tokenId} value={dep.currentValue} />
+                <CopyPill id={dep.tokenId} value={resolvedValue} />
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 

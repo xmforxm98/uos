@@ -1,7 +1,7 @@
 'use client'
 
 import {
-  Layers, Type, Ruler, Shapes, Zap, Circle,
+  Type, Ruler, Shapes, Zap, Circle,
   Component, Square, ToggleLeft, FormInput, LayoutDashboard,
   Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search
 } from 'lucide-react'
@@ -10,6 +10,8 @@ import { themes } from '@/data/themes'
 import { componentDefs } from '@/data/components'
 import { patterns } from '@/data/patterns'
 import type { SelectedItem } from '@/types'
+import { ThemeToggle } from './ThemeToggle'
+import { ScrollArea } from './ui/scroll-area'
 
 const componentIconMap: Record<string, React.ReactNode> = {
   button:  <Square size={12} />,
@@ -23,14 +25,13 @@ const componentIconMap: Record<string, React.ReactNode> = {
 function NavSection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="nav-item section-header" style={{
+      <div style={{
         fontSize: '10px',
         fontWeight: 600,
-        letterSpacing: '0.1em',
+        letterSpacing: '0.08em',
         textTransform: 'uppercase',
         color: 'var(--text-subtle)',
         padding: '14px 12px 4px',
-        pointerEvents: 'none',
       }}>
         {label}
       </div>
@@ -54,7 +55,7 @@ function NavItemRow({
       className={`nav-item w-full text-left ${selected ? 'active' : ''}`}
       style={{ border: 'none', background: selected ? undefined : 'transparent' }}
     >
-      <span style={{ opacity: 0.7, display: 'flex', alignItems: 'center' }}>{icon}</span>
+      <span style={{ opacity: 0.6, display: 'flex', alignItems: 'center' }}>{icon}</span>
       <span style={{ flex: 1 }}>{label}</span>
       {badge && (
         <span className="chip default" style={{ fontSize: '9.5px', padding: '1px 5px' }}>{badge}</span>
@@ -94,26 +95,35 @@ export function Sidebar() {
       overflow: 'hidden',
       flexShrink: 0,
     }}>
-      {/* Logo */}
+      {/* Header */}
       <div style={{
-        padding: '16px 14px 10px',
+        padding: '12px 14px',
         borderBottom: '1px solid var(--border)',
         flexShrink: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 8,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div>
           <div style={{
-            width: 26, height: 26, borderRadius: 6,
-            background: 'var(--accent)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
+            fontSize: 13,
+            fontWeight: 600,
+            color: 'var(--text)',
+            letterSpacing: '-0.01em',
           }}>
-            <Layers size={13} color="#fff" />
+            DesignOS
           </div>
-          <div>
-            <div style={{ fontWeight: 600, fontSize: 13, lineHeight: 1.2 }}>DesignOS</div>
-            <div style={{ fontSize: 10, color: 'var(--text-subtle)', lineHeight: 1.2 }}>Semantic Explorer</div>
+          <div style={{
+            fontSize: 10,
+            color: 'var(--text-subtle)',
+            letterSpacing: '0.04em',
+            marginTop: 1,
+          }}>
+            Design System Explorer
           </div>
         </div>
+        <ThemeToggle />
       </div>
 
       {/* Search */}
@@ -157,7 +167,7 @@ export function Sidebar() {
                 border: '1px solid',
                 cursor: 'pointer',
                 background: activeTheme.id === t.id ? 'var(--accent-subtle)' : 'transparent',
-                borderColor: activeTheme.id === t.id ? 'var(--accent)' : 'var(--border)',
+                borderColor: activeTheme.id === t.id ? 'var(--accent-border)' : 'var(--border)',
                 color: activeTheme.id === t.id ? 'var(--accent)' : 'var(--text-muted)',
                 transition: 'all 100ms',
               }}
@@ -169,79 +179,83 @@ export function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1, overflowY: 'auto', padding: '4px 6px 16px' }}>
-        <NavSection label="Foundations">
-          <NavItemRow icon={<Palette size={12} />} label="Colors"      selected={isSelected({ type: 'primitive', id: 'color' })}      onClick={() => setSelected({ type: 'primitive', id: 'color' })} />
-          <NavItemRow icon={<Ruler size={12} />}   label="Spacing"     selected={isSelected({ type: 'primitive', id: 'spacing' })}    onClick={() => setSelected({ type: 'primitive', id: 'spacing' })} />
-          <NavItemRow icon={<Type size={12} />}    label="Typography"  selected={isSelected({ type: 'primitive', id: 'typography' })} onClick={() => setSelected({ type: 'primitive', id: 'typography' })} />
-          <NavItemRow icon={<Shapes size={12} />}  label="Radius"      selected={isSelected({ type: 'primitive', id: 'radius' })}     onClick={() => setSelected({ type: 'primitive', id: 'radius' })} />
-          <NavItemRow icon={<Zap size={12} />}     label="Motion"      selected={isSelected({ type: 'primitive', id: 'motion' })}     onClick={() => setSelected({ type: 'primitive', id: 'motion' })} />
-        </NavSection>
+      <ScrollArea style={{ flex: 1 }}>
+        <nav style={{ padding: '4px 6px 16px' }}>
+          <NavSection label="Foundations">
+            <NavItemRow icon={<Palette size={12} />} label="Colors"      selected={isSelected({ type: 'primitive', id: 'color' })}      onClick={() => setSelected({ type: 'primitive', id: 'color' })} />
+            <NavItemRow icon={<Ruler size={12} />}   label="Spacing"     selected={isSelected({ type: 'primitive', id: 'spacing' })}    onClick={() => setSelected({ type: 'primitive', id: 'spacing' })} />
+            <NavItemRow icon={<Type size={12} />}    label="Typography"  selected={isSelected({ type: 'primitive', id: 'typography' })} onClick={() => setSelected({ type: 'primitive', id: 'typography' })} />
+            <NavItemRow icon={<Shapes size={12} />}  label="Radius"      selected={isSelected({ type: 'primitive', id: 'radius' })}     onClick={() => setSelected({ type: 'primitive', id: 'radius' })} />
+            <NavItemRow icon={<Zap size={12} />}     label="Motion"      selected={isSelected({ type: 'primitive', id: 'motion' })}     onClick={() => setSelected({ type: 'primitive', id: 'motion' })} />
+            <NavItemRow icon={<Shapes size={12} />}  label="Shadows"     selected={isSelected({ type: 'primitive', id: 'shadow' })}     onClick={() => setSelected({ type: 'primitive', id: 'shadow' })} />
+            <NavItemRow icon={<Zap size={12} />}     label="Icons"       selected={isSelected({ type: 'primitive', id: 'icons' })}      onClick={() => setSelected({ type: 'primitive', id: 'icons' })} />
+          </NavSection>
 
-        <NavSection label="Semantic Tokens">
-          {['background', 'text', 'border', 'surface', 'interactive'].map(g => (
+          <NavSection label="Semantic Tokens">
+            {['background', 'text', 'border', 'surface', 'interactive', 'radius'].map(g => (
+              <NavItemRow
+                key={g}
+                icon={<Circle size={12} />}
+                label={g.charAt(0).toUpperCase() + g.slice(1)}
+                selected={isSelected({ type: 'semantic', id: g })}
+                onClick={() => setSelected({ type: 'semantic', id: g })}
+              />
+            ))}
+          </NavSection>
+
+          <NavSection label="Components">
+            {Object.entries(byCategory).map(([cat, comps]) => (
+              <div key={cat}>
+                <div style={{ fontSize: 10.5, color: 'var(--text-subtle)', padding: '6px 10px 2px', fontWeight: 500 }}>{cat}</div>
+                {comps.map(c => (
+                  <NavItemRow
+                    key={c.id}
+                    icon={componentIconMap[c.id] ?? <Component size={12} />}
+                    label={c.name}
+                    selected={isSelected({ type: 'component', id: c.id })}
+                    onClick={() => setSelected({ type: 'component', id: c.id })}
+                    badge={c.accessibility.some(a => !a.passes) ? 'a11y' : undefined}
+                  />
+                ))}
+              </div>
+            ))}
+          </NavSection>
+
+          <NavSection label="Patterns">
+            {patterns.map(p => (
+              <NavItemRow
+                key={p.id}
+                icon={<GalleryHorizontal size={12} />}
+                label={p.name}
+                selected={isSelected({ type: 'pattern', id: p.id })}
+                onClick={() => setSelected({ type: 'pattern', id: p.id })}
+              />
+            ))}
+          </NavSection>
+
+          <NavSection label="Brand Themes">
+            {themes.map(t => (
+              <NavItemRow
+                key={t.id}
+                icon={<MonitorSmartphone size={12} />}
+                label={t.name}
+                selected={isSelected({ type: 'theme', id: t.id })}
+                onClick={() => setSelected({ type: 'theme', id: t.id })}
+                badge={t.overrides.length > 0 ? `${t.overrides.length}` : undefined}
+              />
+            ))}
+          </NavSection>
+
+          <NavSection label="AI System">
             <NavItemRow
-              key={g}
-              icon={<Circle size={12} />}
-              label={g.charAt(0).toUpperCase() + g.slice(1)}
-              selected={isSelected({ type: 'semantic', id: g })}
-              onClick={() => setSelected({ type: 'semantic', id: g })}
+              icon={<Sparkles size={12} />}
+              label="Generation Rules"
+              selected={isSelected({ type: 'pattern', id: 'ai-rules' })}
+              onClick={() => setSelected({ type: 'pattern', id: 'ai-rules' })}
             />
-          ))}
-        </NavSection>
-
-        <NavSection label="Components">
-          {Object.entries(byCategory).map(([cat, comps]) => (
-            <div key={cat}>
-              <div style={{ fontSize: 10.5, color: 'var(--text-subtle)', padding: '6px 10px 2px', fontWeight: 500 }}>{cat}</div>
-              {comps.map(c => (
-                <NavItemRow
-                  key={c.id}
-                  icon={componentIconMap[c.id] ?? <Component size={12} />}
-                  label={c.name}
-                  selected={isSelected({ type: 'component', id: c.id })}
-                  onClick={() => setSelected({ type: 'component', id: c.id })}
-                  badge={c.accessibility.some(a => !a.passes) ? 'a11y' : undefined}
-                />
-              ))}
-            </div>
-          ))}
-        </NavSection>
-
-        <NavSection label="Patterns">
-          {patterns.map(p => (
-            <NavItemRow
-              key={p.id}
-              icon={<GalleryHorizontal size={12} />}
-              label={p.name}
-              selected={isSelected({ type: 'pattern', id: p.id })}
-              onClick={() => setSelected({ type: 'pattern', id: p.id })}
-            />
-          ))}
-        </NavSection>
-
-        <NavSection label="Brand Themes">
-          {themes.map(t => (
-            <NavItemRow
-              key={t.id}
-              icon={<MonitorSmartphone size={12} />}
-              label={t.name}
-              selected={isSelected({ type: 'theme', id: t.id })}
-              onClick={() => setSelected({ type: 'theme', id: t.id })}
-              badge={t.overrides.length > 0 ? `${t.overrides.length}` : undefined}
-            />
-          ))}
-        </NavSection>
-
-        <NavSection label="AI System">
-          <NavItemRow
-            icon={<Sparkles size={12} />}
-            label="Generation Rules"
-            selected={isSelected({ type: 'pattern', id: 'ai-rules' })}
-            onClick={() => setSelected({ type: 'pattern', id: 'ai-rules' })}
-          />
-        </NavSection>
-      </nav>
+          </NavSection>
+        </nav>
+      </ScrollArea>
     </aside>
   )
 }

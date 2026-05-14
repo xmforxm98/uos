@@ -49,7 +49,7 @@ export const componentDefs: ComponentDef[] = [
       {
         tokenId: 'btn/radius',
         label: 'Border Radius',
-        semanticRef: 'radius/component',
+        semanticRef: 'radius/sm',
         primitiveRef: 'radius-md',
         currentValue: '6px',
       },
@@ -184,6 +184,13 @@ export const componentDefs: ComponentDef[] = [
         primitiveRef: 'gray-400',
         currentValue: '#9ca3af',
       },
+      {
+        tokenId: 'input/radius',
+        label: 'Border Radius',
+        semanticRef: 'radius/sm',
+        primitiveRef: 'radius-md',
+        currentValue: '6px',
+      },
     ],
     accessibility: [
       { rule: 'Always has associated <label>', wcag: '1.3.1', level: 'A', passes: true },
@@ -273,7 +280,7 @@ import { Label } from '@/components/ui/label'
       {
         tokenId: 'card/radius',
         label: 'Radius',
-        semanticRef: 'radius/container',
+        semanticRef: 'radius/md',
         primitiveRef: 'radius-xl',
         currentValue: '12px',
       },
@@ -362,7 +369,7 @@ import { Label } from '@/components/ui/label'
       {
         tokenId: 'badge/radius',
         label: 'Radius',
-        semanticRef: 'radius/pill',
+        semanticRef: 'radius/full',
         primitiveRef: 'radius-full',
         currentValue: '9999px',
       },
@@ -440,6 +447,13 @@ import { Label } from '@/components/ui/label'
         semanticRef: 'border/default',
         primitiveRef: 'gray-200',
         currentValue: '#e5e7eb',
+      },
+      {
+        tokenId: 'avatar/radius',
+        label: 'Border Radius',
+        semanticRef: 'radius/full',
+        primitiveRef: 'radius-full',
+        currentValue: '9999px',
       },
     ],
     accessibility: [

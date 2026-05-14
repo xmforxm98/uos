@@ -44,10 +44,10 @@ export default function Home() {
         display: 'flex',
         height: '100dvh',
         overflow: 'hidden',
-        background: 'var(--bg)',
+        background: 'var(--background)',
       }}>
         <Sidebar />
-        <main style={{ flex: 1, overflow: 'hidden', background: 'var(--bg)' }}>
+        <main style={{ flex: 1, overflow: 'hidden', background: 'var(--background)' }}>
           <MainContent />
         </main>
         <Inspector />

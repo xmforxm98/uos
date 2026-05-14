@@ -110,36 +110,121 @@ export function ComponentView({ id }: { id: string }) {
       {/* Tab content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
         {tab === 'Preview' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+            {/* Live interactive preview */}
             <div>
               <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-                Component Preview · {component.variants.length} variants
+                Live Preview · hover, focus, click to interact
               </div>
               <ComponentPreview component={component} />
             </div>
 
+            {/* States / Variants table */}
             <div>
-              <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-                States
+              <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+                States & Variants
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
-                {component.states.map(s => (
-                  <div key={s.name} style={{
-                    background: 'var(--surface-mid)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius-lg)',
-                    padding: '10px 12px',
-                  }}>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>
-                      {s.name}
+              <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+                {/* Header */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '130px 1fr 1fr 1fr',
+                  background: 'var(--surface-mid)',
+                  borderBottom: '1px solid var(--border)',
+                  padding: '8px 14px',
+                  gap: 12,
+                }}>
+                  {['State', 'Description', 'Trigger', 'Token change'].map(h => (
+                    <div key={h} style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>{h}</div>
+                  ))}
+                </div>
+                {/* Rows */}
+                {component.states.map((s, i) => {
+                  const stateColors: Record<string, string> = {
+                    default: 'var(--text)',
+                    hover: 'var(--accent)',
+                    active: 'var(--accent)',
+                    focus: 'var(--yellow)',
+                    disabled: 'var(--text-subtle)',
+                    loading: 'var(--purple)',
+                    error: 'var(--red)',
+                    success: 'var(--green)',
+                    checked: 'var(--green)',
+                    indeterminate: 'var(--yellow)',
+                  }
+                  const stateTriggers: Record<string, string> = {
+                    default: 'Initial / resting',
+                    hover: ':hover — mouse over',
+                    active: ':active — mouse down',
+                    focus: ':focus-visible — keyboard nav',
+                    disabled: '[disabled] attribute',
+                    loading: 'async operation',
+                    error: 'validation fail',
+                    success: 'validation pass',
+                    checked: '[checked] state',
+                    indeterminate: 'partial selection',
+                  }
+                  const stateTokens: Record<string, string> = {
+                    default: 'bg/brand → accent',
+                    hover: 'bg/brand → accent-hover',
+                    active: 'transform: scale(0.97)',
+                    focus: 'box-shadow: focus-ring',
+                    disabled: 'opacity: 0.45',
+                    loading: 'pointer-events: none',
+                    error: 'border → red, bg → red-subtle',
+                    success: 'border → green',
+                    checked: 'bg → accent',
+                    indeterminate: 'bg → surface-high',
+                  }
+                  const dotColor = stateColors[s.name] ?? 'var(--text-muted)'
+                  return (
+                    <div key={s.name} style={{
+                      display: 'grid',
+                      gridTemplateColumns: '130px 1fr 1fr 1fr',
+                      padding: '10px 14px', gap: 12,
+                      borderBottom: i < component.states.length - 1 ? '1px solid var(--border)' : 'none',
+                      background: i % 2 === 0 ? 'transparent' : 'var(--surface-mid)',
+                      alignItems: 'start',
+                      transition: 'background 80ms',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                        <div style={{ width: 7, height: 7, borderRadius: '50%', background: dotColor, flexShrink: 0 }} />
+                        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', fontFamily: 'monospace' }}>{s.name}</span>
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5 }}>{s.description}</div>
+                      <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontFamily: 'monospace' }}>
+                        {stateTriggers[s.name] ?? '—'}
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontFamily: 'monospace' }}>
+                        {stateTokens[s.name] ?? '—'}
+                      </div>
                     </div>
-                    <div style={{ fontSize: 11, color: 'var(--text-subtle)', lineHeight: 1.4 }}>
-                      {s.description}
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
+
+            {/* Variants row */}
+            {component.variants.length > 0 && (
+              <div>
+                <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+                  Variants ({component.variants.length})
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {component.variants.map(v => (
+                    <div key={v} style={{
+                      padding: '6px 12px',
+                      background: 'var(--surface-mid)',
+                      border: '1px solid var(--border)',
+                      borderRadius: 'var(--radius-md)',
+                      fontSize: 12, color: 'var(--text)', fontFamily: 'monospace',
+                    }}>
+                      {v}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

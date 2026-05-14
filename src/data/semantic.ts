@@ -316,6 +316,65 @@ export const semanticTokens: SemanticToken[] = [
     description: 'Focus ring color for accessibility',
     usage: ['Keyboard focus indicator', 'Tab navigation', 'Focus visible ring'],
   },
+
+  // ── Radius ────────────────────────────────────────────────────
+  // 5-scale system: xs → sm → md → lg → xl
+  // Each theme overrides these to achieve its personality
+  // (Brand A: sharp xs/sm, Brand B: very rounded lg/xl)
+  {
+    id: 'radius/xs',
+    name: 'radius/xs',
+    group: 'radius',
+    primitiveRef: 'radius-sm',
+    darkRef: 'radius-sm',
+    description: 'Extra small — sharp, dense UI elements',
+    usage: ['Dense tags', 'Compact chips', 'Table cells', 'Tight badges'],
+  },
+  {
+    id: 'radius/sm',
+    name: 'radius/sm',
+    group: 'radius',
+    primitiveRef: 'radius-md',
+    darkRef: 'radius-md',
+    description: 'Small — standard interactive elements',
+    usage: ['Button', 'Input', 'Select', 'Checkbox', 'Toggle'],
+  },
+  {
+    id: 'radius/md',
+    name: 'radius/md',
+    group: 'radius',
+    primitiveRef: 'radius-lg',
+    darkRef: 'radius-lg',
+    description: 'Medium — default surface radius',
+    usage: ['Card', 'Panel', 'Dropdown', 'Tooltip', 'Default component'],
+  },
+  {
+    id: 'radius/lg',
+    name: 'radius/lg',
+    group: 'radius',
+    primitiveRef: 'radius-xl',
+    darkRef: 'radius-xl',
+    description: 'Large — elevated surfaces and modals',
+    usage: ['Dialog', 'Modal', 'Sheet', 'Large card', 'Feature block'],
+  },
+  {
+    id: 'radius/xl',
+    name: 'radius/xl',
+    group: 'radius',
+    primitiveRef: 'radius-2xl',
+    darkRef: 'radius-2xl',
+    description: 'Extra large — prominent, featured elements',
+    usage: ['Hero card', 'CTA block', 'Featured section', 'Pill button'],
+  },
+  {
+    id: 'radius/full',
+    name: 'radius/full',
+    group: 'radius',
+    primitiveRef: 'radius-full',
+    darkRef: 'radius-full',
+    description: 'Full — always circular or pill shape',
+    usage: ['Avatar', 'Badge', 'Chip', 'Progress bar', 'Icon button'],
+  },
 ]
 
 export function getSemanticToken(id: string) {
@@ -332,4 +391,5 @@ export const semanticGroups = [
   'border',
   'surface',
   'interactive',
+  'radius',
 ]
