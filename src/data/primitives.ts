@@ -1,0 +1,152 @@
+import type { PrimitiveToken } from '@/types'
+
+export const primitiveColors: PrimitiveToken[] = [
+  // Blues
+  { id: 'blue-50',  name: 'blue-50',  category: 'color', value: '#eff6ff', description: 'Lightest blue tint' },
+  { id: 'blue-100', name: 'blue-100', category: 'color', value: '#dbeafe' },
+  { id: 'blue-200', name: 'blue-200', category: 'color', value: '#bfdbfe' },
+  { id: 'blue-300', name: 'blue-300', category: 'color', value: '#93c5fd' },
+  { id: 'blue-400', name: 'blue-400', category: 'color', value: '#60a5fa' },
+  { id: 'blue-500', name: 'blue-500', category: 'color', value: '#3b82f6' },
+  { id: 'blue-600', name: 'blue-600', category: 'color', value: '#2563eb', description: 'Primary brand blue' },
+  { id: 'blue-700', name: 'blue-700', category: 'color', value: '#1d4ed8' },
+  { id: 'blue-800', name: 'blue-800', category: 'color', value: '#1e40af' },
+  { id: 'blue-900', name: 'blue-900', category: 'color', value: '#1e3a8a' },
+  { id: 'blue-950', name: 'blue-950', category: 'color', value: '#172554' },
+
+  // Grays
+  { id: 'gray-0',   name: 'gray-0',   category: 'color', value: '#ffffff', description: 'Pure white' },
+  { id: 'gray-50',  name: 'gray-50',  category: 'color', value: '#f9fafb' },
+  { id: 'gray-100', name: 'gray-100', category: 'color', value: '#f3f4f6' },
+  { id: 'gray-200', name: 'gray-200', category: 'color', value: '#e5e7eb' },
+  { id: 'gray-300', name: 'gray-300', category: 'color', value: '#d1d5db' },
+  { id: 'gray-400', name: 'gray-400', category: 'color', value: '#9ca3af' },
+  { id: 'gray-500', name: 'gray-500', category: 'color', value: '#6b7280' },
+  { id: 'gray-600', name: 'gray-600', category: 'color', value: '#4b5563' },
+  { id: 'gray-700', name: 'gray-700', category: 'color', value: '#374151' },
+  { id: 'gray-800', name: 'gray-800', category: 'color', value: '#1f2937' },
+  { id: 'gray-900', name: 'gray-900', category: 'color', value: '#111827' },
+  { id: 'gray-950', name: 'gray-950', category: 'color', value: '#030712', description: 'Near black' },
+
+  // Reds
+  { id: 'red-50',  name: 'red-50',  category: 'color', value: '#fef2f2' },
+  { id: 'red-100', name: 'red-100', category: 'color', value: '#fee2e2' },
+  { id: 'red-200', name: 'red-200', category: 'color', value: '#fecaca' },
+  { id: 'red-400', name: 'red-400', category: 'color', value: '#f87171' },
+  { id: 'red-500', name: 'red-500', category: 'color', value: '#ef4444' },
+  { id: 'red-600', name: 'red-600', category: 'color', value: '#dc2626', description: 'Danger / destructive' },
+  { id: 'red-700', name: 'red-700', category: 'color', value: '#b91c1c' },
+  { id: 'red-900', name: 'red-900', category: 'color', value: '#7f1d1d' },
+
+  // Greens
+  { id: 'green-50',  name: 'green-50',  category: 'color', value: '#f0fdf4' },
+  { id: 'green-100', name: 'green-100', category: 'color', value: '#dcfce7' },
+  { id: 'green-200', name: 'green-200', category: 'color', value: '#bbf7d0' },
+  { id: 'green-400', name: 'green-400', category: 'color', value: '#4ade80' },
+  { id: 'green-500', name: 'green-500', category: 'color', value: '#22c55e' },
+  { id: 'green-600', name: 'green-600', category: 'color', value: '#16a34a', description: 'Success state' },
+  { id: 'green-700', name: 'green-700', category: 'color', value: '#15803d' },
+  { id: 'green-900', name: 'green-900', category: 'color', value: '#14532d' },
+
+  // Yellows
+  { id: 'yellow-50',  name: 'yellow-50',  category: 'color', value: '#fefce8' },
+  { id: 'yellow-100', name: 'yellow-100', category: 'color', value: '#fef9c3' },
+  { id: 'yellow-400', name: 'yellow-400', category: 'color', value: '#facc15' },
+  { id: 'yellow-500', name: 'yellow-500', category: 'color', value: '#eab308', description: 'Warning state' },
+  { id: 'yellow-600', name: 'yellow-600', category: 'color', value: '#ca8a04' },
+  { id: 'yellow-900', name: 'yellow-900', category: 'color', value: '#713f12' },
+
+  // Purples
+  { id: 'purple-50',  name: 'purple-50',  category: 'color', value: '#faf5ff' },
+  { id: 'purple-100', name: 'purple-100', category: 'color', value: '#f3e8ff' },
+  { id: 'purple-400', name: 'purple-400', category: 'color', value: '#c084fc' },
+  { id: 'purple-500', name: 'purple-500', category: 'color', value: '#a855f7' },
+  { id: 'purple-600', name: 'purple-600', category: 'color', value: '#9333ea', description: 'Brand B accent' },
+  { id: 'purple-700', name: 'purple-700', category: 'color', value: '#7e22ce' },
+  { id: 'purple-900', name: 'purple-900', category: 'color', value: '#581c87' },
+
+  // Transparent
+  { id: 'transparent', name: 'transparent', category: 'color', value: 'transparent' },
+  { id: 'white',        name: 'white',       category: 'color', value: '#ffffff' },
+  { id: 'black',        name: 'black',       category: 'color', value: '#000000' },
+]
+
+export const primitiveSpacing: PrimitiveToken[] = [
+  { id: 'space-0',   name: 'space-0',   category: 'spacing', value: '0px' },
+  { id: 'space-0.5', name: 'space-0.5', category: 'spacing', value: '2px' },
+  { id: 'space-1',   name: 'space-1',   category: 'spacing', value: '4px' },
+  { id: 'space-1.5', name: 'space-1.5', category: 'spacing', value: '6px' },
+  { id: 'space-2',   name: 'space-2',   category: 'spacing', value: '8px' },
+  { id: 'space-2.5', name: 'space-2.5', category: 'spacing', value: '10px' },
+  { id: 'space-3',   name: 'space-3',   category: 'spacing', value: '12px' },
+  { id: 'space-4',   name: 'space-4',   category: 'spacing', value: '16px' },
+  { id: 'space-5',   name: 'space-5',   category: 'spacing', value: '20px' },
+  { id: 'space-6',   name: 'space-6',   category: 'spacing', value: '24px' },
+  { id: 'space-8',   name: 'space-8',   category: 'spacing', value: '32px' },
+  { id: 'space-10',  name: 'space-10',  category: 'spacing', value: '40px' },
+  { id: 'space-12',  name: 'space-12',  category: 'spacing', value: '48px' },
+  { id: 'space-16',  name: 'space-16',  category: 'spacing', value: '64px' },
+  { id: 'space-20',  name: 'space-20',  category: 'spacing', value: '80px' },
+  { id: 'space-24',  name: 'space-24',  category: 'spacing', value: '96px' },
+]
+
+export const primitiveRadius: PrimitiveToken[] = [
+  { id: 'radius-none', name: 'radius-none', category: 'radius', value: '0px' },
+  { id: 'radius-sm',   name: 'radius-sm',   category: 'radius', value: '4px' },
+  { id: 'radius-md',   name: 'radius-md',   category: 'radius', value: '6px' },
+  { id: 'radius-lg',   name: 'radius-lg',   category: 'radius', value: '8px' },
+  { id: 'radius-xl',   name: 'radius-xl',   category: 'radius', value: '12px' },
+  { id: 'radius-2xl',  name: 'radius-2xl',  category: 'radius', value: '16px' },
+  { id: 'radius-full', name: 'radius-full', category: 'radius', value: '9999px' },
+]
+
+export const primitiveTypography: PrimitiveToken[] = [
+  { id: 'font-sans',  name: 'font-sans',  category: 'typography', value: 'Inter, system-ui, sans-serif' },
+  { id: 'font-mono',  name: 'font-mono',  category: 'typography', value: 'JetBrains Mono, Fira Code, monospace' },
+  { id: 'text-xs',    name: 'text-xs',    category: 'typography', value: '11px / 16px' },
+  { id: 'text-sm',    name: 'text-sm',    category: 'typography', value: '13px / 20px' },
+  { id: 'text-base',  name: 'text-base',  category: 'typography', value: '14px / 22px' },
+  { id: 'text-md',    name: 'text-md',    category: 'typography', value: '16px / 24px' },
+  { id: 'text-lg',    name: 'text-lg',    category: 'typography', value: '18px / 28px' },
+  { id: 'text-xl',    name: 'text-xl',    category: 'typography', value: '20px / 30px' },
+  { id: 'text-2xl',   name: 'text-2xl',   category: 'typography', value: '24px / 32px' },
+  { id: 'text-3xl',   name: 'text-3xl',   category: 'typography', value: '30px / 36px' },
+  { id: 'font-regular', name: 'font-regular', category: 'typography', value: '400' },
+  { id: 'font-medium',  name: 'font-medium',  category: 'typography', value: '500' },
+  { id: 'font-semibold',name: 'font-semibold', category: 'typography', value: '600' },
+  { id: 'font-bold',    name: 'font-bold',     category: 'typography', value: '700' },
+]
+
+export const primitiveShadows: PrimitiveToken[] = [
+  { id: 'shadow-none', name: 'shadow-none', category: 'shadow', value: 'none' },
+  { id: 'shadow-sm',   name: 'shadow-sm',   category: 'shadow', value: '0 1px 2px rgba(0,0,0,0.05)' },
+  { id: 'shadow-md',   name: 'shadow-md',   category: 'shadow', value: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)' },
+  { id: 'shadow-lg',   name: 'shadow-lg',   category: 'shadow', value: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)' },
+  { id: 'shadow-xl',   name: 'shadow-xl',   category: 'shadow', value: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)' },
+]
+
+export const primitiveMotion: PrimitiveToken[] = [
+  { id: 'duration-instant', name: 'duration-instant', category: 'motion', value: '0ms' },
+  { id: 'duration-fast',    name: 'duration-fast',    category: 'motion', value: '100ms' },
+  { id: 'duration-normal',  name: 'duration-normal',  category: 'motion', value: '200ms' },
+  { id: 'duration-slow',    name: 'duration-slow',    category: 'motion', value: '300ms' },
+  { id: 'duration-slower',  name: 'duration-slower',  category: 'motion', value: '500ms' },
+  { id: 'ease-linear',      name: 'ease-linear',      category: 'motion', value: 'linear' },
+  { id: 'ease-in',          name: 'ease-in',          category: 'motion', value: 'cubic-bezier(0.4, 0, 1, 1)' },
+  { id: 'ease-out',         name: 'ease-out',         category: 'motion', value: 'cubic-bezier(0, 0, 0.2, 1)' },
+  { id: 'ease-in-out',      name: 'ease-in-out',      category: 'motion', value: 'cubic-bezier(0.4, 0, 0.2, 1)' },
+  { id: 'ease-spring',      name: 'ease-spring',      category: 'motion', value: 'cubic-bezier(0.34, 1.56, 0.64, 1)' },
+]
+
+export const allPrimitives = [
+  ...primitiveColors,
+  ...primitiveSpacing,
+  ...primitiveRadius,
+  ...primitiveTypography,
+  ...primitiveShadows,
+  ...primitiveMotion,
+]
+
+export function getPrimitive(id: string) {
+  return allPrimitives.find(t => t.id === id)
+}
