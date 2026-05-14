@@ -16,7 +16,7 @@
  * different behavioral implementations of the same component.
  */
 
-import { useState, useRef } from 'react'
+import { useState, useRef, type JSX } from 'react'
 
 // ─── Minimal Toggle ──────────────────────────────────────────────────────────
 // Zero decoration. Instant or <100ms. No spring, no glow. Just flips.
@@ -437,6 +437,97 @@ export function NativeMobileToggle({ label }: { label?: string }) {
   )
 }
 
+// ─── AI Native Toggle ────────────────────────────────────────────────────────
+// Streaming / generative feel. Track pulses when ON — like computation running.
+// Purple gradient, smooth spring, subtle inner glow. Context-aware.
+
+export function AINativeToggle({ label }: { label?: string }) {
+  const [on, setOn] = useState(false)
+  const [thinking, setThinking] = useState(false)
+
+  function handleToggle() {
+    setThinking(true)
+    setTimeout(() => {
+      setOn(!on)
+      setThinking(false)
+    }, 280)
+  }
+
+  return (
+    <label style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', userSelect: 'none' }}>
+      <div
+        onClick={handleToggle}
+        style={{
+          position: 'relative',
+          width: 51, height: 31,
+          borderRadius: 15.5,
+          background: on
+            ? 'linear-gradient(135deg, #a855f7, #7c3aed)'
+            : 'rgba(120,120,128,0.32)',
+          transition: 'background 300ms ease',
+          cursor: 'pointer',
+          flexShrink: 0,
+          boxShadow: on ? '0 0 12px rgba(168,85,247,0.35)' : 'none',
+        }}
+      >
+        {/* Thinking pulse */}
+        {thinking && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            borderRadius: 15.5,
+            background: 'linear-gradient(90deg, transparent, rgba(168,85,247,0.4), transparent)',
+            animation: 'premiumShimmer 0.4s ease-out',
+          }} />
+        )}
+        {/* Subtle inner glow when on */}
+        {on && (
+          <div style={{
+            position: 'absolute', inset: 2,
+            borderRadius: 13.5,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.15), transparent)',
+            pointerEvents: 'none',
+          }} />
+        )}
+        {/* Thumb */}
+        <div style={{
+          position: 'absolute',
+          top: 2,
+          left: on ? 'calc(100% - 27px)' : 2,
+          width: 27, height: 27,
+          borderRadius: '50%',
+          background: thinking ? 'rgba(168,85,247,0.3)' : '#fff',
+          boxShadow: on
+            ? '0 2px 8px rgba(168,85,247,0.3), 0 1px 3px rgba(0,0,0,0.1)'
+            : '0 1px 3px rgba(0,0,0,0.15)',
+          transition: 'left 300ms cubic-bezier(0.34,1.3,0.64,1), background 280ms ease',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 12,
+        }}>
+          {thinking ? (
+            <div style={{
+              width: 8, height: 8, borderRadius: '50%',
+              background: '#a855f7',
+              animation: 'cyberPulse 0.5s infinite',
+            }} />
+          ) : (
+            <span style={{ opacity: on ? 1 : 0.4, transition: 'opacity 200ms' }}>✦</span>
+          )}
+        </div>
+      </div>
+      {label && (
+        <span style={{
+          fontSize: 13.5,
+          color: on ? '#a855f7' : 'var(--text-muted)',
+          fontWeight: 500,
+          transition: 'color 200ms',
+        }}>
+          {label}
+        </span>
+      )}
+    </label>
+  )
+}
+
 // ─── Style Gallery ────────────────────────────────────────────────────────────
 // Renders all 6 toggle variants in a comparable grid.
 
@@ -445,7 +536,7 @@ type ToggleVariantEntry = {
   name: string
   color: string
   tagline: string
-  component: React.ReactNode
+  component: JSX.Element
   motionNote: string
   decorationNote: string
 }
@@ -506,6 +597,15 @@ export function ToggleStyleGallery() {
       motionNote: '250ms cubic-bezier(0.25,0.46,0.45,0.94) — OS timing',
       decorationNote: 'Press ripple',
     },
+    {
+      styleId: 'ai-native',
+      name: 'AI Native',
+      color: '#a855f7',
+      tagline: 'The interface thinks with you.',
+      component: <AINativeToggle label="AI Assist" />,
+      motionNote: '280ms thinking delay + 300ms spring — computation feel',
+      decorationNote: 'Shimmer pulse + inner glow + ✦ icon',
+    },
   ]
 
   return (
@@ -530,7 +630,7 @@ export function ToggleStyleGallery() {
           <div style={{
             width: 220, flexShrink: 0,
             padding: '12px 16px',
-            background: v.styleId === 'cyber' ? '#080808' : v.styleId === 'minimal' ? '#111' : 'var(--surface)',
+            background: v.styleId === 'cyber' ? '#080808' : v.styleId === 'minimal' ? '#111' : v.styleId === 'ai-native' ? '#0d0014' : 'var(--surface)',
             border: '1px solid var(--border)',
             borderRadius: 'var(--radius-md)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',

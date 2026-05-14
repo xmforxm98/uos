@@ -6,7 +6,8 @@ import { getPrimitive } from '@/data/primitives'
 import { semanticTokens } from '@/data/semantic'
 import { getPattern } from '@/data/patterns'
 import { getTheme } from '@/data/themes'
-import { Check } from 'lucide-react'
+import { getBestProfilesForComponent, getProfilesCompatibleWithComponent, getStyleForTheme } from '@/data/interactionStyles'
+import { Check, Fingerprint } from 'lucide-react'
 
 function CopyPill({ id, value }: { id: string; value: string }) {
   const { copiedId, copyValue } = useDesignSystem()
@@ -148,6 +149,74 @@ function ComponentInspector({ id }: { id: string }) {
             </div>
           </div>
         )}
+      </div>
+
+      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+        <div className="inspector-label" style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 8 }}>
+          <Fingerprint size={10} />
+          Behavioral Profile Compatibility
+        </div>
+        {(() => {
+          const activeStyle = getStyleForTheme(activeTheme.id)
+          const bestProfiles = getBestProfilesForComponent(id)
+          const compatibleProfiles = getProfilesCompatibleWithComponent(id)
+          const incompatibleCount = 7 - compatibleProfiles.length
+
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {activeStyle && (
+                <div style={{
+                  padding: '7px 10px',
+                  background: 'var(--surface-mid)',
+                  border: `1px solid ${activeStyle.color}40`,
+                  borderRadius: 'var(--radius-md)',
+                  borderLeft: `3px solid ${activeStyle.color}`,
+                }}>
+                  <div style={{ fontSize: 10, color: 'var(--text-subtle)', marginBottom: 3 }}>ACTIVE THEME PROFILE</div>
+                  <div style={{ fontSize: 11.5, fontWeight: 600, color: activeStyle.color }}>{activeStyle.name}</div>
+                  <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 2 }}>{activeStyle.tagline}</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 5 }}>
+                    {activeStyle.emotionalTone.map(t => (
+                      <span key={t} style={{
+                        fontSize: 9.5, padding: '1px 5px',
+                        background: `${activeStyle.color}20`,
+                        color: activeStyle.color,
+                        borderRadius: 3,
+                        border: `1px solid ${activeStyle.color}30`,
+                      }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {bestProfiles.length > 0 && (
+                <div>
+                  <div style={{ fontSize: 9.5, color: 'var(--text-subtle)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    Best with
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                    {bestProfiles.map(p => (
+                      <span key={p.id} style={{
+                        fontSize: 10.5, padding: '2px 7px',
+                        background: `${p.color}15`,
+                        color: p.color,
+                        border: `1px solid ${p.color}35`,
+                        borderRadius: 4,
+                        fontWeight: 500,
+                      }}>{p.name}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {incompatibleCount > 0 && (
+                <div style={{ fontSize: 10.5, color: 'var(--text-subtle)' }}>
+                  <span style={{ color: 'var(--red)', fontWeight: 600 }}>{incompatibleCount}</span> profile{incompatibleCount > 1 ? 's' : ''} avoid this component
+                </div>
+              )}
+            </div>
+          )
+        })()}
       </div>
 
       <div style={{ padding: '12px 16px' }}>

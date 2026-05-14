@@ -3,8 +3,9 @@
 import {
   Type, Ruler, Shapes, Zap, Circle,
   Component, Square, ToggleLeft, FormInput, LayoutDashboard,
-  Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search, Layers, Wind, MousePointer2, Fingerprint
+  Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search, Layers, Wind, MousePointer2, Fingerprint, Brain
 } from 'lucide-react'
+import { interactionStyles } from '@/data/interactionStyles'
 import { useDesignSystem } from '@/context/DesignSystemContext'
 import { themes } from '@/data/themes'
 import { componentDefs } from '@/data/components'
@@ -205,13 +206,22 @@ export function Sidebar() {
             ))}
           </NavSection>
 
-          <NavSection label="Interaction Styles">
+          <NavSection label="Behavior">
+            {interactionStyles.map(style => (
+              <NavItemRow
+                key={style.id}
+                icon={<Fingerprint size={12} style={{ color: style.color }} />}
+                label={style.name}
+                selected={isSelected({ type: 'primitive', id: `behavior-${style.id}` })}
+                onClick={() => setSelected({ type: 'primitive', id: `behavior-${style.id}` })}
+              />
+            ))}
             <NavItemRow
-              icon={<Fingerprint size={12} />}
-              label="Style Gallery"
+              icon={<Brain size={12} />}
+              label="Compare All"
               selected={isSelected({ type: 'primitive', id: 'interaction-styles' })}
               onClick={() => setSelected({ type: 'primitive', id: 'interaction-styles' })}
-              badge="6"
+              badge="7"
             />
           </NavSection>
 

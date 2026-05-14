@@ -9,6 +9,7 @@ import { SemanticView } from '@/components/views/SemanticView'
 import { ThemeView } from '@/components/views/ThemeView'
 import { PatternView } from '@/components/views/PatternView'
 import { InteractionStylesView } from '@/components/views/InteractionStylesView'
+import { BehaviorProfileView } from '@/components/views/BehaviorProfileView'
 import { Layers } from 'lucide-react'
 
 function MainContent() {
@@ -31,6 +32,9 @@ function MainContent() {
 
   if (selected.type === 'component') return <ComponentView id={selected.id} />
   if (selected.type === 'primitive' && selected.id === 'interaction-styles') return <InteractionStylesView />
+  if (selected.type === 'primitive' && selected.id.startsWith('behavior-')) {
+    return <BehaviorProfileView profileId={selected.id.replace('behavior-', '')} />
+  }
   if (selected.type === 'primitive') return <FoundationsView category={selected.id} />
   if (selected.type === 'semantic')  return <SemanticView group={selected.id} />
   if (selected.type === 'theme')     return <ThemeView id={selected.id} />
