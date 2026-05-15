@@ -40,7 +40,7 @@ export function MinimalToggle({ label }: { label?: string }) {
       >
         <div style={{
           position: 'absolute',
-          top: 3,
+          top: 4,
           left: on ? 'calc(100% - 17px)' : 3,
           width: 14, height: 14,
           borderRadius: '50%',
@@ -86,7 +86,7 @@ export function EnterpriseToggle({ label }: { label?: string }) {
         <div style={{
           position: 'absolute',
           top: 3,
-          left: on ? 'calc(100% - 19px)' : 3,
+          left: on ? 'calc(100% - 21px)' : 3,
           width: 18, height: 18,
           borderRadius: '50%',
           background: '#fff',
@@ -143,7 +143,7 @@ export function PremiumToggle({ label }: { label?: string }) {
         <div style={{
           position: 'absolute',
           top: 2,
-          left: on ? 'calc(100% - 27px)' : 2,
+          left: on ? 'calc(100% - 29px)' : 2,
           width: 27, height: 27,
           borderRadius: '50%',
           background: '#fff',
@@ -224,7 +224,7 @@ export function PlayfulToggle({ label }: { label?: string }) {
           <div style={{
             position: 'absolute',
             top: 3,
-            left: on ? 'calc(100% - 25px)' : 3,
+            left: on ? 'calc(100% - 27px)' : 3,
             width: 24, height: 24,
             borderRadius: '50%',
             background: '#fff',
@@ -424,7 +424,7 @@ export function NativeMobileToggle({ label }: { label?: string }) {
         <div style={{
           position: 'absolute',
           top: 2,
-          left: on ? 'calc(100% - 27px)' : 2,
+          left: on ? 'calc(100% - 29px)' : 2,
           width: 27, height: 27,
           borderRadius: '50%',
           background: '#fff',
@@ -492,7 +492,7 @@ export function AINativeToggle({ label }: { label?: string }) {
         <div style={{
           position: 'absolute',
           top: 2,
-          left: on ? 'calc(100% - 27px)' : 2,
+          left: on ? 'calc(100% - 29px)' : 2,
           width: 27, height: 27,
           borderRadius: '50%',
           background: thinking ? 'rgba(168,85,247,0.3)' : '#fff',
