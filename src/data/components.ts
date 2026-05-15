@@ -123,6 +123,13 @@ export const componentDefs: ComponentDef[] = [
 >
   Delete Account
 </Button>`,
+    semanticRole: 'action trigger — initiates an operation with immediate user feedback',
+    interactionTokenRefs: ['motion/press', 'motion/quick'],
+    compatibleProfileIds: ['minimal', 'enterprise', 'premium', 'playful', 'cyber', 'native-mobile', 'ai-native'],
+    usageRules: {
+      useWhen: ['Form submission', 'Primary call-to-action', 'Completing onboarding steps', 'Opening important dialogs'],
+      avoidWhen: ['Navigation between pages', 'More than one primary per section', 'Secondary or tertiary actions'],
+    },
   },
 
   // ── INPUT ────────────────────────────────────────────────────────
@@ -239,6 +246,13 @@ import { Label } from '@/components/ui/label'
     <p className="text-sm text-danger">{error}</p>
   )}
 </div>`,
+    semanticRole: 'data entry field — captures user text for processing or persistence',
+    interactionTokenRefs: ['motion/quick', 'motion/fade-in'],
+    compatibleProfileIds: ['minimal', 'enterprise', 'premium', 'native-mobile', 'ai-native'],
+    usageRules: {
+      useWhen: ['Collecting user text data', 'Search interfaces', 'Authentication forms', 'Settings fields'],
+      avoidWhen: ['Binary choices (use Toggle)', 'Multiple selections (use Select)', 'Date ranges (use DatePicker)'],
+    },
   },
 
   // ── CARD ─────────────────────────────────────────────────────────
@@ -336,6 +350,13 @@ import { Label } from '@/components/ui/label'
     <p className="text-sm text-muted">vs $42,912 last month</p>
   </CardContent>
 </Card>`,
+    semanticRole: 'content container — groups related information into a scannable, interactive unit',
+    interactionTokenRefs: ['motion/hover-lift', 'motion/smooth', 'motion/fade-in'],
+    compatibleProfileIds: ['enterprise', 'premium', 'playful', 'native-mobile', 'ai-native'],
+    usageRules: {
+      useWhen: ['Grouping related content', 'Presenting scannable summaries', 'Navigation to detail views'],
+      avoidWhen: ['Simple key-value data (use table)', 'High-density lists (use list items)', 'Single isolated values'],
+    },
   },
 
   // ── BADGE ─────────────────────────────────────────────────────────
@@ -409,6 +430,13 @@ import { Label } from '@/components/ui/label'
 <Badge variant="warning">Pending Review</Badge>
 <Badge variant="danger">Failed</Badge>
 <Badge variant="brand">New</Badge>`,
+    semanticRole: 'status indicator — communicates state, category, count, or classification at a glance',
+    interactionTokenRefs: ['motion/instant', 'motion/quick'],
+    compatibleProfileIds: ['minimal', 'enterprise', 'premium', 'playful', 'cyber', 'native-mobile', 'ai-native'],
+    usageRules: {
+      useWhen: ['Showing status (active/pending/failed)', 'Categorizing content', 'Displaying unread counts', 'Feature labels'],
+      avoidWhen: ['Long text (use Chip)', 'Interactive actions (use Button)', 'More than 3 per list item'],
+    },
   },
 
   // ── AVATAR ────────────────────────────────────────────────────────
@@ -496,6 +524,13 @@ import { Label } from '@/components/ui/label'
     <Avatar key={m.id} src={m.avatar} fallback={m.initials} />
   ))}
 </AvatarGroup>`,
+    semanticRole: 'identity representation — visualizes a user, entity, or persona with fallback hierarchy',
+    interactionTokenRefs: ['motion/quick', 'motion/hover-lift'],
+    compatibleProfileIds: ['enterprise', 'premium', 'playful', 'native-mobile', 'ai-native'],
+    usageRules: {
+      useWhen: ['Representing users in comments/feeds', 'Author attribution', 'Team member lists', 'Chat participants'],
+      avoidWhen: ['Non-person entities without clear identity', 'Decorative imagery (use Image)', 'More than 8 in a stack without AvatarGroup'],
+    },
   },
 
   // ── TOGGLE ────────────────────────────────────────────────────────
@@ -576,6 +611,13 @@ import { Label } from '@/components/ui/label'
     aria-label="Toggle email notifications"
   />
 </div>`,
+    semanticRole: 'binary state controller — represents a persistent on/off preference or setting',
+    interactionTokenRefs: ['motion/spring', 'motion/quick', 'motion/press'],
+    compatibleProfileIds: ['minimal', 'enterprise', 'premium', 'playful', 'cyber', 'native-mobile', 'ai-native'],
+    usageRules: {
+      useWhen: ['Persistent settings that take effect immediately', 'On/off feature flags', 'Preference toggles in settings panels'],
+      avoidWhen: ['Temporary state changes (use Checkbox for forms)', 'Multi-option selection (use Radio/Select)', 'Actions (use Button)'],
+    },
   },
 ]
 

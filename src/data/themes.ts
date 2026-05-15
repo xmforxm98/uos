@@ -43,6 +43,7 @@ export const themes: BrandTheme[] = [
     name: 'Utopia',
     description: 'Utopia Studio dark — terracotta accent on warm black. The canonical brand experience.',
     accentColor: '#CC5536',
+    brandDNAId: 'notion-like',
     overrides: [
       { semanticId: 'bg/default',          primitiveRef: 'warm-900', value: '#0d0a0b' },
       { semanticId: 'bg/subtle',           primitiveRef: 'warm-800', value: '#0f0c0d' },
@@ -80,6 +81,7 @@ export const themes: BrandTheme[] = [
     name: 'Light',
     description: 'Warm light mode — terracotta accent on cream white.',
     accentColor: '#CC5536',
+    brandDNAId: 'notion-like',
     overrides: [
       { semanticId: 'bg/default',          primitiveRef: 'warm-0',   value: '#efeae8' },
       { semanticId: 'bg/subtle',           primitiveRef: 'warm-100', value: '#e3e1e2' },
@@ -105,6 +107,7 @@ export const themes: BrandTheme[] = [
     name: 'Dark',
     description: 'Pure dark mode — standard cool-neutral dark with blue accent.',
     accentColor: '#3b82f6',
+    brandDNAId: 'linear-like',
     overrides: [
       { semanticId: 'bg/default',       primitiveRef: 'gray-950', value: '#030712' },
       { semanticId: 'bg/subtle',        primitiveRef: 'gray-900', value: '#111827' },
@@ -132,6 +135,7 @@ export const themes: BrandTheme[] = [
     name: 'Brand A',
     description: 'Blue-first, sharp — corporate, trustworthy, enterprise SaaS. Minimal radius.',
     accentColor: '#2563eb',
+    brandDNAId: 'stripe-like',
     overrides: [
       { semanticId: 'bg/brand',            primitiveRef: 'blue-600', value: '#2563eb' },
       { semanticId: 'bg/brand-subtle',     primitiveRef: 'blue-50',  value: '#eff6ff' },
@@ -157,6 +161,7 @@ export const themes: BrandTheme[] = [
     name: 'Brand B',
     description: 'Apple-inspired — iOS blue, liquid glass, pill shapes. Clean, premium, alive.',
     accentColor: '#007AFF',
+    brandDNAId: 'apple-like',
     direction: {
       moodWords: ['Fluid', 'Premium', 'Alive', 'Abstract', 'Tactile'],
       photography: 'Abstract and generative — fluid simulations, macro water/light refraction, CGI renders, mesh gradients. No real people. Colors should bleed, blend, and glow. Particle systems, soap bubble iridescence, frosted glass textures.',

@@ -78,6 +78,16 @@ export type ComponentDef = {
   aiRules: AIRule
   codeExample: string
   previewType: 'button' | 'input' | 'card' | 'badge' | 'avatar' | 'toggle' | 'dialog' | 'select'
+
+  // ── Schema v2 additions ────────────────────────────────────────
+  /** What this component DOES semantically — not what it is structurally */
+  semanticRole?: string
+  /** InteractionToken IDs this component consumes */
+  interactionTokenRefs?: string[]
+  /** BehavioralProfile IDs this component is compatible with */
+  compatibleProfileIds?: string[]
+  /** When to use / avoid (mirrors aiRules.useWhen/avoidWhen at schema level) */
+  usageRules?: { useWhen: string[]; avoidWhen: string[] }
 }
 
 export type ThemeToken = {
@@ -108,6 +118,8 @@ export type BrandTheme = {
   accentColor: string
   overrides: ThemeToken[]
   direction?: ThemeDirection
+  /** Optional reference to the Brand DNA this theme implements */
+  brandDNAId?: string
 }
 
 export type PatternDef = {
@@ -118,6 +130,8 @@ export type PatternDef = {
   components: string[]
   aiConstraints: string[]
   semanticPurpose: string
+  /** BehavioralProfile IDs this pattern feels right in */
+  compatibleProfileIds?: string[]
 }
 
 export type NavItem = {

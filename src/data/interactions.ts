@@ -31,6 +31,11 @@ export type InteractionToken = {
     touch: 'full' | 'partial' | 'none'
   }
   productFit: 'all' | 'b2b' | 'b2c' | 'b2b+' | 'b2c+'
+  /**
+   * Emotional qualities this token conveys.
+   * Used by resolver to match tokens to Brand DNA emotional intent.
+   */
+  emotionalQualities: string[]
 }
 
 export type InteractionProfile = {
@@ -72,6 +77,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'none',
     platformSupport: { desktop: 'full', mobile: 'full', touch: 'full' },
     productFit: 'all',
+    emotionalQualities: ['decisive', 'reliable', 'no-nonsense'],
   },
   {
     id: 'motion/quick',
@@ -85,6 +91,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'subtle',
     platformSupport: { desktop: 'full', mobile: 'full', touch: 'partial' },
     productFit: 'b2b+',
+    emotionalQualities: ['responsive', 'snappy', 'professional'],
   },
   {
     id: 'motion/hover-lift',
@@ -99,6 +106,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'subtle',
     platformSupport: { desktop: 'full', mobile: 'none', touch: 'none' },
     productFit: 'all',
+    emotionalQualities: ['depth', 'interactive', 'inviting'],
   },
   {
     id: 'motion/press',
@@ -113,6 +121,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'subtle',
     platformSupport: { desktop: 'full', mobile: 'full', touch: 'full' },
     productFit: 'all',
+    emotionalQualities: ['physical', 'tactile', 'confirming'],
   },
   {
     id: 'motion/spring',
@@ -127,6 +136,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'expressive',
     platformSupport: { desktop: 'partial', mobile: 'full', touch: 'full' },
     productFit: 'b2c+',
+    emotionalQualities: ['alive', 'playful', 'energetic'],
   },
   {
     id: 'motion/smooth',
@@ -140,6 +150,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'standard',
     platformSupport: { desktop: 'full', mobile: 'full', touch: 'full' },
     productFit: 'all',
+    emotionalQualities: ['premium', 'deliberate', 'polished'],
   },
   {
     id: 'motion/fade-in',
@@ -154,6 +165,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'subtle',
     platformSupport: { desktop: 'full', mobile: 'full', touch: 'full' },
     productFit: 'all',
+    emotionalQualities: ['gentle', 'welcoming', 'clean'],
   },
 
   // ── Feedback group ──────────────────────────────────────────
@@ -167,6 +179,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'none',
     platformSupport: { desktop: 'full', mobile: 'partial', touch: 'partial' },
     productFit: 'b2b',
+    emotionalQualities: ['focused', 'efficient', 'invisible'],
   },
   {
     id: 'feedback/expressive',
@@ -177,6 +190,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'expressive',
     platformSupport: { desktop: 'partial', mobile: 'full', touch: 'full' },
     productFit: 'b2c',
+    emotionalQualities: ['joyful', 'alive', 'rewarding'],
   },
   {
     id: 'feedback/balanced',
@@ -187,6 +201,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'standard',
     platformSupport: { desktop: 'full', mobile: 'full', touch: 'full' },
     productFit: 'all',
+    emotionalQualities: ['neutral', 'comfortable', 'universal'],
   },
 
   // ── Density group ───────────────────────────────────────────
@@ -199,6 +214,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'none',
     platformSupport: { desktop: 'full', mobile: 'none', touch: 'none' },
     productFit: 'b2b',
+    emotionalQualities: ['efficient', 'powerful', 'information-rich'],
   },
   {
     id: 'density/normal',
@@ -209,6 +225,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'none',
     platformSupport: { desktop: 'full', mobile: 'full', touch: 'partial' },
     productFit: 'all',
+    emotionalQualities: ['balanced', 'accessible', 'universal'],
   },
   {
     id: 'density/relaxed',
@@ -219,6 +236,7 @@ export const interactionTokens: InteractionToken[] = [
     intensity: 'none',
     platformSupport: { desktop: 'partial', mobile: 'full', touch: 'full' },
     productFit: 'b2c',
+    emotionalQualities: ['breathable', 'premium', 'touch-friendly'],
   },
 ]
 
