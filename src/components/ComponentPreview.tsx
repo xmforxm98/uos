@@ -62,14 +62,15 @@ const INTERACTIVE_STYLES = `
   .ds-toggle-track {
     width: 38px; height: 22px; border-radius: 11px; position: relative;
     cursor: pointer; transition: background 200ms, box-shadow 120ms; flex-shrink: 0;
-    border: none; display: inline-flex; align-items: center;
+    border: none; outline: none; display: inline-flex; align-items: center;
   }
   .ds-toggle-thumb {
     width: 16px; height: 16px; border-radius: 50%; background: #fff;
-    position: absolute; top: 3px; transition: left 200ms;
+    position: absolute; top: 50%; transform: translateY(-50%);
+    transition: left 200ms cubic-bezier(0.25,0.46,0.45,0.94);
     box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   }
-  .ds-toggle-track:focus-visible { box-shadow: 0 0 0 3px var(--accent-subtle); outline: none; }
+  .ds-toggle-track:focus-visible { box-shadow: 0 0 0 3px var(--accent-subtle); }
   .ds-toggle-track:hover { opacity: 0.85; }
 
   .ds-card {
@@ -246,10 +247,10 @@ function PreviewToggle({ theme }: { theme: string }) {
               className="ds-toggle-track"
               style={{
                 background: t.on ? accent : 'var(--surface-high)',
-                border: '1px solid ' + (t.on ? 'transparent' : 'var(--border-mid)'),
+                boxShadow: t.on ? 'none' : 'inset 0 0 0 1px var(--border-mid)',
               }}
             >
-              <div className="ds-toggle-thumb" style={{ left: t.on ? 19 : 3 }} />
+              <div className="ds-toggle-thumb" style={{ left: t.on ? 'calc(100% - 19px)' : '3px' }} />
             </button>
           </div>
         ))}
