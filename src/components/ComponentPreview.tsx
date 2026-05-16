@@ -15,6 +15,22 @@ import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
+import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarTrigger } from '@/components/ui/menubar'
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '@/components/ui/navigation-menu'
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb'
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuLabel } from '@/components/ui/dropdown-menu'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Button } from '@/components/ui/button'
+import { AlertCircle, CheckCircle2, Info, LayoutGrid, LayoutList, Map, MoreHorizontal, Settings, Bell, User, FileText, Trash2 } from 'lucide-react'
 
 function themeAccent(theme: string) {
   if (theme === 'dark')    return '#3b82f6'
@@ -591,6 +607,438 @@ function PreviewDialog() {
   )
 }
 
+function PreviewMenubar() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
+      <Menubar>
+        <MenubarMenu>
+          <MenubarTrigger>File</MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem>New Tab <MenubarShortcut>⌘T</MenubarShortcut></MenubarItem>
+            <MenubarItem>Open... <MenubarShortcut>⌘O</MenubarShortcut></MenubarItem>
+            <MenubarItem>Save <MenubarShortcut>⌘S</MenubarShortcut></MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem>Close Window</MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+        <MenubarMenu>
+          <MenubarTrigger>Edit</MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem>Undo <MenubarShortcut>⌘Z</MenubarShortcut></MenubarItem>
+            <MenubarItem>Redo</MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem>Copy <MenubarShortcut>⌘C</MenubarShortcut></MenubarItem>
+            <MenubarItem>Paste <MenubarShortcut>⌘V</MenubarShortcut></MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+        <MenubarMenu>
+          <MenubarTrigger>View</MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem>Zoom In</MenubarItem>
+            <MenubarItem>Zoom Out</MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem>Toggle Fullscreen</MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>
+      <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>Click menu items to expand</p>
+    </div>
+  )
+}
+
+function PreviewNavigation() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuLink className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md cursor-pointer" href="#">
+              Home
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md cursor-pointer" href="#">
+              Components
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md cursor-pointer" href="#">
+              Documentation
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md cursor-pointer" href="#">
+              Blog
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
+  )
+}
+
+function PreviewBreadcrumb() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href="#">Settings</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>Profile</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href="#">E-commerce</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href="#">Electronics</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>MacBook Pro 16&quot;</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    </div>
+  )
+}
+
+function PreviewPagination() {
+  const [page, setPage] = React.useState(3)
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious onClick={() => setPage(p => Math.max(1, p - 1))} href="#" />
+          </PaginationItem>
+          {[1, 2, 3, 4, 5].map(n => (
+            <PaginationItem key={n}>
+              <PaginationLink href="#" isActive={n === page} onClick={() => setPage(n)}>{n}</PaginationLink>
+            </PaginationItem>
+          ))}
+          <PaginationItem><PaginationEllipsis /></PaginationItem>
+          <PaginationItem>
+            <PaginationNext onClick={() => setPage(p => Math.min(10, p + 1))} href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+      <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>Page {page} of 10</p>
+    </div>
+  )
+}
+
+function PreviewTooltip() {
+  return (
+    <TooltipProvider>
+      <div style={{ display: 'flex', gap: 24, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="icon"><Settings className="h-4 w-4" /></Button>
+          </TooltipTrigger>
+          <TooltipContent>Settings</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button>
+          </TooltipTrigger>
+          <TooltipContent>Notifications</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="icon"><User className="h-4 w-4" /></Button>
+          </TooltipTrigger>
+          <TooltipContent>Profile</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline">Hover me</Button>
+          </TooltipTrigger>
+          <TooltipContent><p>This is a helpful tooltip</p></TooltipContent>
+        </Tooltip>
+      </div>
+    </TooltipProvider>
+  )
+}
+
+function PreviewPopover() {
+  return (
+    <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline">Open filter</Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-72">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Filter results</p>
+            <div className="flex flex-col gap-2">
+              <Label>Status</Label>
+              <Select defaultValue="all">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox id="archived" />
+              <Label htmlFor="archived">Show archived</Label>
+            </div>
+            <Button size="sm">Apply filters</Button>
+          </div>
+        </PopoverContent>
+      </Popover>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline">User info</Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-64">
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14, fontWeight: 600 }}>AK</div>
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 600 }}>Alice Kim</p>
+              <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>alice@company.com</p>
+              <Badge variant="green" className="mt-1">Pro</Badge>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  )
+}
+
+function PreviewAlert() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: 340 }}>
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertTitle>Heads up!</AlertTitle>
+        <AlertDescription>You can add components using the CLI or manually.</AlertDescription>
+      </Alert>
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Authentication error</AlertTitle>
+        <AlertDescription>Your session expired. Please sign in again.</AlertDescription>
+      </Alert>
+      <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200">
+        <CheckCircle2 className="h-4 w-4 text-green-600" />
+        <AlertTitle>Payment confirmed</AlertTitle>
+        <AlertDescription>Your subscription is now active.</AlertDescription>
+      </Alert>
+    </div>
+  )
+}
+
+function PreviewSeparator() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
+      <div>
+        <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>Horizontal</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ fontSize: 13 }}>Account settings</div>
+          <Separator />
+          <div style={{ fontSize: 13 }}>Billing</div>
+          <Separator />
+          <div style={{ fontSize: 13 }}>Team members</div>
+        </div>
+      </div>
+      <div>
+        <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>Vertical</p>
+        <div className="flex h-5 items-center gap-4 text-sm">
+          <span>Blog</span>
+          <Separator orientation="vertical" />
+          <span>Docs</span>
+          <Separator orientation="vertical" />
+          <span>Source</span>
+          <Separator orientation="vertical" />
+          <span>API</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PreviewSkeleton() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+        <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-3 w-40" />
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-4 w-4/6" />
+      </div>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <Skeleton className="h-24 w-24 rounded-lg" />
+        <Skeleton className="h-24 w-24 rounded-lg" />
+        <Skeleton className="h-24 w-24 rounded-lg" />
+      </div>
+    </div>
+  )
+}
+
+function PreviewDropdown() {
+  return (
+    <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">Open menu</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-48">
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem><User className="mr-2 h-4 w-4" />Profile</DropdownMenuItem>
+          <DropdownMenuItem><Settings className="mr-2 h-4 w-4" />Settings</DropdownMenuItem>
+          <DropdownMenuItem><Bell className="mr-2 h-4 w-4" />Notifications</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4" />Delete account</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem><FileText className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
+          <DropdownMenuItem>Duplicate</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4" />Delete</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  )
+}
+
+function PreviewHoverCard() {
+  return (
+    <div style={{ display: 'flex', gap: 24, justifyContent: 'center' }}>
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <Button variant="link">@alice</Button>
+        </HoverCardTrigger>
+        <HoverCardContent className="w-72">
+          <div style={{ display: 'flex', gap: 12 }}>
+            <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 16, fontWeight: 700, flexShrink: 0 }}>AK</div>
+            <div>
+              <p style={{ fontSize: 14, fontWeight: 600 }}>Alice Kim</p>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 6 }}>@alice · Product Designer</p>
+              <p style={{ fontSize: 12, lineHeight: 1.5 }}>Designing at the intersection of humans and systems.</p>
+            </div>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <Button variant="link">@shadcn/ui</Button>
+        </HoverCardTrigger>
+        <HoverCardContent className="w-64">
+          <div>
+            <p style={{ fontSize: 14, fontWeight: 600 }}>shadcn/ui</p>
+            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 4 }}>github.com/shadcn-ui</p>
+            <p style={{ fontSize: 12 }}>Beautifully designed components built with Radix UI and Tailwind CSS.</p>
+            <div style={{ marginTop: 8, fontSize: 11, color: 'var(--text-muted)' }}>Joined January 2023</div>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
+    </div>
+  )
+}
+
+function PreviewCarousel() {
+  const items = [
+    { title: 'Design Tokens', desc: 'Colors, spacing, radius', color: 'var(--accent)' },
+    { title: 'Components', desc: 'Shadcn UI library', color: '#9333ea' },
+    { title: 'Patterns', desc: 'Reusable UI patterns', color: '#16a34a' },
+    { title: 'Themes', desc: 'Brand customization', color: '#d97706' },
+  ]
+  return (
+    <div style={{ width: 320 }}>
+      <Carousel className="w-full">
+        <CarouselContent>
+          {items.map((item, i) => (
+            <CarouselItem key={i}>
+              <div style={{ padding: '0 4px' }}>
+                <div style={{
+                  background: item.color + '12',
+                  border: `1px solid ${item.color}30`,
+                  borderRadius: 12, padding: '24px 20px',
+                  display: 'flex', flexDirection: 'column', gap: 8
+                }}>
+                  <div style={{ fontSize: 28, fontWeight: 700, color: item.color }}>{i + 1}</div>
+                  <div style={{ fontSize: 15, fontWeight: 600 }}>{item.title}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{item.desc}</div>
+                </div>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </div>
+  )
+}
+
+function PreviewResizable() {
+  return (
+    <div style={{ width: 380, height: 200 }}>
+      <ResizablePanelGroup orientation="horizontal" className="rounded-lg border">
+        <ResizablePanel defaultSize={30} minSize={20}>
+          <div style={{ padding: 12, height: '100%', display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sidebar</p>
+            {['Components', 'Tokens', 'Themes'].map(item => (
+              <div key={item} style={{ fontSize: 12, padding: '4px 8px', borderRadius: 4, background: 'var(--surface-mid)', cursor: 'pointer' }}>{item}</div>
+            ))}
+          </div>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={70}>
+          <div style={{ padding: 12, height: '100%' }}>
+            <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>Main content</p>
+            <Skeleton className="h-3 w-full mb-2" />
+            <Skeleton className="h-3 w-4/5 mb-2" />
+            <Skeleton className="h-3 w-3/5" />
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
+  )
+}
+
+function PreviewToggleGroup() {
+  const [view, setView] = React.useState('grid')
+  const [format, setFormat] = React.useState<string[]>(['bold'])
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+        <Label>View mode (single)</Label>
+        <ToggleGroup type="single" value={view} onValueChange={v => v && setView(v)}>
+          <ToggleGroupItem value="list" aria-label="List view"><LayoutList className="h-4 w-4" /></ToggleGroupItem>
+          <ToggleGroupItem value="grid" aria-label="Grid view"><LayoutGrid className="h-4 w-4" /></ToggleGroupItem>
+          <ToggleGroupItem value="map" aria-label="Map view"><Map className="h-4 w-4" /></ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+        <Label>Text format (multiple)</Label>
+        <ToggleGroup type="multiple" value={format} onValueChange={setFormat} variant="outline">
+          <ToggleGroupItem value="bold" className="font-bold">B</ToggleGroupItem>
+          <ToggleGroupItem value="italic" className="italic">I</ToggleGroupItem>
+          <ToggleGroupItem value="underline" className="underline">U</ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+    </div>
+  )
+}
+
 export function ComponentPreview({ component }: { component: ComponentDef }) {
   const { activeTheme } = useDesignSystem()
   const accent = themeAccent(activeTheme.id)
@@ -605,6 +1053,11 @@ export function ComponentPreview({ component }: { component: ComponentDef }) {
     '--color-accent':  accent,
     '--color-primary': accent,
     '--color-ring':    accent,
+    '--radius':    resolveRadius('radius/xs', activeTheme.id),
+    '--radius-sm': resolveRadius('radius/sm', activeTheme.id),
+    '--radius-md': resolveRadius('radius/md', activeTheme.id),
+    '--radius-lg': resolveRadius('radius/lg', activeTheme.id),
+    '--radius-xl': resolveRadius('radius/xl', activeTheme.id),
   } as React.CSSProperties
 
   const renders: Record<string, React.ReactNode> = {
@@ -623,6 +1076,20 @@ export function ComponentPreview({ component }: { component: ComponentDef }) {
     tabs:      <PreviewTabs />,
     select:    <PreviewSelect />,
     dialog:    <PreviewDialog />,
+    menubar:    <PreviewMenubar />,
+    navigation: <PreviewNavigation />,
+    breadcrumb: <PreviewBreadcrumb />,
+    pagination: <PreviewPagination />,
+    tooltip:    <PreviewTooltip />,
+    popover:    <PreviewPopover />,
+    alert:      <PreviewAlert />,
+    separator:  <PreviewSeparator />,
+    skeleton:   <PreviewSkeleton />,
+    dropdown:   <PreviewDropdown />,
+    'hover-card': <PreviewHoverCard />,
+    carousel:   <PreviewCarousel />,
+    resizable:  <PreviewResizable />,
+    'toggle-group': <PreviewToggleGroup />,
   }
 
   return (

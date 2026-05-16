@@ -829,7 +829,7 @@ import { Button } from '@/components/ui/button'
     category: 'Overlay',
     description: 'A floating panel anchored to a trigger — for secondary controls, filters, or rich content that overlays.',
     variants: ['default'],
-    previewType: 'dialog',
+    previewType: 'popover',
     states: [
       { name: 'closed', description: 'Hidden' },
       { name: 'open', description: 'Floating, positioned relative to trigger' },
@@ -875,7 +875,7 @@ import { Button } from '@/components/ui/button'
     category: 'Overlay',
     description: 'A short text label that appears on hover/focus — explains icon buttons or provides supplemental context.',
     variants: ['default', 'rich'],
-    previewType: 'badge',
+    previewType: 'tooltip',
     states: [
       { name: 'hidden', description: 'Not visible' },
       { name: 'visible', description: 'Appears after delay on hover/focus' },
@@ -926,7 +926,7 @@ import { Settings } from 'lucide-react'
     category: 'Overlay',
     description: 'A card that appears on hover over a link or element — shows rich preview content like user profiles or link previews.',
     variants: ['default'],
-    previewType: 'card',
+    previewType: 'hover-card',
     states: [
       { name: 'hidden', description: 'Not visible' },
       { name: 'visible', description: 'Shown after hover delay' },
@@ -976,7 +976,7 @@ import { Settings } from 'lucide-react'
     category: 'Navigation',
     description: 'A context menu triggered by a button — shows a list of actions or navigation options.',
     variants: ['default', 'with-icons', 'with-shortcuts', 'checkable'],
-    previewType: 'select',
+    previewType: 'dropdown',
     states: [
       { name: 'closed', description: 'Button visible, menu hidden' },
       { name: 'open', description: 'Menu floating below/above trigger' },
@@ -1027,7 +1027,7 @@ import { Button } from '@/components/ui/button'
     category: 'Navigation',
     description: 'A right-click / long-press menu — surfaces actions contextually on any target element.',
     variants: ['default', 'with-shortcuts'],
-    previewType: 'select',
+    previewType: 'dropdown',
     states: [
       { name: 'closed', description: 'No visible UI until triggered' },
       { name: 'open', description: 'Appears at cursor position' },
@@ -1072,7 +1072,7 @@ import { Button } from '@/components/ui/button'
     category: 'Navigation',
     description: 'A top-level navigation component with support for dropdowns and rich content — built for site-wide navigation.',
     variants: ['horizontal', 'with-content'],
-    previewType: 'badge',
+    previewType: 'navigation',
     states: [
       { name: 'default', description: 'All top-level items visible' },
       { name: 'item-active', description: 'Current page item indicated' },
@@ -1120,7 +1120,7 @@ import { Button } from '@/components/ui/button'
     category: 'Navigation',
     description: 'A desktop application-style menu bar — File, Edit, View menus with keyboard shortcut support.',
     variants: ['default'],
-    previewType: 'badge',
+    previewType: 'menubar',
     states: [
       { name: 'default', description: 'Menu items visible in bar' },
       { name: 'open', description: 'One menu expanded' },
@@ -1170,7 +1170,7 @@ import { Button } from '@/components/ui/button'
     category: 'Navigation',
     description: 'Shows hierarchical location within a site or app — helps users understand and navigate up the hierarchy.',
     variants: ['default', 'with-dropdown', 'collapsed'],
-    previewType: 'badge',
+    previewType: 'breadcrumb',
     states: [
       { name: 'default', description: 'Full path visible' },
       { name: 'collapsed', description: 'Middle segments hidden with ellipsis' },
@@ -1215,7 +1215,7 @@ import { Button } from '@/components/ui/button'
     category: 'Navigation',
     description: 'Splits long lists or data sets into pages — lets users navigate between pages of content.',
     variants: ['default', 'compact', 'with-ellipsis'],
-    previewType: 'badge',
+    previewType: 'pagination',
     states: [
       { name: 'default', description: 'Page numbers visible' },
       { name: 'current-page', description: 'Active page highlighted' },
@@ -1803,7 +1803,7 @@ function SignupForm() {
     category: 'Feedback',
     description: 'An inline contextual message — informs users of status, warnings, errors, or tips without interruption.',
     variants: ['default', 'destructive', 'success', 'warning', 'info'],
-    previewType: 'badge',
+    previewType: 'alert',
     states: [
       { name: 'default', description: 'Informational — neutral tone' },
       { name: 'destructive', description: 'Error or danger — red palette' },
@@ -1898,7 +1898,7 @@ import { AlertCircle, CheckCircle2 } from 'lucide-react'
     category: 'Feedback',
     description: 'Animated placeholder shapes that preview content layout while data loads — reduces perceived wait time.',
     variants: ['text', 'circle', 'card', 'table-row'],
-    previewType: 'card',
+    previewType: 'skeleton',
     states: [
       { name: 'loading', description: 'Pulsing animation active' },
       { name: 'resolved', description: 'Hidden — replaced by real content' },
@@ -2099,7 +2099,7 @@ const [range, setRange] = useState<DateRange>()
     category: 'Data Display',
     description: 'A horizontal scroll container with prev/next navigation — for image galleries, card sequences, or step flows.',
     variants: ['default', 'loop', 'autoplay', 'vertical'],
-    previewType: 'card',
+    previewType: 'carousel',
     states: [
       { name: 'default', description: 'First slide visible' },
       { name: 'transitioning', description: 'Animated slide change' },
@@ -2199,7 +2199,7 @@ const [isOpen, setIsOpen] = useState(false)
     category: 'Layout',
     description: 'Draggable panel dividers that let users resize adjacent panes — for IDE-style or split-view layouts.',
     variants: ['horizontal', 'vertical', 'nested'],
-    previewType: 'card',
+    previewType: 'resizable',
     states: [
       { name: 'default', description: 'Panels at default sizes' },
       { name: 'dragging', description: 'Divider being dragged — cursor changes' },
@@ -2287,7 +2287,7 @@ const [isOpen, setIsOpen] = useState(false)
     category: 'Layout',
     description: 'A visual and semantic divider between content sections — horizontal or vertical.',
     variants: ['horizontal', 'vertical'],
-    previewType: 'badge',
+    previewType: 'separator',
     states: [
       { name: 'default', description: 'Static line' },
     ],
@@ -2336,7 +2336,7 @@ const [isOpen, setIsOpen] = useState(false)
     category: 'Actions',
     description: 'A group of toggle buttons with single or multiple selection — like a segmented control.',
     variants: ['single', 'multiple', 'outline', 'default'],
-    previewType: 'toggle',
+    previewType: 'toggle-group',
     states: [
       { name: 'default', description: 'No selection' },
       { name: 'selected', description: 'One or more items active' },
