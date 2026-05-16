@@ -682,7 +682,7 @@ import { Button } from '@/components/ui/button'
     category: 'Overlay',
     description: 'An accessible dialog for actions requiring explicit confirmation — stricter than Dialog with no accidental dismiss.',
     variants: ['default', 'destructive'],
-    previewType: 'dialog',
+    previewType: 'alert-dialog',
     states: [
       { name: 'closed', description: 'Not rendered' },
       { name: 'open', description: 'Blocks all interaction — cannot dismiss via backdrop click' },
@@ -731,7 +731,7 @@ import { Button } from '@/components/ui/button'
     category: 'Overlay',
     description: 'A slide-in panel from any edge — ideal for secondary content, settings, or detail views without leaving context.',
     variants: ['top', 'bottom', 'left', 'right'],
-    previewType: 'dialog',
+    previewType: 'sheet',
     states: [
       { name: 'closed', description: 'Off-screen' },
       { name: 'open', description: 'Slides in from edge with backdrop' },
@@ -778,7 +778,7 @@ import { Button } from '@/components/ui/button'
     category: 'Overlay',
     description: 'A bottom sheet with native-feeling drag-to-dismiss gesture — mobile-first alternative to Dialog.',
     variants: ['default', 'nested'],
-    previewType: 'dialog',
+    previewType: 'drawer',
     states: [
       { name: 'closed', description: 'Off-screen below viewport' },
       { name: 'open', description: 'Snapped to height with handle indicator' },

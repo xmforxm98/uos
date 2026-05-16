@@ -43,7 +43,7 @@ function themeAccent(theme: string) {
 const INTERACTIVE_STYLES = `
   .ds-btn {
     display: inline-flex; align-items: center; justify-content: center;
-    gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px;
+    gap: 6px; padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px;
     font-weight: 500; cursor: pointer; border: 1px solid transparent;
     transition: background 120ms, color 120ms, border-color 120ms, box-shadow 120ms, opacity 120ms, transform 80ms;
     font-family: inherit; outline: none; user-select: none;
@@ -78,7 +78,7 @@ const INTERACTIVE_STYLES = `
 
   .ds-input {
     width: 100%; background: var(--surface-mid); border: 1px solid var(--border-mid);
-    border-radius: 8px; padding: 8px 10px; font-size: 13px; color: var(--text);
+    border-radius: var(--radius-sm); padding: 8px 10px; font-size: 13px; color: var(--text);
     outline: none; transition: border-color 120ms, box-shadow 120ms; font-family: inherit;
   }
   .ds-input:hover:not(:disabled) { border-color: var(--border-strong); }
@@ -103,7 +103,7 @@ const INTERACTIVE_STYLES = `
 
   .ds-card {
     background: var(--surface); border: 1px solid var(--border-mid);
-    border-radius: 12px; padding: 20px; width: 240px;
+    border-radius: var(--radius-lg); padding: 20px; width: 240px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: box-shadow 150ms, transform 150ms, border-color 150ms;
     cursor: default;
@@ -585,12 +585,12 @@ function PreviewDialog() {
     <div style={{ position: 'relative', width: 340, height: 200 }}>
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'rgba(0,0,0,0.45)', borderRadius: 12,
+        background: 'rgba(0,0,0,0.45)', borderRadius: 'var(--radius-lg)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <div style={{
-          background: 'var(--surface)', border: '1px solid var(--border-mid)',
-          borderRadius: 12, padding: '20px 24px', width: 280,
+          background: 'var(--surface-mid)', border: '1px solid var(--border-mid)',
+          borderRadius: 'var(--radius-lg)', padding: '20px 24px', width: 280,
           boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
         }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Delete project?</div>
@@ -598,10 +598,109 @@ function PreviewDialog() {
             This action is permanent and cannot be undone. All data will be removed.
           </div>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-            <button className="ds-btn ds-btn-secondary" style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6 }}>Cancel</button>
-            <button className="ds-btn ds-btn-destructive" style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6 }}>Delete</button>
+            <button className="ds-btn ds-btn-secondary" style={{ fontSize: 12, padding: '6px 12px' }}>Cancel</button>
+            <button className="ds-btn ds-btn-destructive" style={{ fontSize: 12, padding: '6px 12px' }}>Delete</button>
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function PreviewAlertDialog() {
+  return (
+    <div style={{ position: 'relative', width: 340, height: 200 }}>
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'rgba(0,0,0,0.5)', borderRadius: 'var(--radius-lg)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{
+          background: 'var(--surface-mid)', border: '1px solid var(--border-mid)',
+          borderRadius: 'var(--radius-lg)', padding: '24px', width: 286,
+          boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
+        }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Are you absolutely sure?</div>
+          <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 20 }}>
+            This will permanently delete your account and remove all data from our servers. This action cannot be undone.
+          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            <button className="ds-btn ds-btn-secondary" style={{ fontSize: 12, padding: '6px 12px' }}>Cancel</button>
+            <button className="ds-btn ds-btn-destructive" style={{ fontSize: 12, padding: '6px 12px' }}>Delete Account</button>
+          </div>
+          <p style={{ fontSize: 10, color: 'var(--text-subtle)', marginTop: 10, textAlign: 'center' }}>
+            Clicking outside will not close this dialog
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PreviewSheet() {
+  return (
+    <div style={{ position: 'relative', width: 340, height: 200, overflow: 'hidden', borderRadius: 'var(--radius-lg)' }}>
+      {/* dimmed backdrop */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }} />
+      {/* slide-in panel from the right */}
+      <div style={{
+        position: 'absolute', top: 0, right: 0, bottom: 0, width: 220,
+        background: 'var(--surface-mid)', borderLeft: '1px solid var(--border-mid)',
+        display: 'flex', flexDirection: 'column', padding: '16px',
+        boxShadow: '-8px 0 32px rgba(0,0,0,0.25)',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>Edit Profile</span>
+          <span style={{ fontSize: 16, color: 'var(--text-muted)', cursor: 'pointer', lineHeight: 1 }}>×</span>
+        </div>
+        <p style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 14, lineHeight: 1.5 }}>
+          Update your profile details below.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+          <div>
+            <label style={{ fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 3 }}>Name</label>
+            <div style={{ height: 28, background: 'var(--surface-high)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-mid)' }} />
+          </div>
+          <div>
+            <label style={{ fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 3 }}>Email</label>
+            <div style={{ height: 28, background: 'var(--surface-high)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-mid)' }} />
+          </div>
+        </div>
+        <button className="ds-btn ds-btn-primary" style={{ fontSize: 11, padding: '6px 12px', marginTop: 12, width: '100%' }}>
+          Save changes
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function PreviewDrawer() {
+  return (
+    <div style={{ position: 'relative', width: 340, height: 200, overflow: 'hidden', borderRadius: 'var(--radius-lg)' }}>
+      {/* dimmed backdrop */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }} />
+      {/* bottom sheet rising from bottom */}
+      <div style={{
+        position: 'absolute', left: 0, right: 0, bottom: 0,
+        background: 'var(--surface-mid)', borderTop: '1px solid var(--border-mid)',
+        borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
+        padding: '12px 16px 16px',
+        boxShadow: '0 -8px 32px rgba(0,0,0,0.25)',
+      }}>
+        {/* drag handle */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+          <div style={{ width: 36, height: 4, borderRadius: 2, background: 'var(--border-strong)' }} />
+        </div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Share</div>
+        <p style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 12 }}>Choose how to share this item</p>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+          {['Copy link', 'Email', 'Export'].map(action => (
+            <button key={action} className="ds-btn ds-btn-secondary" style={{ fontSize: 11, padding: '5px 10px', flex: 1 }}>
+              {action}
+            </button>
+          ))}
+        </div>
+        <p style={{ fontSize: 10, color: 'var(--text-subtle)', textAlign: 'center' }}>Drag handle or swipe down to dismiss</p>
       </div>
     </div>
   )
@@ -1043,16 +1142,27 @@ export function ComponentPreview({ component }: { component: ComponentDef }) {
   const { activeTheme } = useDesignSystem()
   const accent = themeAccent(activeTheme.id)
 
-  // Inject theme accent into CSS variables so ALL previews (custom + Shadcn) respond to theme switching.
-  // Shadcn components use --color-primary / --color-ring; our custom ones use --accent.
+  // Inject theme CSS variables so ALL previews (custom + Shadcn) respond to theme switching.
+  // --color-primary = brand accent (buttons, rings)
+  // --color-accent  = subtle hover surface — NOT brand color (Shadcn uses bg-accent for hover states)
   const themeVars = {
     '--accent':        accent,
     '--accent-hover':  accent + 'dd',
     '--accent-subtle': accent + '18',
     '--accent-border': accent + '44',
-    '--color-accent':  accent,
-    '--color-primary': accent,
-    '--color-ring':    accent,
+    '--color-primary':            accent,
+    '--color-primary-foreground': '#ffffff',
+    '--color-ring':               accent,
+    // Shadcn accent = subtle brand tint (not gray, not full brand color)
+    // Keeps hover states on-brand while still being subtle
+    '--color-accent':            accent + '22',
+    '--color-accent-foreground': accent,
+    // Ensure border variables are explicit so border-b / border classes always resolve
+    '--border':           '#e5e5e5',
+    '--border-mid':       '#d4d4d4',
+    '--border-strong':    '#a3a3a3',
+    '--color-border':     '#e5e5e5',
+    '--color-input':      '#d4d4d4',
     '--radius':    resolveRadius('radius/xs', activeTheme.id),
     '--radius-sm': resolveRadius('radius/sm', activeTheme.id),
     '--radius-md': resolveRadius('radius/md', activeTheme.id),
@@ -1075,7 +1185,10 @@ export function ComponentPreview({ component }: { component: ComponentDef }) {
     accordion: <PreviewAccordion />,
     tabs:      <PreviewTabs />,
     select:    <PreviewSelect />,
-    dialog:    <PreviewDialog />,
+    dialog:         <PreviewDialog />,
+    'alert-dialog': <PreviewAlertDialog />,
+    sheet:          <PreviewSheet />,
+    drawer:         <PreviewDrawer />,
     menubar:    <PreviewMenubar />,
     navigation: <PreviewNavigation />,
     breadcrumb: <PreviewBreadcrumb />,
