@@ -1,8 +1,20 @@
 'use client'
 
+import * as React from 'react'
 import { useDesignSystem } from '@/context/DesignSystemContext'
 import { resolveRadius } from '@/data/themes'
 import type { ComponentDef } from '@/types'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Switch } from '@/components/ui/switch'
+import { Slider } from '@/components/ui/slider'
+import { Progress } from '@/components/ui/progress'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Label } from '@/components/ui/label'
 
 function themeAccent(theme: string) {
   if (theme === 'dark')    return '#3b82f6'
@@ -259,16 +271,345 @@ function PreviewToggle({ theme }: { theme: string }) {
   )
 }
 
+function PreviewCheckbox() {
+  const [checked1, setChecked1] = React.useState<boolean | 'indeterminate'>(true)
+  const [checked2, setChecked2] = React.useState<boolean | 'indeterminate'>(false)
+  const [radio, setRadio] = React.useState('monthly')
+  const [sw1, setSw1] = React.useState(true)
+  const [sw2, setSw2] = React.useState(false)
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 260 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <p style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Checkbox</p>
+        <div className="flex items-center gap-2">
+          <Checkbox id="p1" checked={checked1} onCheckedChange={v => setChecked1(v as boolean)} />
+          <Label htmlFor="p1">Accept terms and conditions</Label>
+        </div>
+        <div className="flex items-center gap-2">
+          <Checkbox id="p2" checked={checked2} onCheckedChange={v => setChecked2(v as boolean)} />
+          <Label htmlFor="p2">Subscribe to newsletter</Label>
+        </div>
+        <div className="flex items-center gap-2">
+          <Checkbox id="p3" disabled />
+          <Label htmlFor="p3" className="opacity-50">Disabled option</Label>
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <p style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Radio Group</p>
+        <RadioGroup value={radio} onValueChange={setRadio} className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="monthly" id="monthly" />
+            <Label htmlFor="monthly">Monthly — $12/mo</Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="annual" id="annual" />
+            <Label htmlFor="annual">Annual — $99/yr</Label>
+          </div>
+        </RadioGroup>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <p style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Switch</p>
+        <div className="flex items-center justify-between">
+          <Label>Dark mode</Label>
+          <Switch checked={sw1} onCheckedChange={setSw1} />
+        </div>
+        <div className="flex items-center justify-between">
+          <Label>Notifications</Label>
+          <Switch checked={sw2} onCheckedChange={setSw2} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PreviewSlider() {
+  const [val1, setVal1] = React.useState([60])
+  const [val2, setVal2] = React.useState([20, 75])
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 280 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="flex justify-between items-center">
+          <Label>Volume</Label>
+          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{val1[0]}%</span>
+        </div>
+        <Slider value={val1} onValueChange={setVal1} max={100} step={1} />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="flex justify-between items-center">
+          <Label>Price range</Label>
+          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>${val2[0]} – ${val2[1]}</span>
+        </div>
+        <Slider value={val2} onValueChange={setVal2} max={100} step={5} />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="flex justify-between items-center">
+          <Label className="opacity-50">Disabled</Label>
+          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>50%</span>
+        </div>
+        <Slider defaultValue={[50]} disabled />
+      </div>
+    </div>
+  )
+}
+
+function PreviewProgress() {
+  const [upload, setUpload] = React.useState(0)
+  React.useEffect(() => {
+    const t = setInterval(() => setUpload(v => v >= 100 ? 0 : v + 2), 80)
+    return () => clearInterval(t)
+  }, [])
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 280 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="flex justify-between">
+          <Label>Profile completion</Label>
+          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>72%</span>
+        </div>
+        <Progress value={72} />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="flex justify-between">
+          <Label>Uploading file...</Label>
+          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{upload}%</span>
+        </div>
+        <Progress value={upload} />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <Label>Storage used</Label>
+        <Progress value={91} className="[&>div]:bg-red-500" />
+        <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>9.1 GB of 10 GB used</p>
+      </div>
+    </div>
+  )
+}
+
+function PreviewTable() {
+  const rows = [
+    { name: 'Alice Kim',    email: 'alice@co.com',  status: 'Active',   plan: 'Pro' },
+    { name: 'Bob Park',     email: 'bob@co.com',    status: 'Pending',  plan: 'Free' },
+    { name: 'Carol Lee',    email: 'carol@co.com',  status: 'Active',   plan: 'Enterprise' },
+    { name: 'Dave Choi',    email: 'dave@co.com',   status: 'Inactive', plan: 'Pro' },
+  ]
+  const statusColor: Record<string, 'green' | 'yellow' | 'default'> = {
+    Active: 'green', Pending: 'yellow', Inactive: 'default',
+  }
+  return (
+    <div style={{ width: 420 }}>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Plan</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map(r => (
+            <TableRow key={r.email}>
+              <TableCell className="font-medium">{r.name}</TableCell>
+              <TableCell className="text-muted-foreground text-xs">{r.email}</TableCell>
+              <TableCell>{r.plan}</TableCell>
+              <TableCell>
+                <Badge variant={statusColor[r.status]}>{r.status}</Badge>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  )
+}
+
+function PreviewCalendar() {
+  const [selected, setSelected] = React.useState<number | null>(14)
+  const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+  const cells = Array.from({ length: 35 }, (_, i) => {
+    const day = i - 2
+    return day > 0 && day <= 31 ? day : null
+  })
+  const today = 16
+  return (
+    <div style={{
+      background: 'var(--surface)', border: '1px solid var(--border-mid)',
+      borderRadius: 12, padding: 16, width: 260, userSelect: 'none',
+    }}>
+      <div className="flex items-center justify-between mb-3">
+        <button style={{ fontSize: 12, color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}>←</button>
+        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>May 2026</span>
+        <button style={{ fontSize: 12, color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}>→</button>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2, marginBottom: 4 }}>
+        {days.map(d => (
+          <div key={d} style={{ fontSize: 10, color: 'var(--text-muted)', textAlign: 'center', padding: '2px 0', fontWeight: 500 }}>{d}</div>
+        ))}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}>
+        {cells.map((day, i) => {
+          const isSelected = day === selected
+          const isToday = day === today
+          return (
+            <button
+              key={i}
+              onClick={() => day && setSelected(day)}
+              style={{
+                width: '100%', aspectRatio: '1', borderRadius: 6, border: 'none',
+                fontSize: 11, cursor: day ? 'pointer' : 'default',
+                background: isSelected ? 'var(--accent)' : isToday ? 'var(--accent-subtle)' : 'transparent',
+                color: isSelected ? '#fff' : isToday ? 'var(--accent)' : day ? 'var(--text)' : 'transparent',
+                fontWeight: isSelected || isToday ? 600 : 400,
+                transition: 'background 100ms',
+              }}
+            >{day ?? ''}</button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function PreviewAccordion() {
+  return (
+    <div style={{ width: 300 }}>
+      <Accordion type="single" collapsible defaultValue="item-1">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>What is included?</AccordionTrigger>
+          <AccordionContent>All plans include unlimited projects, team collaboration, and priority support.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Can I cancel anytime?</AccordionTrigger>
+          <AccordionContent>Yes, cancel anytime with no questions asked. Billing stops at cycle end.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger>Is there a free trial?</AccordionTrigger>
+          <AccordionContent>14-day free trial on all paid plans. No credit card required.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  )
+}
+
+function PreviewTabs() {
+  return (
+    <div style={{ width: 320 }}>
+      <Tabs defaultValue="overview">
+        <TabsList className="w-full">
+          <TabsTrigger value="overview" className="flex-1">Overview</TabsTrigger>
+          <TabsTrigger value="analytics" className="flex-1">Analytics</TabsTrigger>
+          <TabsTrigger value="settings" className="flex-1">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          <div style={{ padding: '16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Project overview</div>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>Track your project's progress, recent activity, and key metrics all in one place.</div>
+            <div className="flex gap-2 mt-2">
+              <Badge variant="green">Active</Badge>
+              <Badge variant="default">v2.4.1</Badge>
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="analytics">
+          <div style={{ padding: '16px 0', fontSize: 12, color: 'var(--text-muted)' }}>Analytics dashboard coming soon.</div>
+        </TabsContent>
+        <TabsContent value="settings">
+          <div style={{ padding: '16px 0', fontSize: 12, color: 'var(--text-muted)' }}>Project settings and configuration.</div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
+
+function PreviewSelect() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 260 }}>
+      <div className="flex flex-col gap-1.5">
+        <Label>Timezone</Label>
+        <Select defaultValue="utc">
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="utc">UTC +0:00</SelectItem>
+            <SelectItem value="pst">Pacific Time −8:00</SelectItem>
+            <SelectItem value="est">Eastern Time −5:00</SelectItem>
+            <SelectItem value="kst">Korea Standard +9:00</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <Label>Plan</Label>
+        <Select defaultValue="pro">
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="free">Free</SelectItem>
+            <SelectItem value="pro">Pro — $12/mo</SelectItem>
+            <SelectItem value="enterprise">Enterprise</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <Label className="opacity-50">Disabled</Label>
+        <Select disabled>
+          <SelectTrigger>
+            <SelectValue placeholder="Not available" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="x">x</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  )
+}
+
+function PreviewDialog() {
+  return (
+    <div style={{ position: 'relative', width: 340, height: 200 }}>
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'rgba(0,0,0,0.45)', borderRadius: 12,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{
+          background: 'var(--surface)', border: '1px solid var(--border-mid)',
+          borderRadius: 12, padding: '20px 24px', width: 280,
+          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+        }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Delete project?</div>
+          <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 16 }}>
+            This action is permanent and cannot be undone. All data will be removed.
+          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            <button className="ds-btn ds-btn-secondary" style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6 }}>Cancel</button>
+            <button className="ds-btn ds-btn-destructive" style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6 }}>Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function ComponentPreview({ component }: { component: ComponentDef }) {
   const { activeTheme } = useDesignSystem()
 
   const renders: Record<string, React.ReactNode> = {
-    button:  <PreviewButton theme={activeTheme.id} />,
-    input:   <PreviewInput theme={activeTheme.id} />,
-    card:    <PreviewCard theme={activeTheme.id} />,
-    badge:   <PreviewBadge />,
-    avatar:  <PreviewAvatar theme={activeTheme.id} />,
-    toggle:  <PreviewToggle theme={activeTheme.id} />,
+    button:    <PreviewButton theme={activeTheme.id} />,
+    input:     <PreviewInput theme={activeTheme.id} />,
+    card:      <PreviewCard theme={activeTheme.id} />,
+    badge:     <PreviewBadge />,
+    avatar:    <PreviewAvatar theme={activeTheme.id} />,
+    toggle:    <PreviewToggle theme={activeTheme.id} />,
+    checkbox:  <PreviewCheckbox />,
+    slider:    <PreviewSlider />,
+    progress:  <PreviewProgress />,
+    table:     <PreviewTable />,
+    calendar:  <PreviewCalendar />,
+    accordion: <PreviewAccordion />,
+    tabs:      <PreviewTabs />,
+    select:    <PreviewSelect />,
+    dialog:    <PreviewDialog />,
   }
 
   return (
