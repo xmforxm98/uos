@@ -51,7 +51,14 @@
       "Bash(git -C /Users/yongwoo.kim/UOS log --oneline -5)",
       "Bash(git -C /Users/yongwoo.kim/UOS status)",
       "Bash(git -C /Users/yongwoo.kim/UOS/.claude/worktrees/gallant-dhawan-2fde2a log --oneline)",
-      "Bash(pkill -f \"next dev\")"
+      "Bash(pkill -f \"next dev\")",
+      "Bash(GIT_SSL_NO_VERIFY=true git push)",
+      "Bash(GIT_SSL_NO_VERIFY=true git -C /Users/yongwoo.kim/UOS push origin main)",
+      "Bash(grep -n \"^  {$\\\\|id: '\" /Users/yongwoo.kim/UOS/.claude/worktrees/gallant-dhawan-2fde2a/src/data/components.ts)",
+      "WebFetch(domain:styles.refero.design)",
+      "Bash(node -e ' *)",
+      "Bash(grep -n \"agentPrompt:\\\\|designMd:\\\\|\\\\`,\" src/data/profileReferences.ts)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(k\\) for k in d.get\\('dependencies',{}\\) if 'radix' in k or k in ['cmdk','sonner','vaul','embla-carousel-react','react-day-picker','input-otp','react-resizable-panels','react-hook-form','zod','recharts']]\")"
     ]
   }
 }

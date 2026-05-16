@@ -6,15 +6,16 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default:     'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]',
-        secondary:   'bg-[var(--surface-mid)] text-[var(--text)] border border-[var(--border)] hover:bg-[var(--surface-high)]',
-        ghost:       'text-[var(--text-muted)] hover:bg-[var(--surface-mid)] hover:text-[var(--text)]',
-        destructive: 'bg-[var(--red-subtle)] text-[var(--red)] border border-[var(--border)] hover:bg-[var(--red)] hover:text-white',
-        outline:     'border border-[var(--border)] bg-transparent text-[var(--text)] hover:bg-[var(--surface-mid)]',
+        default:     'bg-accent text-white hover:bg-accent-hover',
+        secondary:   'bg-surface-mid text-text border border-border hover:bg-surface-high',
+        ghost:       'text-text-muted hover:bg-surface-mid hover:text-text',
+        outline:     'border border-border bg-transparent text-text hover:bg-surface-mid',
+        destructive: 'bg-red-subtle text-red border border-border hover:bg-red hover:text-white',
+        link:        'text-accent underline-offset-4 hover:underline p-0 h-auto',
       },
       size: {
         default: 'h-9 px-4 py-2',
