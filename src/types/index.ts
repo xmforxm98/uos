@@ -77,7 +77,7 @@ export type ComponentDef = {
   contrast?: ContrastInfo
   aiRules: AIRule
   codeExample: string
-  previewType: 'button' | 'input' | 'card' | 'badge' | 'avatar' | 'toggle' | 'dialog' | 'select'
+  previewType: 'button' | 'input' | 'card' | 'badge' | 'avatar' | 'toggle' | 'dialog' | 'select' | 'checkbox' | 'slider' | 'progress' | 'table' | 'calendar' | 'accordion' | 'tabs'
 
   // ── Schema v2 additions ────────────────────────────────────────
   /** What this component DOES semantically — not what it is structurally */
