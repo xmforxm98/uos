@@ -8,6 +8,8 @@ import {
   PlayfulToggle, CyberToggle, NativeMobileToggle,
   ToggleStyleGallery,
 } from '@/components/styleVariants/ToggleVariants'
+import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
 const TABS = ['Gallery', 'Styles', 'Startup DNA'] as const
 type Tab = typeof TABS[number]
@@ -61,31 +63,26 @@ function StyleDetailCard({ styleId, selected, onClick }: { styleId: string; sele
   return (
     <button
       onClick={onClick}
+      className="rounded-lg text-left transition-all w-full px-4 py-3.5 cursor-pointer"
       style={{
-        padding: '14px 16px',
         background: selected ? `${style.color}12` : 'var(--surface-mid)',
         border: `1.5px solid ${selected ? style.color + '60' : 'var(--border)'}`,
-        borderRadius: 'var(--radius-lg)',
-        cursor: 'pointer',
-        textAlign: 'left',
-        transition: 'all 120ms',
-        width: '100%',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
+      <div className="flex items-center gap-2 mb-1.5">
         <div style={{ width: 9, height: 9, borderRadius: '50%', background: style.color, flexShrink: 0, boxShadow: `0 0 0 3px ${style.color}20` }} />
-        <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>{style.name}</span>
-        <span style={{
-          fontSize: 9.5, fontWeight: 600, padding: '1px 6px', borderRadius: 99,
-          background: im.bg, color: im.color, marginLeft: 'auto',
-        }}>
+        <span className="text-text font-bold" style={{ fontSize: 13, letterSpacing: '-0.01em' }}>{style.name}</span>
+        <span
+          className="ml-auto font-semibold"
+          style={{ fontSize: 9.5, padding: '1px 6px', borderRadius: 99, background: im.bg, color: im.color }}
+        >
           {style.animationIntensity}
         </span>
       </div>
-      <p style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8, fontStyle: 'italic' }}>
+      <p className="text-text-muted italic mb-2" style={{ fontSize: 11 }}>
         &ldquo;{style.tagline}&rdquo;
       </p>
-      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+      <div className="flex gap-1 flex-wrap">
         <span style={{ fontSize: 9.5, padding: '1px 6px', borderRadius: 99, background: `${dm.color}18`, color: dm.color, fontWeight: 600 }}>
           {dm.label} deco
         </span>
@@ -109,49 +106,50 @@ function StyleDetailPanel({ styleId }: { styleId: string }) {
   const dm = decorationMeta[style.decoration]
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div className="flex flex-col gap-5">
       {/* Header */}
-      <div style={{
-        padding: '20px',
-        background: `${style.color}0e`,
-        border: `1.5px solid ${style.color}35`,
-        borderRadius: 'var(--radius-lg)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+      <div
+        className="rounded-lg p-5"
+        style={{
+          background: `${style.color}0e`,
+          border: `1.5px solid ${style.color}35`,
+        }}
+      >
+        <div className="flex items-center gap-2.5 mb-2">
           <div style={{ width: 12, height: 12, borderRadius: '50%', background: style.color, boxShadow: `0 0 10px ${style.color}70` }} />
-          <span style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em' }}>{style.name}</span>
+          <span className="text-text font-extrabold" style={{ fontSize: 20, letterSpacing: '-0.02em' }}>{style.name}</span>
         </div>
-        <p style={{ fontSize: 13, color: 'var(--text)', fontStyle: 'italic', marginBottom: 10 }}>
+        <p className="text-text italic mb-2.5" style={{ fontSize: 13 }}>
           &ldquo;{style.tagline}&rdquo;
         </p>
-        <p style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.65 }}>
+        <p className="text-text-muted" style={{ fontSize: 12.5, lineHeight: 1.65 }}>
           {style.personality}
         </p>
       </div>
 
       {/* Live demo */}
       <div>
-        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
+        <div className="text-text-subtle font-semibold uppercase mb-2.5" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Toggle · Live Demo
         </div>
-        <div style={{
-          padding: '28px 32px',
-          background: styleBg[styleId] ?? 'var(--surface-mid)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-lg)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          minHeight: 90,
-        }}>
+        <div
+          className="border border-border rounded-lg flex items-center justify-center"
+          style={{
+            padding: '28px 32px',
+            background: styleBg[styleId] ?? 'var(--surface-mid)',
+            minHeight: 90,
+          }}
+        >
           {styleToggleMap[styleId]}
         </div>
       </div>
 
       {/* Behavior profile */}
       <div>
-        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
+        <div className="text-text-subtle font-semibold uppercase mb-2.5" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Behavior Profile
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <div className="grid gap-2" style={{ gridTemplateColumns: '1fr 1fr' }}>
           {[
             { label: 'Animation Intensity', value: style.animationIntensity, color: im.color },
             { label: 'Feedback', value: style.feedback, color: feedbackMeta[style.feedback].color },
@@ -160,16 +158,11 @@ function StyleDetailPanel({ styleId }: { styleId: string }) {
             { label: 'Gesture Model', value: style.gestureModel, color: 'var(--text-muted)' },
             { label: 'Motion Refs', value: style.motionRefs.length + ' tokens', color: 'var(--accent)' },
           ].map(item => (
-            <div key={item.label} style={{
-              padding: '10px 12px',
-              background: 'var(--surface-mid)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-md)',
-            }}>
-              <div style={{ fontSize: 9.5, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 3 }}>
+            <div key={item.label} className="bg-surface-mid border border-border rounded-md px-3 py-2.5">
+              <div className="text-text-subtle uppercase mb-0.5" style={{ fontSize: 9.5, letterSpacing: '0.07em' }}>
                 {item.label}
               </div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: item.color, fontFamily: 'monospace' }}>
+              <div className="font-semibold" style={{ fontSize: 12.5, color: item.color, fontFamily: 'monospace' }}>
                 {item.value}
               </div>
             </div>
@@ -179,17 +172,21 @@ function StyleDetailPanel({ styleId }: { styleId: string }) {
 
       {/* Motion tokens */}
       <div>
-        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+        <div className="text-text-subtle font-semibold uppercase mb-2" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Interaction Token Refs
         </div>
-        <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+        <div className="flex gap-1.5 flex-wrap">
           {style.motionRefs.map(ref => (
-            <code key={ref} style={{
-              fontSize: 11, fontFamily: 'monospace',
-              padding: '3px 9px', borderRadius: 5,
-              background: `${style.color}14`, color: style.color,
-              border: `1px solid ${style.color}30`,
-            }}>
+            <code
+              key={ref}
+              className="rounded"
+              style={{
+                fontSize: 11, fontFamily: 'monospace',
+                padding: '3px 9px',
+                background: `${style.color}14`, color: style.color,
+                border: `1px solid ${style.color}30`,
+              }}
+            >
               {ref}
             </code>
           ))}
@@ -198,21 +195,22 @@ function StyleDetailPanel({ styleId }: { styleId: string }) {
 
       {/* Product fit */}
       <div>
-        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+        <div className="text-text-subtle font-semibold uppercase mb-2" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Product Fit
         </div>
-        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 10 }}>
+        <div className="flex gap-1 flex-wrap mb-2.5">
           {style.productFit.map(f => (
             <span key={f} className="chip default" style={{ fontSize: 10 }}>{f}</span>
           ))}
         </div>
-        <div style={{ fontSize: 11, color: 'var(--text-subtle)', marginBottom: 6 }}>Emotional tone:</div>
-        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        <div className="text-text-subtle mb-1.5" style={{ fontSize: 11 }}>Emotional tone:</div>
+        <div className="flex gap-1 flex-wrap">
           {style.emotionalTone.map(t => (
-            <span key={t} style={{
-              fontSize: 10, padding: '2px 8px', borderRadius: 99,
-              background: `${style.color}12`, color: style.color, fontWeight: 600,
-            }}>
+            <span
+              key={t}
+              className="font-semibold"
+              style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: `${style.color}12`, color: style.color }}
+            >
               {t}
             </span>
           ))}
@@ -221,18 +219,16 @@ function StyleDetailPanel({ styleId }: { styleId: string }) {
 
       {/* Example products */}
       <div>
-        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+        <div className="text-text-subtle font-semibold uppercase mb-2" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Example Products
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <div className="flex flex-col gap-1">
           {style.exampleProducts.map(p => (
-            <div key={p} style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '6px 10px',
-              background: 'var(--surface-mid)', border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-md)',
-              fontSize: 12, color: 'var(--text-muted)',
-            }}>
+            <div
+              key={p}
+              className="flex items-center gap-2 bg-surface-mid border border-border rounded-md px-2.5 py-1.5 text-text-muted"
+              style={{ fontSize: 12 }}
+            >
               <div style={{ width: 5, height: 5, borderRadius: '50%', background: style.color, flexShrink: 0 }} />
               {p}
             </div>
@@ -241,13 +237,8 @@ function StyleDetailPanel({ styleId }: { styleId: string }) {
       </div>
 
       {linkedProfile && (
-        <div style={{
-          padding: '12px 14px',
-          background: 'var(--accent-subtle)', border: '1px solid var(--accent-border)',
-          borderRadius: 'var(--radius-md)',
-          fontSize: 11.5, color: 'var(--text-muted)',
-        }}>
-          Linked to <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{linkedProfile.name}</span> interaction profile
+        <div className="bg-accent-subtle border border-accent-border rounded-md px-3.5 py-3 text-text-muted" style={{ fontSize: 11.5 }}>
+          Linked to <span className="text-accent font-semibold">{linkedProfile.name}</span> interaction profile
         </div>
       )}
     </div>
@@ -259,15 +250,12 @@ function DNAView() {
   const dna = startupDNAProfiles.find(d => d.id === selected)!
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <div style={{
-        background: 'var(--accent-subtle)', border: '1px solid var(--accent-border)',
-        borderRadius: 'var(--radius-lg)', padding: '14px 16px',
-      }}>
-        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+    <div className="flex flex-col gap-5">
+      <div className="bg-accent-subtle border border-accent-border rounded-lg px-4 py-3.5">
+        <div className="text-accent font-semibold uppercase mb-1.5" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Startup DNA → Interaction Style
         </div>
-        <p style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.65 }}>
+        <p className="text-text-muted" style={{ fontSize: 12.5, lineHeight: 1.65 }}>
           Define your product&apos;s DNA — platform, audience, emotional tone.
           The system recommends which Interaction Styles fit your context.
           AI generators use this to avoid randomly assigning interaction behaviors.
@@ -275,23 +263,20 @@ function DNAView() {
       </div>
 
       {/* DNA selector */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div className="flex flex-col gap-1.5">
         {startupDNAProfiles.map(d => (
           <button
             key={d.id}
             onClick={() => setSelected(d.id)}
+            className="rounded-md px-3.5 py-3 cursor-pointer text-left transition-all"
             style={{
-              padding: '12px 14px',
               background: selected === d.id ? `${d.color}12` : 'var(--surface-mid)',
               border: `1.5px solid ${selected === d.id ? d.color + '50' : 'var(--border)'}`,
-              borderRadius: 'var(--radius-md)',
-              cursor: 'pointer', textAlign: 'left',
-              transition: 'all 100ms',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div className="flex items-center gap-2">
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: d.color }} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{d.name}</span>
+              <span className="text-text font-bold" style={{ fontSize: 13 }}>{d.name}</span>
               <span className="chip default" style={{ fontSize: 9.5 }}>{d.productType}</span>
               <span className="chip default" style={{ fontSize: 9.5 }}>{d.platform}</span>
             </div>
@@ -301,39 +286,43 @@ function DNAView() {
 
       {/* Result */}
       <div>
-        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
+        <div className="text-text-subtle font-semibold uppercase mb-2.5" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Recommended Interaction Styles for: <span style={{ color: dna.color }}>{dna.name}</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="flex flex-col gap-2">
           {dna.recommendedStyleIds.map((sid, i) => {
             const s = getInteractionStyle(sid)
             if (!s) return null
             return (
-              <div key={sid} style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                padding: '14px 16px',
-                background: 'var(--surface-mid)', border: `1.5px solid ${s.color}30`,
-                borderRadius: 'var(--radius-lg)',
-                borderLeft: `3px solid ${s.color}`,
-              }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: '50%',
-                  background: `${s.color}18`, border: `1px solid ${s.color}40`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 11, fontWeight: 800, color: s.color, flexShrink: 0,
-                }}>
+              <div
+                key={sid}
+                className="flex items-center gap-3.5 bg-surface-mid rounded-lg px-4 py-3.5"
+                style={{
+                  border: `1.5px solid ${s.color}30`,
+                  borderLeft: `3px solid ${s.color}`,
+                }}
+              >
+                <div
+                  className="flex items-center justify-center shrink-0 font-extrabold"
+                  style={{
+                    width: 24, height: 24, borderRadius: '50%',
+                    background: `${s.color}18`, border: `1px solid ${s.color}40`,
+                    fontSize: 11, color: s.color,
+                  }}
+                >
                   {i + 1}
                 </div>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{s.name}</div>
-                  <div style={{ fontSize: 11, color: 'var(--text-muted)', fontStyle: 'italic' }}>&ldquo;{s.tagline}&rdquo;</div>
+                  <div className="text-text font-bold mb-0.5" style={{ fontSize: 13 }}>{s.name}</div>
+                  <div className="text-text-muted italic" style={{ fontSize: 11 }}>&ldquo;{s.tagline}&rdquo;</div>
                 </div>
-                <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
+                <div className="ml-auto flex gap-1">
                   {s.emotionalTone.slice(0, 2).map(t => (
-                    <span key={t} style={{
-                      fontSize: 9.5, padding: '2px 7px', borderRadius: 99,
-                      background: `${s.color}15`, color: s.color, fontWeight: 600,
-                    }}>
+                    <span
+                      key={t}
+                      className="font-semibold"
+                      style={{ fontSize: 9.5, padding: '2px 7px', borderRadius: 99, background: `${s.color}15`, color: s.color }}
+                    >
                       {t}
                     </span>
                   ))}
@@ -345,20 +334,17 @@ function DNAView() {
       </div>
 
       {/* Emotional tone */}
-      <div style={{
-        padding: '14px 16px',
-        background: 'var(--surface-mid)', border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-md)',
-      }}>
-        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+      <div className="bg-surface-mid border border-border rounded-md px-4 py-3.5">
+        <div className="text-text-subtle font-semibold uppercase mb-2" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Emotional Tone
         </div>
-        <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+        <div className="flex gap-1.5 flex-wrap">
           {dna.emotionalTone.map(t => (
-            <span key={t} style={{
-              padding: '3px 10px', borderRadius: 99, fontSize: 11,
-              background: `${dna.color}15`, color: dna.color, fontWeight: 600,
-            }}>
+            <span
+              key={t}
+              className="font-semibold"
+              style={{ padding: '3px 10px', borderRadius: 99, fontSize: 11, background: `${dna.color}15`, color: dna.color }}
+            >
               {t}
             </span>
           ))}
@@ -369,47 +355,42 @@ function DNAView() {
 }
 
 export function InteractionStylesView() {
-  const [tab, setTab] = useState<Tab>('Gallery')
   const [selectedStyleId, setSelectedStyleId] = useState('enterprise')
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+    <Tabs defaultValue="Gallery" className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div style={{
-        padding: '16px 24px 14px',
-        borderBottom: '1px solid var(--border)',
-        flexShrink: 0, background: 'var(--surface)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <h1 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>
+      <div className="px-6 pt-4 pb-3.5 border-b border-border shrink-0 bg-surface">
+        <div className="flex items-center gap-2 mb-1">
+          <h1 className="text-lg font-bold text-text" style={{ letterSpacing: '-0.02em' }}>
             Interaction Styles
           </h1>
-          <span className="chip default">{interactionStyles.length} styles</span>
-          <span className="chip accent">Behavioral</span>
+          <Badge variant="default">{interactionStyles.length} styles</Badge>
+          <Badge variant="accent">Behavioral</Badge>
         </div>
-        <p style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}>
+        <p className="text-text-muted m-0" style={{ fontSize: 13 }}>
           Named behavioral personalities — the same component moves differently depending on which style the theme adopts.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="tab-bar">
+      <TabsList className="tab-bar rounded-none justify-start px-6 h-auto bg-transparent border-b border-border">
         {TABS.map(t => (
-          <button key={t} className={`tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
+          <TabsTrigger key={t} value={t} className="tab">
             {t}
-          </button>
+          </TabsTrigger>
         ))}
-      </div>
+      </TabsList>
 
       {/* Content */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
-        {tab === 'Gallery' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div className="flex-1 overflow-y-auto px-6 py-5">
+        <TabsContent value="Gallery" className="mt-0">
+          <div className="flex flex-col gap-6">
             <div>
-              <div className="inspector-label" style={{ marginBottom: 10 }}>
+              <div className="inspector-label mb-2.5">
                 Toggle · All Style Variants · hover / click each to interact
               </div>
-              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16, lineHeight: 1.6 }}>
+              <p className="text-text-muted mb-4" style={{ fontSize: 12, lineHeight: 1.6 }}>
                 The same Toggle component, 6 different behavioral identities.
                 Each has different motion timing, decoration level, and emotional character.
                 Switching themes changes which style is active — the component
@@ -418,12 +399,12 @@ export function InteractionStylesView() {
               <ToggleStyleGallery />
             </div>
           </div>
-        )}
+        </TabsContent>
 
-        {tab === 'Styles' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 20, alignItems: 'start' }}>
+        <TabsContent value="Styles" className="mt-0">
+          <div className="grid gap-5 items-start" style={{ gridTemplateColumns: '240px 1fr' }}>
             {/* Style list */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div className="flex flex-col gap-1.5">
               {interactionStyles.map(s => (
                 <StyleDetailCard
                   key={s.id}
@@ -436,10 +417,12 @@ export function InteractionStylesView() {
             {/* Detail panel */}
             <StyleDetailPanel styleId={selectedStyleId} />
           </div>
-        )}
+        </TabsContent>
 
-        {tab === 'Startup DNA' && <DNAView />}
+        <TabsContent value="Startup DNA" className="mt-0">
+          <DNAView />
+        </TabsContent>
       </div>
-    </div>
+    </Tabs>
   )
 }

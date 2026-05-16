@@ -9,9 +9,23 @@ import { getComponent } from '@/data/components'
 import { getProfileForTheme, getInteractionToken, interactionProfiles } from '@/data/interactions'
 import { interactionStyles, getStyleForTheme } from '@/data/interactionStyles'
 import { ToggleStyleGallery } from '@/components/styleVariants/ToggleVariants'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { cn } from '@/lib/utils'
 
 const TABS = ['Preview', 'Token Deps', 'Accessibility', 'AI Rules', 'Interaction', 'Styles', 'Code'] as const
 type Tab = typeof TABS[number]
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="text-[11px] text-text-subtle font-semibold uppercase tracking-[0.08em] mb-[10px]">
+      {children}
+    </div>
+  )
+}
 
 function CodeBlock({ code }: { code: string }) {
   const { copiedId, copyValue } = useDesignSystem()
@@ -28,23 +42,21 @@ function CodeBlock({ code }: { code: string }) {
     .replace(/(\/\/.*)/g, '<span style="color:#5c6370">$1</span>')
 
   return (
-    <div style={{ position: 'relative' }}>
-      <button
+    <div className="relative">
+      <Button
+        variant="ghost"
+        size="sm"
         onClick={() => copyValue(id, code)}
-        style={{
-          position: 'absolute', top: 10, right: 10, zIndex: 1,
-          background: copied ? 'var(--green-subtle)' : 'var(--surface-high)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-md)',
-          padding: '4px 8px', cursor: 'pointer',
-          color: copied ? 'var(--green)' : 'var(--text-muted)',
-          fontSize: 11, display: 'flex', gap: 4, alignItems: 'center',
-          transition: 'all 100ms',
-        }}
+        className={cn(
+          'absolute top-2.5 right-2.5 z-10 h-auto px-2 py-1 text-[11px] gap-1',
+          copied
+            ? 'bg-green-subtle text-green border border-border'
+            : 'bg-surface-high text-text-muted border border-border'
+        )}
       >
         {copied ? <Check size={10} /> : <Copy size={10} />}
         {copied ? 'Copied' : 'Copy'}
-      </button>
+      </Button>
       <div
         className="code-block"
         dangerouslySetInnerHTML={{ __html: highlighted }}
@@ -64,8 +76,8 @@ function LiveMotionDemo({ tokenId, label }: { tokenId: string; label: string }) 
   const isActive = tokenId.includes('press') ? pressed : active
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
-      <div style={{ fontSize: 9.5, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 600 }}>
+    <div className="flex flex-col gap-1.5 items-center">
+      <div className="text-[9.5px] text-text-subtle uppercase tracking-[0.07em] font-semibold">
         {label}
       </div>
       <div
@@ -97,7 +109,7 @@ function LiveMotionDemo({ tokenId, label }: { tokenId: string; label: string }) 
           flexShrink: 0,
         }} />
       </div>
-      <code style={{ fontSize: 9.5, color: 'var(--text-subtle)', fontFamily: 'monospace', textAlign: 'center', maxWidth: 80, wordBreak: 'break-all' }}>
+      <code className="text-[9.5px] text-text-subtle font-mono text-center max-w-[80px] break-all">
         {tokenId.replace('motion/', '').replace('feedback/', '').replace('density/', '')}
       </code>
     </div>
@@ -109,7 +121,7 @@ function InteractionTab({ componentId: _componentId }: { componentId: string }) 
   const profile = getProfileForTheme(activeTheme.id)
 
   if (!profile) {
-    return <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>No interaction profile for theme {activeTheme.id}</div>
+    return <div className="text-text-muted text-[13px]">No interaction profile for theme {activeTheme.id}</div>
   }
 
   const tokenRows: { label: string; tokenId: string; description: string }[] = [
@@ -120,72 +132,60 @@ function InteractionTab({ componentId: _componentId }: { componentId: string }) 
   ]
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+    <div className="flex flex-col gap-6">
       {/* Profile banner */}
-      <div style={{
-        background: `${profile.color}12`,
-        border: `1.5px solid ${profile.color}40`,
-        borderRadius: 'var(--radius-lg)',
-        padding: '16px 18px',
-        display: 'flex', alignItems: 'flex-start', gap: 14,
-      }}>
-        <MousePointer2 size={20} color={profile.color} style={{ flexShrink: 0, marginTop: 2 }} />
+      <div
+        className="rounded-[var(--radius-lg)] p-4 flex items-start gap-3.5"
+        style={{
+          background: `${profile.color}12`,
+          border: `1.5px solid ${profile.color}40`,
+        }}
+      >
+        <MousePointer2 size={20} color={profile.color} className="shrink-0 mt-0.5" />
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
-            <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em' }}>
+          <div className="flex items-center gap-2 mb-[5px]">
+            <span className="text-[15px] font-bold text-text tracking-[-0.01em]">
               {profile.name} Profile
             </span>
-            <span style={{
-              fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 99,
-              background: `${profile.color}18`, color: profile.color,
-            }}>
+            <span
+              className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+              style={{ background: `${profile.color}18`, color: profile.color }}
+            >
               {activeTheme.name}
             </span>
           </div>
-          <p style={{ fontSize: 12.5, color: 'var(--text-muted)', marginBottom: 8, lineHeight: 1.6 }}>
-            <em style={{ color: 'var(--text)' }}>&ldquo;{profile.tagline}&rdquo;</em> — {profile.persona}
+          <p className="text-[12.5px] text-text-muted mb-2 leading-relaxed">
+            <em className="text-text">&ldquo;{profile.tagline}&rdquo;</em> — {profile.persona}
           </p>
-          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-            <span className="chip default">{profile.motion} motion</span>
-            <span className="chip default">{profile.density} density</span>
-            <span className="chip default">{profile.gestureModel}</span>
+          <div className="flex gap-[5px] flex-wrap">
+            <Badge variant="default">{profile.motion} motion</Badge>
+            <Badge variant="default">{profile.density} density</Badge>
+            <Badge variant="default">{profile.gestureModel}</Badge>
           </div>
         </div>
       </div>
 
       {/* Live demo row */}
       <div>
-        <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
-          Live Demos — hover / click each box
-        </div>
-        <div style={{
-          display: 'flex', gap: 20, flexWrap: 'wrap',
-          padding: '20px 24px',
-          background: 'var(--surface-mid)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-lg)',
-          alignItems: 'flex-end',
-        }}>
-          {tokenRows.map(row => (
-            <LiveMotionDemo key={row.label} tokenId={row.tokenId} label={row.label} />
-          ))}
-        </div>
+        <SectionLabel>Live Demos — hover / click each box</SectionLabel>
+        <Card>
+          <CardContent className="flex gap-5 flex-wrap p-5 items-end">
+            {tokenRows.map(row => (
+              <LiveMotionDemo key={row.label} tokenId={row.tokenId} label={row.label} />
+            ))}
+          </CardContent>
+        </Card>
       </div>
 
       {/* Token breakdown table */}
       <div>
-        <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-          Token Breakdown
-        </div>
-        <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+        <SectionLabel>Token Breakdown</SectionLabel>
+        <div className="border border-border rounded-[var(--radius-lg)] overflow-hidden">
           {/* Header */}
-          <div style={{
-            display: 'grid', gridTemplateColumns: '70px 180px 1fr',
-            background: 'var(--surface-mid)', borderBottom: '1px solid var(--border)',
-            padding: '8px 14px', gap: 12,
-          }}>
+          <div className="grid bg-surface-mid border-b border-border px-3.5 py-2 gap-3"
+            style={{ gridTemplateColumns: '70px 180px 1fr' }}>
             {['State', 'Token', 'CSS Value'].map(h => (
-              <div key={h} style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+              <div key={h} className="text-[10px] font-semibold text-text-subtle uppercase tracking-[0.07em]">
                 {h}
               </div>
             ))}
@@ -193,39 +193,37 @@ function InteractionTab({ componentId: _componentId }: { componentId: string }) 
           {tokenRows.map((row, i) => {
             const token = getInteractionToken(row.tokenId)
             return (
-              <div key={row.label} style={{
-                display: 'grid', gridTemplateColumns: '70px 180px 1fr',
-                padding: '10px 14px', gap: 12,
-                borderBottom: i < tokenRows.length - 1 ? '1px solid var(--border)' : 'none',
-                background: i % 2 === 0 ? 'transparent' : 'var(--surface-mid)',
-                alignItems: 'start',
-              }}>
-                <div style={{
-                  fontSize: 11.5, fontWeight: 600, color: 'var(--text)',
-                  padding: '2px 0',
-                }}>
+              <div
+                key={row.label}
+                className={cn(
+                  'grid px-3.5 py-2.5 gap-3 items-start',
+                  i < tokenRows.length - 1 ? 'border-b border-border' : '',
+                  i % 2 === 0 ? 'bg-transparent' : 'bg-surface-mid'
+                )}
+                style={{ gridTemplateColumns: '70px 180px 1fr' }}
+              >
+                <div className="text-[11.5px] font-semibold text-text py-0.5">
                   {row.label}
                 </div>
-                <code style={{
-                  fontSize: 11.5, fontFamily: 'monospace', color: profile.color,
-                  background: `${profile.color}10`, padding: '2px 8px', borderRadius: 4,
-                  alignSelf: 'start',
-                }}>
+                <code
+                  className="text-[11.5px] font-mono px-2 py-0.5 rounded self-start"
+                  style={{ color: profile.color, background: `${profile.color}10` }}
+                >
                   {row.tokenId}
                 </code>
                 <div>
                   {token?.cssTransition && (
-                    <code style={{ fontSize: 10.5, fontFamily: 'monospace', color: 'var(--text-muted)', display: 'block' }}>
+                    <code className="text-[10.5px] font-mono text-text-muted block">
                       transition: {token.cssTransition}
                     </code>
                   )}
                   {token?.cssTransform && (
-                    <code style={{ fontSize: 10.5, fontFamily: 'monospace', color: 'var(--green)', display: 'block', marginTop: 2 }}>
+                    <code className="text-[10.5px] font-mono text-green block mt-0.5">
                       transform: {token.cssTransform}
                     </code>
                   )}
                   {!token?.cssTransition && !token?.cssTransform && (
-                    <span style={{ fontSize: 11, color: 'var(--text-subtle)' }}>
+                    <span className="text-[11px] text-text-subtle">
                       {token?.description ?? '—'}
                     </span>
                   )}
@@ -238,26 +236,26 @@ function InteractionTab({ componentId: _componentId }: { componentId: string }) 
 
       {/* All profiles reference */}
       <div>
-        <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-          All Profiles — switch theme to change
-        </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <SectionLabel>All Profiles — switch theme to change</SectionLabel>
+        <div className="flex gap-2">
           {interactionProfiles.map(p => (
-            <div key={p.id} style={{
-              flex: 1,
-              padding: '12px 14px',
-              background: p.id === profile.id ? `${p.color}12` : 'var(--surface-mid)',
-              border: `1.5px solid ${p.id === profile.id ? p.color + '50' : 'var(--border)'}`,
-              borderRadius: 'var(--radius-lg)',
-              opacity: p.id === profile.id ? 1 : 0.6,
-              transition: 'all 120ms',
-            }}>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 4 }}>
-                <div style={{ width: 7, height: 7, borderRadius: '50%', background: p.color }} />
-                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{p.name}</span>
-                {p.id === profile.id && <span style={{ fontSize: 9, color: p.color, fontWeight: 600 }}>ACTIVE</span>}
+            <div
+              key={p.id}
+              className="flex-1 p-3 rounded-[var(--radius-lg)] transition-all duration-[120ms]"
+              style={{
+                background: p.id === profile.id ? `${p.color}12` : 'var(--surface-mid)',
+                border: `1.5px solid ${p.id === profile.id ? p.color + '50' : 'var(--border)'}`,
+                opacity: p.id === profile.id ? 1 : 0.6,
+              }}
+            >
+              <div className="flex gap-1.5 items-center mb-1">
+                <div className="w-[7px] h-[7px] rounded-full shrink-0" style={{ background: p.color }} />
+                <span className="text-[12px] font-bold text-text">{p.name}</span>
+                {p.id === profile.id && (
+                  <span className="text-[9px] font-semibold" style={{ color: p.color }}>ACTIVE</span>
+                )}
               </div>
-              <div style={{ fontSize: 10.5, color: 'var(--text-muted)' }}>{p.persona.split('·')[0].trim()}</div>
+              <div className="text-[10.5px] text-text-muted">{p.persona.split('·')[0].trim()}</div>
             </div>
           ))}
         </div>
@@ -275,30 +273,34 @@ function StylesTab({ componentId }: { componentId: string }) {
   const isToggle = componentId === 'toggle'
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+    <div className="flex flex-col gap-6">
       {/* Active style banner */}
-      <div style={{
-        padding: '14px 16px',
-        background: activeStyle ? `${activeStyle.color}10` : 'var(--surface-mid)',
-        border: `1.5px solid ${activeStyle ? activeStyle.color + '40' : 'var(--border)'}`,
-        borderRadius: 'var(--radius-lg)',
-        display: 'flex', alignItems: 'center', gap: 12,
-      }}>
+      <div
+        className="px-4 py-3.5 rounded-[var(--radius-lg)] flex items-center gap-3"
+        style={{
+          background: activeStyle ? `${activeStyle.color}10` : 'var(--surface-mid)',
+          border: `1.5px solid ${activeStyle ? activeStyle.color + '40' : 'var(--border)'}`,
+        }}
+      >
         {activeStyle ? (
           <>
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: activeStyle.color, flexShrink: 0, boxShadow: `0 0 8px ${activeStyle.color}60` }} />
+            <div
+              className="w-2.5 h-2.5 rounded-full shrink-0"
+              style={{ background: activeStyle.color, boxShadow: `0 0 8px ${activeStyle.color}60` }}
+            />
             <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>
-                Active Style: <span style={{ color: activeStyle.color }}>{activeStyle.name}</span>
-                <span style={{ fontWeight: 400, color: 'var(--text-muted)', marginLeft: 8, fontSize: 12 }}>via {activeTheme.name} theme</span>
+              <div className="text-[13px] font-bold text-text mb-0.5">
+                Active Style:{' '}
+                <span style={{ color: activeStyle.color }}>{activeStyle.name}</span>
+                <span className="font-normal text-text-muted ml-2 text-[12px]">via {activeTheme.name} theme</span>
               </div>
-              <div style={{ fontSize: 11.5, color: 'var(--text-muted)', fontStyle: 'italic' }}>
+              <div className="text-[11.5px] text-text-muted italic">
                 &ldquo;{activeStyle.tagline}&rdquo;
               </div>
             </div>
           </>
         ) : (
-          <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+          <div className="text-[12px] text-text-muted">
             No interaction style assigned to <strong>{activeTheme.name}</strong> theme yet.
             Switch to Brand A or Brand B to see style assignment.
           </div>
@@ -307,36 +309,38 @@ function StylesTab({ componentId }: { componentId: string }) {
 
       {/* Style compatibility matrix */}
       <div>
-        <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
-          All Interaction Styles — compatibility matrix
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <SectionLabel>All Interaction Styles — compatibility matrix</SectionLabel>
+        <div className="flex flex-col gap-1.5">
           {interactionStyles.map(style => {
             const isActive = activeStyle?.id === style.id
             return (
-              <div key={style.id} style={{
-                display: 'flex', alignItems: 'center', gap: 12,
-                padding: '10px 14px',
-                background: isActive ? `${style.color}0e` : 'var(--surface-mid)',
-                border: `1.5px solid ${isActive ? style.color + '50' : 'var(--border)'}`,
-                borderRadius: 'var(--radius-md)',
-                borderLeft: `3px solid ${style.color}`,
-              }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: style.color, flexShrink: 0 }} />
-                <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', width: 110 }}>{style.name}</span>
-                <div style={{ display: 'flex', gap: 5, flex: 1, flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 99, background: 'var(--surface-high)', color: 'var(--text-muted)', fontFamily: 'monospace' }}>
+              <div
+                key={style.id}
+                className="flex items-center gap-3 px-3.5 py-2.5 rounded-[var(--radius-md)] transition-all duration-[120ms]"
+                style={{
+                  background: isActive ? `${style.color}0e` : 'var(--surface-mid)',
+                  border: `1.5px solid ${isActive ? style.color + '50' : 'var(--border)'}`,
+                  borderLeft: `3px solid ${style.color}`,
+                }}
+              >
+                <div className="w-2 h-2 rounded-full shrink-0" style={{ background: style.color }} />
+                <span className="text-[12.5px] font-bold text-text w-[110px]">{style.name}</span>
+                <div className="flex gap-[5px] flex-1 flex-wrap">
+                  <span className="text-[10px] px-1.5 py-px rounded-full bg-surface-high text-text-muted font-mono">
                     {style.animationIntensity}
                   </span>
-                  <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 99, background: 'var(--surface-high)', color: 'var(--text-muted)' }}>
+                  <span className="text-[10px] px-1.5 py-px rounded-full bg-surface-high text-text-muted">
                     {style.decoration} deco
                   </span>
-                  <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 99, background: 'var(--surface-high)', color: 'var(--text-muted)' }}>
+                  <span className="text-[10px] px-1.5 py-px rounded-full bg-surface-high text-text-muted">
                     {style.feedback}
                   </span>
                 </div>
                 {isActive && (
-                  <span style={{ fontSize: 9.5, fontWeight: 700, color: style.color, background: `${style.color}15`, padding: '2px 8px', borderRadius: 99 }}>
+                  <span
+                    className="text-[9.5px] font-bold px-2 py-0.5 rounded-full"
+                    style={{ color: style.color, background: `${style.color}15` }}
+                  >
                     ACTIVE
                   </span>
                 )}
@@ -349,10 +353,8 @@ function StylesTab({ componentId }: { componentId: string }) {
       {/* Toggle: full live gallery */}
       {isToggle && (
         <div>
-          <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
-            Toggle · Live Style Variants · click to interact
-          </div>
-          <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14, lineHeight: 1.6 }}>
+          <SectionLabel>Toggle · Live Style Variants · click to interact</SectionLabel>
+          <p className="text-[12px] text-text-muted mb-3.5 leading-relaxed">
             Same component, 6 behavioral identities. Motion, decoration, and personality change entirely based on the active Interaction Style.
           </p>
           <ToggleStyleGallery />
@@ -360,16 +362,13 @@ function StylesTab({ componentId }: { componentId: string }) {
       )}
 
       {!isToggle && (
-        <div style={{
-          padding: '16px',
-          background: 'var(--surface-mid)', border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-lg)',
-          fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6,
-        }}>
-          💡 Full style variant gallery available for <strong>Toggle</strong> — the reference component for behavioral identity.
-          More components (Button, Input, Card) will follow as the system evolves.
-          See <strong>Interaction Styles → Gallery</strong> in the sidebar for the full showcase.
-        </div>
+        <Card>
+          <CardContent className="p-4 text-[12px] text-text-muted leading-relaxed">
+            💡 Full style variant gallery available for <strong>Toggle</strong> — the reference component for behavioral identity.
+            More components (Button, Input, Card) will follow as the system evolves.
+            See <strong>Interaction Styles → Gallery</strong> in the sidebar for the full showcase.
+          </CardContent>
+        </Card>
       )}
     </div>
   )
@@ -383,387 +382,370 @@ export function ComponentView({ id }: { id: string }) {
 
   if (!component) {
     return (
-      <div style={{ padding: 32, color: 'var(--text-muted)' }}>
+      <div className="p-8 text-text-muted">
         Component not found: {id}
       </div>
     )
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+    <Tabs
+      value={tab}
+      onValueChange={(v) => setTab(v as Tab)}
+      className="flex flex-col h-full overflow-hidden"
+    >
       {/* Header */}
-      <div style={{
-        padding: '16px 24px 14px',
-        borderBottom: '1px solid var(--border)',
-        flexShrink: 0,
-        background: 'var(--surface)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+      <div className="px-6 pt-4 pb-3.5 border-b border-border shrink-0 bg-surface">
+        <div className="flex items-start justify-between gap-3">
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <h1 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>
+            <div className="flex items-center gap-2 mb-1">
+              <h1 className="text-[18px] font-bold text-text tracking-[-0.02em]">
                 {component.name}
               </h1>
-              <span className="chip accent">{component.category}</span>
+              <Badge variant="accent">{component.category}</Badge>
               {component.contrast && (
-                <span className={`chip ${component.contrast.level === 'AAA' ? 'green' : 'yellow'}`}>
+                <Badge variant={component.contrast.level === 'AAA' ? 'green' : 'yellow'}>
                   WCAG {component.contrast.level}
-                </span>
+                </Badge>
               )}
             </div>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', maxWidth: 520, lineHeight: 1.6 }}>
+            <p className="text-[13px] text-text-muted max-w-[520px] leading-relaxed">
               {component.description}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+          <div className="flex gap-1 shrink-0">
             {component.states.map(s => (
-              <span key={s.name} className="chip default" title={s.description}>
+              <Badge key={s.name} variant="default" title={s.description}>
                 {s.name}
-              </span>
+              </Badge>
             ))}
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="tab-bar">
+      <TabsList className="tab-bar rounded-none border-b border-border shrink-0 h-auto justify-start px-6 bg-surface">
         {TABS.map(t => (
-          <button key={t} className={`tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
+          <TabsTrigger key={t} value={t} className="tab">
             {t}
-          </button>
+          </TabsTrigger>
         ))}
-      </div>
+      </TabsList>
 
       {/* Tab content */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
-        {tab === 'Preview' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-            {/* Live interactive preview */}
-            <div>
-              <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-                Live Preview · hover, focus, click to interact
-              </div>
-              <ComponentPreview component={component} />
-            </div>
-
-            {/* States / Variants table */}
-            <div>
-              <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
-                States & Variants
-              </div>
-              <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-                {/* Header */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '130px 1fr 1fr 1fr',
-                  background: 'var(--surface-mid)',
-                  borderBottom: '1px solid var(--border)',
-                  padding: '8px 14px',
-                  gap: 12,
-                }}>
-                  {['State', 'Description', 'Trigger', 'Token change'].map(h => (
-                    <div key={h} style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>{h}</div>
-                  ))}
-                </div>
-                {/* Rows */}
-                {component.states.map((s, i) => {
-                  const stateColors: Record<string, string> = {
-                    default: 'var(--text)',
-                    hover: 'var(--accent)',
-                    active: 'var(--accent)',
-                    focus: 'var(--yellow)',
-                    disabled: 'var(--text-subtle)',
-                    loading: 'var(--purple)',
-                    error: 'var(--red)',
-                    success: 'var(--green)',
-                    checked: 'var(--green)',
-                    indeterminate: 'var(--yellow)',
-                  }
-                  const stateTriggers: Record<string, string> = {
-                    default: 'Initial / resting',
-                    hover: ':hover — mouse over',
-                    active: ':active — mouse down',
-                    focus: ':focus-visible — keyboard nav',
-                    disabled: '[disabled] attribute',
-                    loading: 'async operation',
-                    error: 'validation fail',
-                    success: 'validation pass',
-                    checked: '[checked] state',
-                    indeterminate: 'partial selection',
-                  }
-                  const stateTokens: Record<string, string> = {
-                    default: 'bg/brand → accent',
-                    hover: 'bg/brand → accent-hover',
-                    active: 'transform: scale(0.97)',
-                    focus: 'box-shadow: focus-ring',
-                    disabled: 'opacity: 0.45',
-                    loading: 'pointer-events: none',
-                    error: 'border → red, bg → red-subtle',
-                    success: 'border → green',
-                    checked: 'bg → accent',
-                    indeterminate: 'bg → surface-high',
-                  }
-                  const dotColor = stateColors[s.name] ?? 'var(--text-muted)'
-                  return (
-                    <div key={s.name} style={{
-                      display: 'grid',
-                      gridTemplateColumns: '130px 1fr 1fr 1fr',
-                      padding: '10px 14px', gap: 12,
-                      borderBottom: i < component.states.length - 1 ? '1px solid var(--border)' : 'none',
-                      background: i % 2 === 0 ? 'transparent' : 'var(--surface-mid)',
-                      alignItems: 'start',
-                      transition: 'background 80ms',
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                        <div style={{ width: 7, height: 7, borderRadius: '50%', background: dotColor, flexShrink: 0 }} />
-                        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', fontFamily: 'monospace' }}>{s.name}</span>
-                      </div>
-                      <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5 }}>{s.description}</div>
-                      <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontFamily: 'monospace' }}>
-                        {stateTriggers[s.name] ?? '—'}
-                      </div>
-                      <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontFamily: 'monospace' }}>
-                        {stateTokens[s.name] ?? '—'}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Variants row */}
-            {component.variants.length > 0 && (
+      <ScrollArea className="flex-1">
+        <div className="p-6">
+          <TabsContent value="Preview" className="mt-0">
+            <div className="flex flex-col gap-7">
+              {/* Live interactive preview */}
               <div>
-                <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
-                  Variants ({component.variants.length})
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {component.variants.map(v => (
-                    <div key={v} style={{
-                      padding: '6px 12px',
-                      background: 'var(--surface-mid)',
-                      border: '1px solid var(--border)',
-                      borderRadius: 'var(--radius-md)',
-                      fontSize: 12, color: 'var(--text)', fontFamily: 'monospace',
-                    }}>
-                      {v}
-                    </div>
-                  ))}
+                <SectionLabel>Live Preview · hover, focus, click to interact</SectionLabel>
+                <ComponentPreview component={component} />
+              </div>
+
+              {/* States / Variants table */}
+              <div>
+                <SectionLabel>States &amp; Variants</SectionLabel>
+                <div className="border border-border rounded-[var(--radius-lg)] overflow-hidden">
+                  {/* Header */}
+                  <div
+                    className="grid bg-surface-mid border-b border-border px-3.5 py-2 gap-3"
+                    style={{ gridTemplateColumns: '130px 1fr 1fr 1fr' }}
+                  >
+                    {['State', 'Description', 'Trigger', 'Token change'].map(h => (
+                      <div key={h} className="text-[10px] font-semibold text-text-subtle uppercase tracking-[0.07em]">{h}</div>
+                    ))}
+                  </div>
+                  {/* Rows */}
+                  {component.states.map((s, i) => {
+                    const stateColors: Record<string, string> = {
+                      default: 'var(--text)',
+                      hover: 'var(--accent)',
+                      active: 'var(--accent)',
+                      focus: 'var(--yellow)',
+                      disabled: 'var(--text-subtle)',
+                      loading: 'var(--purple)',
+                      error: 'var(--red)',
+                      success: 'var(--green)',
+                      checked: 'var(--green)',
+                      indeterminate: 'var(--yellow)',
+                    }
+                    const stateTriggers: Record<string, string> = {
+                      default: 'Initial / resting',
+                      hover: ':hover — mouse over',
+                      active: ':active — mouse down',
+                      focus: ':focus-visible — keyboard nav',
+                      disabled: '[disabled] attribute',
+                      loading: 'async operation',
+                      error: 'validation fail',
+                      success: 'validation pass',
+                      checked: '[checked] state',
+                      indeterminate: 'partial selection',
+                    }
+                    const stateTokens: Record<string, string> = {
+                      default: 'bg/brand → accent',
+                      hover: 'bg/brand → accent-hover',
+                      active: 'transform: scale(0.97)',
+                      focus: 'box-shadow: focus-ring',
+                      disabled: 'opacity: 0.45',
+                      loading: 'pointer-events: none',
+                      error: 'border → red, bg → red-subtle',
+                      success: 'border → green',
+                      checked: 'bg → accent',
+                      indeterminate: 'bg → surface-high',
+                    }
+                    const dotColor = stateColors[s.name] ?? 'var(--text-muted)'
+                    return (
+                      <div
+                        key={s.name}
+                        className={cn(
+                          'grid px-3.5 py-2.5 gap-3 items-start transition-colors duration-[80ms]',
+                          i < component.states.length - 1 ? 'border-b border-border' : '',
+                          i % 2 === 0 ? 'bg-transparent' : 'bg-surface-mid'
+                        )}
+                        style={{ gridTemplateColumns: '130px 1fr 1fr 1fr' }}
+                      >
+                        <div className="flex items-center gap-[7px]">
+                          <div className="w-[7px] h-[7px] rounded-full shrink-0" style={{ background: dotColor }} />
+                          <span className="text-[12px] font-semibold text-text font-mono">{s.name}</span>
+                        </div>
+                        <div className="text-[12px] text-text-muted leading-snug">{s.description}</div>
+                        <div className="text-[11px] text-text-subtle font-mono">
+                          {stateTriggers[s.name] ?? '—'}
+                        </div>
+                        <div className="text-[11px] text-text-subtle font-mono">
+                          {stateTokens[s.name] ?? '—'}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
-            )}
-          </div>
-        )}
 
-        {tab === 'Token Deps' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <div style={{ fontSize: 11, color: 'var(--text-subtle)', marginBottom: 4, lineHeight: 1.6 }}>
-              Each token traces from <span style={{ color: 'var(--accent)', fontFamily: 'monospace' }}>component</span>
-              {' → '}<span style={{ color: 'var(--text)' }}>semantic</span>
-              {' → '}<span style={{ color: 'var(--text-muted)' }}>primitive</span>
-            </div>
-            {component.tokenDeps.map(dep => (
-              <TokenChain key={dep.tokenId} dep={dep} />
-            ))}
-          </div>
-        )}
-
-        {tab === 'Accessibility' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {component.contrast && (
-              <div style={{
-                background: 'var(--surface-mid)', border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-lg)', padding: '16px',
-                display: 'flex', alignItems: 'center', gap: 16, marginBottom: 4,
-              }}>
+              {/* Variants row */}
+              {component.variants.length > 0 && (
                 <div>
-                  <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-                    Color Contrast
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                    <span style={{
-                      fontSize: 28, fontWeight: 800, letterSpacing: '-0.03em',
-                      color: component.contrast.level === 'AAA' ? 'var(--green)' : component.contrast.level.startsWith('AA') ? 'var(--yellow)' : 'var(--red)',
-                    }}>
-                      {component.contrast.ratio}:1
-                    </span>
-                    <span className={`chip ${component.contrast.level === 'AAA' ? 'green' : 'yellow'}`}>
-                      {component.contrast.level}
-                    </span>
+                  <SectionLabel>Variants ({component.variants.length})</SectionLabel>
+                  <div className="flex flex-wrap gap-2">
+                    {component.variants.map(v => (
+                      <div
+                        key={v}
+                        className="px-3 py-1.5 bg-surface-mid border border-border rounded-[var(--radius-md)] text-[12px] text-text font-mono"
+                      >
+                        {v}
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{
-                      width: 32, height: 32, borderRadius: 6,
-                      background: component.contrast.foreground, border: '1px solid rgba(255,255,255,0.1)',
-                      marginBottom: 4,
-                    }} />
-                    <div style={{ fontSize: 9, fontFamily: 'monospace', color: 'var(--text-subtle)' }}>
-                      {component.contrast.foreground}
-                    </div>
-                  </div>
-                  <div style={{ fontSize: 18, color: 'var(--text-subtle)' }}>on</div>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{
-                      width: 32, height: 32, borderRadius: 6,
-                      background: component.contrast.background, border: '1px solid rgba(255,255,255,0.1)',
-                      marginBottom: 4,
-                    }} />
-                    <div style={{ fontSize: 9, fontFamily: 'monospace', color: 'var(--text-subtle)' }}>
-                      {component.contrast.background}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
+          </TabsContent>
 
-            {component.accessibility.map((rule, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'flex-start', gap: 10,
-                padding: '10px 12px',
-                background: rule.passes ? 'var(--green-subtle)' : 'var(--red-subtle)',
-                border: `1px solid ${rule.passes ? 'rgba(45,213,120,0.2)' : 'rgba(245,101,101,0.2)'}`,
-                borderRadius: 'var(--radius-lg)',
-              }}>
-                <div style={{ flexShrink: 0, marginTop: 1 }}>
-                  {rule.passes
-                    ? <CheckCircle size={14} color="var(--green)" />
-                    : <XCircle size={14} color="var(--red)" />
-                  }
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.4 }}>{rule.rule}</div>
-                  {rule.detail && (
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 3 }}>{rule.detail}</div>
+          <TabsContent value="Token Deps" className="mt-0">
+            <div className="flex flex-col gap-2.5">
+              <div className="text-[11px] text-text-subtle mb-1 leading-relaxed">
+                Each token traces from{' '}
+                <span className="text-accent font-mono">component</span>
+                {' → '}
+                <span className="text-text">semantic</span>
+                {' → '}
+                <span className="text-text-muted">primitive</span>
+              </div>
+              {component.tokenDeps.map(dep => (
+                <TokenChain key={dep.tokenId} dep={dep} />
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="Accessibility" className="mt-0">
+            <div className="flex flex-col gap-2">
+              {component.contrast && (
+                <Card className="mb-1">
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <div>
+                      <div className="text-[10px] text-text-subtle uppercase tracking-[0.08em] mb-1.5">
+                        Color Contrast
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <span
+                          className="text-[28px] font-extrabold tracking-[-0.03em]"
+                          style={{
+                            color: component.contrast.level === 'AAA'
+                              ? 'var(--green)'
+                              : component.contrast.level.startsWith('AA')
+                              ? 'var(--yellow)'
+                              : 'var(--red)',
+                          }}
+                        >
+                          {component.contrast.ratio}:1
+                        </span>
+                        <Badge variant={component.contrast.level === 'AAA' ? 'green' : 'yellow'}>
+                          {component.contrast.level}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="flex gap-2.5 items-center">
+                      <div className="text-center">
+                        <div
+                          className="w-8 h-8 rounded-[6px] mb-1 border border-white/10"
+                          style={{ background: component.contrast.foreground }}
+                        />
+                        <div className="text-[9px] font-mono text-text-subtle">
+                          {component.contrast.foreground}
+                        </div>
+                      </div>
+                      <div className="text-[18px] text-text-subtle">on</div>
+                      <div className="text-center">
+                        <div
+                          className="w-8 h-8 rounded-[6px] mb-1 border border-white/10"
+                          style={{ background: component.contrast.background }}
+                        />
+                        <div className="text-[9px] font-mono text-text-subtle">
+                          {component.contrast.background}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {component.accessibility.map((rule, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    'flex items-start gap-2.5 px-3 py-2.5 rounded-[var(--radius-lg)] border',
+                    rule.passes
+                      ? 'bg-green-subtle border-[rgba(45,213,120,0.2)]'
+                      : 'bg-red-subtle border-[rgba(245,101,101,0.2)]'
                   )}
-                  {rule.wcag && (
-                    <div style={{ fontSize: 10.5, color: 'var(--text-subtle)', marginTop: 2 }}>
-                      WCAG {rule.wcag} · Level {rule.level}
-                    </div>
-                  )}
+                >
+                  <div className="shrink-0 mt-px">
+                    {rule.passes
+                      ? <CheckCircle size={14} color="var(--green)" />
+                      : <XCircle size={14} color="var(--red)" />
+                    }
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[12.5px] text-text leading-snug">{rule.rule}</div>
+                    {rule.detail && (
+                      <div className="text-[11px] text-text-muted mt-0.5">{rule.detail}</div>
+                    )}
+                    {rule.wcag && (
+                      <div className="text-[10.5px] text-text-subtle mt-0.5">
+                        WCAG {rule.wcag} · Level {rule.level}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {tab === 'AI Rules' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {/* Semantic intent */}
-            <div style={{
-              background: 'var(--accent-subtle)', border: '1px solid rgba(91,110,247,0.2)',
-              borderRadius: 'var(--radius-lg)', padding: '14px 16px',
-            }}>
-              <div style={{ fontSize: 10, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 6 }}>
-                Semantic Intent
-              </div>
-              <p style={{ fontSize: 13.5, color: 'var(--text)', lineHeight: 1.6 }}>
-                {component.aiRules.semanticIntent}
-              </p>
+              ))}
             </div>
+          </TabsContent>
 
-            {/* Use when */}
-            <div>
-              <div style={{ fontSize: 11, color: 'var(--green)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span className="status-dot pass" />
-                Use when
+          <TabsContent value="AI Rules" className="mt-0">
+            <div className="flex flex-col gap-4">
+              {/* Semantic intent */}
+              <div className="bg-accent-subtle border border-accent-border rounded-[var(--radius-lg)] px-4 py-3.5">
+                <div className="text-[10px] text-accent uppercase tracking-[0.08em] font-semibold mb-1.5">
+                  Semantic Intent
+                </div>
+                <p className="text-[13.5px] text-text leading-relaxed">
+                  {component.aiRules.semanticIntent}
+                </p>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                {component.aiRules.useWhen.map((rule, i) => (
-                  <div key={i} style={{
-                    display: 'flex', gap: 8, padding: '7px 10px',
-                    background: 'var(--green-subtle)', border: '1px solid rgba(45,213,120,0.15)',
-                    borderRadius: 'var(--radius-md)',
-                  }}>
-                    <ChevronRight size={12} color="var(--green)" style={{ flexShrink: 0, marginTop: 2 }} />
-                    <span style={{ fontSize: 12, lineHeight: 1.5 }}>{rule}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Avoid when */}
-            <div>
-              <div style={{ fontSize: 11, color: 'var(--red)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span className="status-dot fail" />
-                Avoid when
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                {component.aiRules.avoidWhen.map((rule, i) => (
-                  <div key={i} style={{
-                    display: 'flex', gap: 8, padding: '7px 10px',
-                    background: 'var(--red-subtle)', border: '1px solid rgba(245,101,101,0.15)',
-                    borderRadius: 'var(--radius-md)',
-                  }}>
-                    <XCircle size={12} color="var(--red)" style={{ flexShrink: 0, marginTop: 2 }} />
-                    <span style={{ fontSize: 12, lineHeight: 1.5 }}>{rule}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Max per screen */}
-            {component.aiRules.maxPerScreen && (
+              {/* Use when */}
               <div>
-                <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
-                  Max per screen
+                <div className="text-[11px] text-green font-semibold uppercase tracking-[0.08em] mb-2 flex items-center gap-1.5">
+                  <span className="status-dot pass" />
+                  Use when
                 </div>
-                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  {Object.entries(component.aiRules.maxPerScreen).map(([variant, max]) => (
-                    <div key={variant} style={{
-                      background: 'var(--surface-mid)', border: '1px solid var(--border)',
-                      borderRadius: 'var(--radius-md)', padding: '8px 14px',
-                      textAlign: 'center',
-                    }}>
-                      <div style={{ fontSize: 22, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.03em' }}>{max}</div>
-                      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>{variant}</div>
+                <div className="flex flex-col gap-[5px]">
+                  {component.aiRules.useWhen.map((rule, i) => (
+                    <div
+                      key={i}
+                      className="flex gap-2 px-2.5 py-[7px] bg-green-subtle border border-[rgba(45,213,120,0.15)] rounded-[var(--radius-md)]"
+                    >
+                      <ChevronRight size={12} color="var(--green)" className="shrink-0 mt-0.5" />
+                      <span className="text-[12px] leading-snug">{rule}</span>
                     </div>
                   ))}
                 </div>
               </div>
-            )}
 
-            {/* Prompt hints */}
-            {component.aiRules.promptHints && (
+              {/* Avoid when */}
               <div>
-                <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
-                  Generation Hints
+                <div className="text-[11px] text-red font-semibold uppercase tracking-[0.08em] mb-2 flex items-center gap-1.5">
+                  <span className="status-dot fail" />
+                  Avoid when
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                  {component.aiRules.promptHints.map((hint, i) => (
-                    <div key={i} style={{
-                      fontSize: 12, padding: '6px 10px',
-                      background: 'var(--surface-mid)', border: '1px solid var(--border)',
-                      borderRadius: 'var(--radius-md)', color: 'var(--text-muted)',
-                      lineHeight: 1.5,
-                    }}>
-                      💡 {hint}
+                <div className="flex flex-col gap-[5px]">
+                  {component.aiRules.avoidWhen.map((rule, i) => (
+                    <div
+                      key={i}
+                      className="flex gap-2 px-2.5 py-[7px] bg-red-subtle border border-[rgba(245,101,101,0.15)] rounded-[var(--radius-md)]"
+                    >
+                      <XCircle size={12} color="var(--red)" className="shrink-0 mt-0.5" />
+                      <span className="text-[12px] leading-snug">{rule}</span>
                     </div>
                   ))}
                 </div>
               </div>
-            )}
-          </div>
-        )}
 
-        {tab === 'Interaction' && (
-          <InteractionTab componentId={id} />
-        )}
+              {/* Max per screen */}
+              {component.aiRules.maxPerScreen && (
+                <div>
+                  <SectionLabel>Max per screen</SectionLabel>
+                  <div className="flex gap-2 flex-wrap">
+                    {Object.entries(component.aiRules.maxPerScreen).map(([variant, max]) => (
+                      <Card key={variant}>
+                        <CardContent className="p-3 text-center">
+                          <div className="text-[22px] font-extrabold text-accent tracking-[-0.03em]">{max}</div>
+                          <div className="text-[11px] text-text-muted mt-0.5">{variant}</div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-        {tab === 'Styles' && (
-          <StylesTab componentId={id} />
-        )}
-
-        {tab === 'Code' && (
-          <div>
-            <div style={{ fontSize: 11, color: 'var(--text-subtle)', marginBottom: 12, lineHeight: 1.6 }}>
-              Usage examples for <span style={{ color: 'var(--text)', fontFamily: 'monospace' }}>{component.name}</span> component.
+              {/* Prompt hints */}
+              {component.aiRules.promptHints && (
+                <div>
+                  <SectionLabel>Generation Hints</SectionLabel>
+                  <div className="flex flex-col gap-[5px]">
+                    {component.aiRules.promptHints.map((hint, i) => (
+                      <div
+                        key={i}
+                        className="text-[12px] px-2.5 py-1.5 bg-surface-mid border border-border rounded-[var(--radius-md)] text-text-muted leading-snug"
+                      >
+                        💡 {hint}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <CodeBlock code={component.codeExample} />
-          </div>
-        )}
-      </div>
-    </div>
+          </TabsContent>
+
+          <TabsContent value="Interaction" className="mt-0">
+            <InteractionTab componentId={id} />
+          </TabsContent>
+
+          <TabsContent value="Styles" className="mt-0">
+            <StylesTab componentId={id} />
+          </TabsContent>
+
+          <TabsContent value="Code" className="mt-0">
+            <div>
+              <div className="text-[11px] text-text-subtle mb-3 leading-relaxed">
+                Usage examples for{' '}
+                <span className="text-text font-mono">{component.name}</span> component.
+              </div>
+              <CodeBlock code={component.codeExample} />
+            </div>
+          </TabsContent>
+        </div>
+      </ScrollArea>
+    </Tabs>
   )
 }

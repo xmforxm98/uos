@@ -8,19 +8,25 @@ import { getPattern } from '@/data/patterns'
 import { getTheme } from '@/data/themes'
 import { getBestProfilesForComponent, getProfilesCompatibleWithComponent, getStyleForTheme } from '@/data/interactionStyles'
 import { Check, Fingerprint } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { cn } from '@/lib/utils'
 
 function CopyPill({ id, value }: { id: string; value: string }) {
   const { copiedId, copyValue } = useDesignSystem()
   const copied = copiedId === id
   return (
-    <button
-      className={`value-pill ${copied ? 'copied' : ''}`}
+    <Button
+      variant="ghost"
+      size="sm"
+      className={cn('value-pill h-auto px-1.5 py-0.5 text-[10.5px]', copied ? 'copied' : '')}
       onClick={() => copyValue(id, value)}
       title="Click to copy"
     >
-      {copied ? <Check size={9} style={{ display: 'inline', marginRight: 3 }} /> : null}
+      {copied ? <Check size={9} className="inline mr-0.5" /> : null}
       {value}
-    </button>
+    </Button>
   )
 }
 
@@ -28,12 +34,14 @@ function WhereUsed({ semanticId }: { semanticId: string }) {
   const usedBy = componentDefs.filter(c =>
     c.tokenDeps.some(d => d.semanticRef === semanticId)
   )
-  if (usedBy.length === 0) return <span style={{ color: 'var(--text-subtle)', fontSize: 11 }}>Not referenced</span>
+  if (usedBy.length === 0) {
+    return <span className="text-text-subtle text-[11px]">Not referenced</span>
+  }
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+    <div className="flex flex-wrap gap-1">
       {usedBy.map(c => (
-        <span key={c.id} className="chip default">{c.name}</span>
+        <Badge key={c.id} variant="default">{c.name}</Badge>
       ))}
     </div>
   )
@@ -55,104 +63,109 @@ function ComponentInspector({ id }: { id: string }) {
 
   return (
     <div>
-      <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 3 }}>{comp.name}</div>
-        <div style={{ fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.5 }}>{comp.description}</div>
+      <div className="px-4 py-3.5 border-b border-border">
+        <div className="text-[15px] font-semibold mb-0.5">{comp.name}</div>
+        <div className="text-[11.5px] text-text-muted leading-relaxed">{comp.description}</div>
       </div>
 
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+      <div className="px-4 py-3 border-b border-border">
         <div className="inspector-label">Category</div>
-        <span className="chip accent">{comp.category}</span>
+        <Badge variant="accent">{comp.category}</Badge>
       </div>
 
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+      <div className="px-4 py-3 border-b border-border">
         <div className="inspector-label">Variants</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+        <div className="flex flex-wrap gap-1">
           {comp.variants.map(v => (
-            <span key={v} className="chip default">{v}</span>
+            <Badge key={v} variant="default">{v}</Badge>
           ))}
         </div>
       </div>
 
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+      <div className="px-4 py-3 border-b border-border">
         <div className="inspector-label">Token Dependencies</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className="flex flex-col gap-1.5">
           {comp.tokenDeps.map(dep => {
             const resolvedValue = resolveDepValue(dep.semanticRef, dep.primitiveRef, dep.currentValue)
             return (
-            <div key={dep.tokenId} style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '5px 8px',
-              background: 'var(--surface-mid)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border)',
-            }}>
-              <div>
-                <div style={{ fontSize: 10.5, color: 'var(--text-muted)' }}>{dep.label}</div>
-                <div style={{
-                  fontSize: 11, fontFamily: 'JetBrains Mono, monospace',
-                  color: 'var(--accent)', letterSpacing: '-0.01em',
-                }}>
-                  {dep.tokenId}
+              <div
+                key={dep.tokenId}
+                className="flex items-center justify-between px-2 py-1.5 bg-surface-mid rounded-md border border-border"
+              >
+                <div>
+                  <div className="text-[10.5px] text-text-muted">{dep.label}</div>
+                  <div className="text-[11px] font-mono text-accent tracking-tight">
+                    {dep.tokenId}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {resolvedValue !== 'transparent' && (
+                    <div
+                      className="w-3 h-3 rounded-[3px] shrink-0 border border-white/10"
+                      style={{ background: resolvedValue }}
+                    />
+                  )}
+                  <CopyPill id={dep.tokenId} value={resolvedValue} />
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                {resolvedValue !== 'transparent' && (
-                  <div style={{
-                    width: 12, height: 12, borderRadius: 3,
-                    background: resolvedValue,
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    flexShrink: 0,
-                  }} />
-                )}
-                <CopyPill id={dep.tokenId} value={resolvedValue} />
-              </div>
-            </div>
             )
           })}
         </div>
       </div>
 
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+      <div className="px-4 py-3 border-b border-border">
         <div className="inspector-label">Accessibility</div>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8,
-        }}>
+        <div className="flex items-center gap-1.5 mb-2">
           <span className={`status-dot ${passCount === comp.accessibility.length ? 'pass' : 'warn'}`} />
-          <span style={{ fontSize: 11.5 }}>
+          <span className="text-[11.5px]">
             {passCount}/{comp.accessibility.length} rules pass
           </span>
         </div>
         {comp.contrast && (
-          <div style={{
-            background: 'var(--surface-mid)', border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-md)', padding: '8px 10px', marginBottom: 6,
-          }}>
-            <div style={{ fontSize: 10, color: 'var(--text-subtle)', marginBottom: 4 }}>CONTRAST RATIO</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{
-                fontSize: 18, fontWeight: 700,
-                color: comp.contrast.level === 'AAA' ? 'var(--green)' : comp.contrast.level === 'AA' ? 'var(--yellow)' : 'var(--red)',
-              }}>
+          <div className="bg-surface-mid border border-border rounded-md px-2.5 py-2 mb-1.5">
+            <div className="text-[10px] text-text-subtle mb-1 uppercase tracking-wide">CONTRAST RATIO</div>
+            <div className="flex items-center gap-2">
+              <span
+                className="text-[18px] font-bold"
+                style={{
+                  color: comp.contrast.level === 'AAA'
+                    ? 'var(--green)'
+                    : comp.contrast.level === 'AA'
+                      ? 'var(--yellow)'
+                      : 'var(--red)',
+                }}
+              >
                 {comp.contrast.ratio}:1
               </span>
-              <span className={`chip ${comp.contrast.level === 'AAA' ? 'green' : comp.contrast.level === 'AA' || comp.contrast.level === 'AA Large' ? 'yellow' : 'red'}`}>
+              <Badge
+                variant={
+                  comp.contrast.level === 'AAA' ? 'green'
+                    : comp.contrast.level === 'AA' || comp.contrast.level === 'AA Large' ? 'yellow'
+                      : 'red'
+                }
+              >
                 WCAG {comp.contrast.level}
-              </span>
+              </Badge>
             </div>
-            <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
-              <div style={{ width: 14, height: 14, borderRadius: 3, background: comp.contrast.foreground, border: '1px solid rgba(255,255,255,0.1)' }} />
-              <span style={{ fontSize: 10, color: 'var(--text-subtle)', fontFamily: 'monospace' }}>{comp.contrast.foreground}</span>
-              <span style={{ fontSize: 10, color: 'var(--text-subtle)' }}>on</span>
-              <div style={{ width: 14, height: 14, borderRadius: 3, background: comp.contrast.background, border: '1px solid rgba(255,255,255,0.1)' }} />
-              <span style={{ fontSize: 10, color: 'var(--text-subtle)', fontFamily: 'monospace' }}>{comp.contrast.background}</span>
+            <div className="flex gap-1 mt-1.5 items-center">
+              <div
+                className="w-3.5 h-3.5 rounded-[3px] border border-white/10"
+                style={{ background: comp.contrast.foreground }}
+              />
+              <span className="text-[10px] text-text-subtle font-mono">{comp.contrast.foreground}</span>
+              <span className="text-[10px] text-text-subtle">on</span>
+              <div
+                className="w-3.5 h-3.5 rounded-[3px] border border-white/10"
+                style={{ background: comp.contrast.background }}
+              />
+              <span className="text-[10px] text-text-subtle font-mono">{comp.contrast.background}</span>
             </div>
           </div>
         )}
       </div>
 
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
-        <div className="inspector-label" style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 8 }}>
+      <div className="px-4 py-3 border-b border-border">
+        <div className="inspector-label flex items-center gap-1 mb-2">
           <Fingerprint size={10} />
           Behavioral Profile Compatibility
         </div>
@@ -163,27 +176,29 @@ function ComponentInspector({ id }: { id: string }) {
           const incompatibleCount = 7 - compatibleProfiles.length
 
           return (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div className="flex flex-col gap-2">
               {activeStyle && (
-                <div style={{
-                  padding: '7px 10px',
-                  background: 'var(--surface-mid)',
-                  border: `1px solid ${activeStyle.color}40`,
-                  borderRadius: 'var(--radius-md)',
-                  borderLeft: `3px solid ${activeStyle.color}`,
-                }}>
-                  <div style={{ fontSize: 10, color: 'var(--text-subtle)', marginBottom: 3 }}>ACTIVE THEME PROFILE</div>
-                  <div style={{ fontSize: 11.5, fontWeight: 600, color: activeStyle.color }}>{activeStyle.name}</div>
-                  <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 2 }}>{activeStyle.tagline}</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginTop: 5 }}>
+                <div
+                  className="px-2.5 py-1.5 bg-surface-mid rounded-md"
+                  style={{
+                    border: `1px solid ${activeStyle.color}40`,
+                    borderLeft: `3px solid ${activeStyle.color}`,
+                  }}
+                >
+                  <div className="text-[10px] text-text-subtle mb-0.5 uppercase tracking-wide">ACTIVE THEME PROFILE</div>
+                  <div className="text-[11.5px] font-semibold" style={{ color: activeStyle.color }}>{activeStyle.name}</div>
+                  <div className="text-[10.5px] text-text-muted mt-0.5">{activeStyle.tagline}</div>
+                  <div className="flex flex-wrap gap-0.5 mt-1">
                     {activeStyle.emotionalTone.map(t => (
-                      <span key={t} style={{
-                        fontSize: 9.5, padding: '1px 5px',
-                        background: `${activeStyle.color}20`,
-                        color: activeStyle.color,
-                        borderRadius: 3,
-                        border: `1px solid ${activeStyle.color}30`,
-                      }}>{t}</span>
+                      <span
+                        key={t}
+                        className="text-[9.5px] px-1 py-px rounded-[3px]"
+                        style={{
+                          background: `${activeStyle.color}20`,
+                          color: activeStyle.color,
+                          border: `1px solid ${activeStyle.color}30`,
+                        }}
+                      >{t}</span>
                     ))}
                   </div>
                 </div>
@@ -191,27 +206,29 @@ function ComponentInspector({ id }: { id: string }) {
 
               {bestProfiles.length > 0 && (
                 <div>
-                  <div style={{ fontSize: 9.5, color: 'var(--text-subtle)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <div className="text-[9.5px] text-text-subtle mb-1 font-semibold uppercase tracking-[0.06em]">
                     Best with
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                  <div className="flex flex-wrap gap-1">
                     {bestProfiles.map(p => (
-                      <span key={p.id} style={{
-                        fontSize: 10.5, padding: '2px 7px',
-                        background: `${p.color}15`,
-                        color: p.color,
-                        border: `1px solid ${p.color}35`,
-                        borderRadius: 4,
-                        fontWeight: 500,
-                      }}>{p.name}</span>
+                      <span
+                        key={p.id}
+                        className="text-[10.5px] px-1.5 py-0.5 rounded font-medium"
+                        style={{
+                          background: `${p.color}15`,
+                          color: p.color,
+                          border: `1px solid ${p.color}35`,
+                        }}
+                      >{p.name}</span>
                     ))}
                   </div>
                 </div>
               )}
 
               {incompatibleCount > 0 && (
-                <div style={{ fontSize: 10.5, color: 'var(--text-subtle)' }}>
-                  <span style={{ color: 'var(--red)', fontWeight: 600 }}>{incompatibleCount}</span> profile{incompatibleCount > 1 ? 's' : ''} avoid this component
+                <div className="text-[10.5px] text-text-subtle">
+                  <span className="text-red font-semibold">{incompatibleCount}</span>{' '}
+                  profile{incompatibleCount > 1 ? 's' : ''} avoid this component
                 </div>
               )}
             </div>
@@ -219,21 +236,20 @@ function ComponentInspector({ id }: { id: string }) {
         })()}
       </div>
 
-      <div style={{ padding: '12px 16px' }}>
+      <div className="px-4 py-3">
         <div className="inspector-label">AI Semantic Intent</div>
-        <p style={{ fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 8, fontStyle: 'italic' }}>
+        <p className="text-[11.5px] text-text-muted leading-relaxed mb-2 italic">
           &ldquo;{comp.aiRules.semanticIntent}&rdquo;
         </p>
         <div className="inspector-label">Max per screen</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+        <div className="flex flex-wrap gap-1">
           {Object.entries(comp.aiRules.maxPerScreen ?? {}).map(([k, v]) => (
-            <div key={k} style={{
-              fontSize: 11, background: 'var(--surface-mid)', border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-sm)', padding: '2px 7px',
-              display: 'flex', gap: 4, alignItems: 'center',
-            }}>
-              <span style={{ color: 'var(--text-muted)' }}>{k}</span>
-              <span style={{ fontWeight: 600, color: 'var(--accent)' }}>{v}</span>
+            <div
+              key={k}
+              className="text-[11px] bg-surface-mid border border-border rounded-sm px-1.5 py-0.5 flex gap-1 items-center"
+            >
+              <span className="text-text-muted">{k}</span>
+              <span className="font-semibold text-accent">{v}</span>
             </div>
           ))}
         </div>
@@ -247,31 +263,28 @@ function SemanticInspector({ group }: { group: string }) {
   const { activeTheme } = useDesignSystem()
   return (
     <div>
-      <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 3, textTransform: 'capitalize' }}>
-          {group}
-        </div>
-        <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
-          {tokens.length} semantic tokens
-        </div>
+      <div className="px-4 py-3.5 border-b border-border">
+        <div className="text-[14px] font-semibold mb-0.5 capitalize">{group}</div>
+        <div className="text-[11.5px] text-text-muted">{tokens.length} semantic tokens</div>
       </div>
       {tokens.slice(0, 6).map(t => {
         const override = activeTheme.overrides.find(o => o.semanticId === t.id)
         const prim = getPrimitive(override ? override.primitiveRef : t.primitiveRef)
         return (
-          <div key={t.id} style={{ padding: '10px 16px', borderBottom: '1px solid var(--border)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div key={t.id} className="px-4 py-2.5 border-b border-border">
+            <div className="flex items-center gap-2 mb-1">
               {prim && /^#/.test(prim.value) && (
-                <div style={{
-                  width: 14, height: 14, borderRadius: 3,
-                  background: prim.value, border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0,
-                }} />
+                <div
+                  className="w-3.5 h-3.5 rounded-[3px] shrink-0 border border-white/10"
+                  style={{ background: prim.value }}
+                />
               )}
-              <span style={{ fontSize: 11.5, fontFamily: 'monospace', color: 'var(--accent)' }}>{t.name}</span>
+              <span className="text-[11.5px] font-mono text-accent">{t.name}</span>
             </div>
-            <div style={{ fontSize: 10.5, color: 'var(--text-subtle)', marginBottom: 4 }}>{t.description}</div>
-            <div style={{ fontSize: 10, color: 'var(--text-subtle)', marginBottom: 4 }}>
-              Primitive: <span style={{ fontFamily: 'monospace', color: 'var(--text-muted)' }}>{override?.primitiveRef ?? t.primitiveRef}</span>
+            <div className="text-[10.5px] text-text-subtle mb-1">{t.description}</div>
+            <div className="text-[10px] text-text-subtle mb-1">
+              Primitive:{' '}
+              <span className="font-mono text-text-muted">{override?.primitiveRef ?? t.primitiveRef}</span>
             </div>
             <WhereUsed semanticId={t.id} />
           </div>
@@ -286,35 +299,34 @@ function PatternInspector({ id }: { id: string }) {
   if (!pattern) return null
   return (
     <div>
-      <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 3 }}>{pattern.name}</div>
-        <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>{pattern.description}</div>
+      <div className="px-4 py-3.5 border-b border-border">
+        <div className="text-[14px] font-semibold mb-0.5">{pattern.name}</div>
+        <div className="text-[11.5px] text-text-muted">{pattern.description}</div>
       </div>
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+      <div className="px-4 py-3 border-b border-border">
         <div className="inspector-label">Semantic Purpose</div>
-        <p style={{ fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.5, fontStyle: 'italic' }}>
+        <p className="text-[11.5px] text-text-muted leading-relaxed italic">
           &ldquo;{pattern.semanticPurpose}&rdquo;
         </p>
       </div>
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+      <div className="px-4 py-3 border-b border-border">
         <div className="inspector-label">Uses Components</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+        <div className="flex flex-wrap gap-1">
           {pattern.components.map(c => (
-            <span key={c} className="chip accent" style={{ textTransform: 'capitalize' }}>{c}</span>
+            <Badge key={c} variant="accent" className="capitalize">{c}</Badge>
           ))}
         </div>
       </div>
-      <div style={{ padding: '12px 16px' }}>
+      <div className="px-4 py-3">
         <div className="inspector-label">AI Constraints ({pattern.aiConstraints.length})</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className="flex flex-col gap-1.5">
           {pattern.aiConstraints.map((rule, i) => (
-            <div key={i} style={{
-              display: 'flex', gap: 8, alignItems: 'flex-start',
-              padding: '6px 8px', background: 'var(--surface-mid)',
-              border: '1px solid var(--border)', borderRadius: 'var(--radius-md)',
-            }}>
-              <span className="status-dot pass" style={{ marginTop: 4 }} />
-              <span style={{ fontSize: 11.5, lineHeight: 1.5, color: 'var(--text-muted)' }}>{rule}</span>
+            <div
+              key={i}
+              className="flex gap-2 items-start px-2 py-1.5 bg-surface-mid border border-border rounded-md"
+            >
+              <span className="status-dot pass mt-1" />
+              <span className="text-[11.5px] leading-relaxed text-text-muted">{rule}</span>
             </div>
           ))}
         </div>
@@ -328,30 +340,35 @@ function ThemeInspector({ id }: { id: string }) {
   if (!theme) return null
   return (
     <div>
-      <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 3 }}>{theme.name}</div>
-        <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>{theme.description}</div>
+      <div className="px-4 py-3.5 border-b border-border">
+        <div className="text-[14px] font-semibold mb-0.5">{theme.name}</div>
+        <div className="text-[11.5px] text-text-muted">{theme.description}</div>
       </div>
-      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+      <div className="px-4 py-3 border-b border-border">
         <div className="inspector-label">Accent Color</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 20, height: 20, borderRadius: 4, background: theme.accentColor, border: '1px solid rgba(255,255,255,0.1)' }} />
-          <span style={{ fontSize: 11.5, fontFamily: 'monospace', color: 'var(--text-muted)' }}>{theme.accentColor}</span>
+        <div className="flex items-center gap-2">
+          <div
+            className="w-5 h-5 rounded border border-white/10"
+            style={{ background: theme.accentColor }}
+          />
+          <span className="text-[11.5px] font-mono text-text-muted">{theme.accentColor}</span>
         </div>
       </div>
-      <div style={{ padding: '12px 16px' }}>
+      <div className="px-4 py-3">
         <div className="inspector-label">Token Overrides ({theme.overrides.length})</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <div className="flex flex-col gap-1">
           {theme.overrides.map(o => (
-            <div key={o.semanticId} style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '5px 8px', background: 'var(--surface-mid)',
-              border: '1px solid var(--border)', borderRadius: 'var(--radius-md)',
-            }}>
-              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'var(--text)' }}>{o.semanticId}</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                <div style={{ width: 12, height: 12, borderRadius: 2, background: o.value, border: '1px solid rgba(255,255,255,0.1)' }} />
-                <span style={{ fontSize: 10, fontFamily: 'monospace', color: 'var(--text-muted)' }}>{o.primitiveRef}</span>
+            <div
+              key={o.semanticId}
+              className="flex items-center justify-between px-2 py-1.5 bg-surface-mid border border-border rounded-md"
+            >
+              <span className="text-[11px] font-mono text-text">{o.semanticId}</span>
+              <div className="flex items-center gap-1.5">
+                <div
+                  className="w-3 h-3 rounded-[2px] border border-white/10"
+                  style={{ background: o.value }}
+                />
+                <span className="text-[10px] font-mono text-text-muted">{o.primitiveRef}</span>
               </div>
             </div>
           ))}
@@ -365,35 +382,14 @@ export function Inspector() {
   const { selected } = useDesignSystem()
 
   return (
-    <aside style={{
-      width: 280,
-      minWidth: 280,
-      background: 'var(--surface)',
-      borderLeft: '1px solid var(--border)',
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column',
-      flexShrink: 0,
-    }}>
-      <div style={{
-        padding: '10px 16px',
-        borderBottom: '1px solid var(--border)',
-        fontSize: 10,
-        fontWeight: 600,
-        textTransform: 'uppercase',
-        letterSpacing: '0.1em',
-        color: 'var(--text-subtle)',
-        flexShrink: 0,
-      }}>
+    <aside className="w-[280px] min-w-[280px] bg-surface border-l border-border overflow-hidden flex flex-col shrink-0">
+      <div className="px-4 py-2.5 border-b border-border text-[10px] font-semibold uppercase tracking-[0.1em] text-text-subtle shrink-0">
         Inspector
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+      <ScrollArea className="flex-1">
         {!selected && (
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            height: 200, color: 'var(--text-subtle)', fontSize: 12,
-          }}>
+          <div className="flex items-center justify-center h-[200px] text-text-subtle text-xs">
             Select an item to inspect
           </div>
         )}
@@ -401,7 +397,7 @@ export function Inspector() {
         {selected?.type === 'semantic' && <SemanticInspector group={selected.id} />}
         {selected?.type === 'pattern' && <PatternInspector id={selected.id} />}
         {selected?.type === 'theme' && <ThemeInspector id={selected.id} />}
-      </div>
+      </ScrollArea>
     </aside>
   )
 }

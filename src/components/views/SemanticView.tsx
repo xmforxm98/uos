@@ -4,6 +4,7 @@ import { useDesignSystem } from '@/context/DesignSystemContext'
 import { getSemanticsByGroup } from '@/data/semantic'
 import { getPrimitive } from '@/data/primitives'
 import { componentDefs } from '@/data/components'
+import { Badge } from '@/components/ui/badge'
 
 function whereUsedInComponents(semanticId: string) {
   return componentDefs.filter(c =>
@@ -20,51 +21,44 @@ function TokenRow({ token, theme }: { token: ReturnType<typeof getSemanticsByGro
   const usedBy = whereUsedInComponents(token.id)
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: '200px 1fr 140px 140px',
-      alignItems: 'start',
-      padding: '10px 12px',
-      background: 'var(--surface-mid)',
-      border: '1px solid var(--border)',
-      borderRadius: 'var(--radius-lg)',
-      gap: 12,
-    }}>
+    <div
+      className="grid items-start bg-surface-mid border border-border rounded-lg gap-3 px-3 py-2.5"
+      style={{ gridTemplateColumns: '200px 1fr 140px 140px' }}
+    >
       {/* Token name + description */}
       <div>
-        <div style={{
-          fontSize: 12, fontFamily: 'JetBrains Mono, monospace',
-          color: 'var(--accent)', fontWeight: 500, letterSpacing: '-0.01em',
-          marginBottom: 2,
-        }}>
+        <div
+          className="text-accent font-medium"
+          style={{ fontSize: 12, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.01em', marginBottom: 2 }}
+        >
           {token.name}
         </div>
-        <div style={{ fontSize: 11, color: 'var(--text-subtle)', lineHeight: 1.4 }}>
+        <div className="text-text-subtle" style={{ fontSize: 11, lineHeight: 1.4 }}>
           {token.description}
         </div>
       </div>
 
       {/* Usage */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+      <div className="flex flex-wrap gap-1">
         {token.usage.map(u => (
-          <span key={u} style={{
-            fontSize: 10.5, background: 'var(--surface-high)',
-            border: '1px solid var(--border)', borderRadius: 4,
-            padding: '1px 6px', color: 'var(--text-subtle)',
-          }}>
+          <span
+            key={u}
+            className="bg-surface-high border border-border text-text-subtle rounded"
+            style={{ fontSize: 10.5, padding: '1px 6px' }}
+          >
             {u}
           </span>
         ))}
       </div>
 
       {/* Resolution chain */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <span style={{ fontSize: 10, color: 'var(--text-subtle)' }}>→</span>
-          <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'var(--text-muted)' }}>{primitiveId}</span>
+      <div className="flex flex-col gap-0.5">
+        <div className="flex items-center gap-1">
+          <span className="text-text-subtle" style={{ fontSize: 10 }}>→</span>
+          <span className="text-text-muted" style={{ fontSize: 11, fontFamily: 'monospace' }}>{primitiveId}</span>
         </div>
         {primitive && /^#/.test(primitive.value) && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <div className="flex items-center gap-1.5">
             <div style={{
               width: 14, height: 14, borderRadius: 3,
               background: value,
@@ -80,7 +74,7 @@ function TokenRow({ token, theme }: { token: ReturnType<typeof getSemanticsByGro
           </div>
         )}
         {primitive && !/^#/.test(primitive.value) && (
-          <span style={{ fontSize: 10.5, fontFamily: 'monospace', color: 'var(--text-muted)' }}>
+          <span className="text-text-muted" style={{ fontSize: 10.5, fontFamily: 'monospace' }}>
             {primitive.value}
           </span>
         )}
@@ -89,13 +83,13 @@ function TokenRow({ token, theme }: { token: ReturnType<typeof getSemanticsByGro
       {/* Used by */}
       <div>
         {usedBy.length > 0 ? (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+          <div className="flex flex-wrap gap-0.5">
             {usedBy.map(c => (
               <span key={c.id} className="chip accent" style={{ fontSize: 9.5 }}>{c.name}</span>
             ))}
           </div>
         ) : (
-          <span style={{ fontSize: 10.5, color: 'var(--text-subtle)' }}>—</span>
+          <span className="text-text-subtle" style={{ fontSize: 10.5 }}>—</span>
         )}
       </div>
     </div>
@@ -115,58 +109,48 @@ export function SemanticView({ group }: { group: string }) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div style={{
-        padding: '16px 24px 14px',
-        borderBottom: '1px solid var(--border)',
-        flexShrink: 0,
-        background: 'var(--surface)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <h1 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em', textTransform: 'capitalize' }}>
+      <div className="px-6 pt-4 pb-3.5 border-b border-border shrink-0 bg-surface">
+        <div className="flex items-center gap-2 mb-1">
+          <h1 className="text-lg font-bold capitalize" style={{ letterSpacing: '-0.02em' }}>
             {group}
           </h1>
-          <span className="chip default">{tokens.length} tokens</span>
-          <span className="chip purple">Semantic</span>
-          <span style={{
-            fontSize: 11, background: activeTheme.accentColor + '22',
-            border: `1px solid ${activeTheme.accentColor}44`,
-            color: activeTheme.accentColor,
-            padding: '2px 7px', borderRadius: 99, fontWeight: 500,
-          }}>
+          <Badge variant="default">{tokens.length} tokens</Badge>
+          <Badge variant="purple">Semantic</Badge>
+          <span
+            className="font-medium"
+            style={{
+              fontSize: 11,
+              background: activeTheme.accentColor + '22',
+              border: `1px solid ${activeTheme.accentColor}44`,
+              color: activeTheme.accentColor,
+              padding: '2px 7px', borderRadius: 99,
+            }}
+          >
             {activeTheme.name} theme
           </span>
         </div>
-        <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+        <p className="text-text-muted" style={{ fontSize: 13, lineHeight: 1.5 }}>
           {groupDescriptions[group]}
         </p>
       </div>
 
       {/* Column headers */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '200px 1fr 140px 140px',
-        padding: '8px 12px',
-        gap: 12,
-        background: 'var(--surface)',
-        borderBottom: '1px solid var(--border)',
-        flexShrink: 0,
-        marginLeft: 24, marginRight: 24,
-      }}>
+      <div
+        className="grid bg-surface border-b border-border shrink-0 mx-6 gap-3 px-3 py-2"
+        style={{ gridTemplateColumns: '200px 1fr 140px 140px' }}
+      >
         {['Token', 'Usage', 'Resolution', 'Used by'].map(h => (
-          <div key={h} style={{
-            fontSize: 10, fontWeight: 600, color: 'var(--text-subtle)',
-            textTransform: 'uppercase', letterSpacing: '0.08em',
-          }}>
+          <div key={h} className="text-text-subtle font-semibold uppercase" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
             {h}
           </div>
         ))}
       </div>
 
       {/* Token rows */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 24px 24px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div className="flex-1 overflow-y-auto px-6 pt-2 pb-6">
+        <div className="flex flex-col gap-1.5">
           {tokens.map(t => (
             <TokenRow key={t.id} token={t} theme={activeTheme} />
           ))}

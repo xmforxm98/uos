@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import { getTheme } from '@/data/themes'
 import { getPrimitive } from '@/data/primitives'
-import { getSemanticToken, semanticTokens } from '@/data/semantic'
+import { getSemanticToken } from '@/data/semantic'
 import { useDesignSystem } from '@/context/DesignSystemContext'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
 /* ── Brand A: Precision grid animated canvas ──────────────────── */
 function BrandADirectionCanvas() {
@@ -238,11 +240,13 @@ function DirectionTab({ themeId, accentColor }: { themeId: string; accentColor: 
     'utopia':  <UtopiaDirectionCanvas />,
   }
 
+  const cardRadius = themeId === 'brand-b' ? 16 : themeId === 'brand-a' ? 2 : 10
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+    <div className="flex flex-col gap-6">
       {/* Animated canvas */}
       <div>
-        <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 10 }}>
+        <div className="text-text-subtle font-semibold uppercase mb-2.5" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
           Visual Direction
         </div>
         {canvas[themeId] ?? <GenericDirectionCanvas accentColor={accentColor} name={theme?.name ?? ''} />}
@@ -252,20 +256,23 @@ function DirectionTab({ themeId, accentColor }: { themeId: string; accentColor: 
         <>
           {/* Mood words */}
           <div>
-            <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 10 }}>
+            <div className="text-text-subtle font-semibold uppercase mb-2.5" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
               Mood
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            <div className="flex flex-wrap gap-2">
               {dir.moodWords.map((w, i) => (
-                <div key={w} style={{
-                  padding: '6px 14px',
-                  borderRadius: themeId === 'brand-b' ? 9999 : themeId === 'brand-a' ? 2 : 8,
-                  background: i === 0 ? accentColor : 'var(--surface-mid)',
-                  color: i === 0 ? '#fff' : 'var(--text)',
-                  border: i === 0 ? 'none' : '1px solid var(--border-mid)',
-                  fontSize: 12.5, fontWeight: i === 0 ? 600 : 400,
-                  letterSpacing: themeId === 'brand-a' ? '0.06em' : '-0.01em',
-                }}>
+                <div
+                  key={w}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: themeId === 'brand-b' ? 9999 : themeId === 'brand-a' ? 2 : 8,
+                    background: i === 0 ? accentColor : 'var(--surface-mid)',
+                    color: i === 0 ? '#fff' : 'var(--text)',
+                    border: i === 0 ? 'none' : '1px solid var(--border-mid)',
+                    fontSize: 12.5, fontWeight: i === 0 ? 600 : 400,
+                    letterSpacing: themeId === 'brand-a' ? '0.06em' : '-0.01em',
+                  }}
+                >
                   {w}
                 </div>
               ))}
@@ -273,44 +280,44 @@ function DirectionTab({ themeId, accentColor }: { themeId: string; accentColor: 
           </div>
 
           {/* Direction notes */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
             {[
               { label: '📷  Photography', text: dir.photography },
               { label: '✦  Motion',       text: dir.motion },
               { label: 'Aa  Typography',  text: dir.typography },
             ].map(({ label, text }) => (
-              <div key={label} style={{
-                padding: '14px 16px',
-                background: 'var(--surface-mid)', border: '1px solid var(--border)',
-                borderRadius: themeId === 'brand-b' ? 16 : themeId === 'brand-a' ? 2 : 10,
-                gridColumn: label.includes('Typography') ? '1 / -1' : undefined,
-              }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 7, letterSpacing: '0.04em' }}>{label}</div>
-                <div style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.65 }}>{text}</div>
+              <div
+                key={label}
+                className="bg-surface-mid border border-border px-4 py-3.5"
+                style={{
+                  borderRadius: cardRadius,
+                  gridColumn: label.includes('Typography') ? '1 / -1' : undefined,
+                }}
+              >
+                <div className="text-text-muted font-semibold mb-1.5" style={{ fontSize: 11, letterSpacing: '0.04em' }}>{label}</div>
+                <div className="text-text" style={{ fontSize: 12.5, lineHeight: 1.65 }}>{text}</div>
               </div>
             ))}
           </div>
 
           {/* GIF / Asset board */}
           <div>
-            <div style={{ fontSize: 10, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 6 }}>
+            <div className="text-text-subtle font-semibold uppercase mb-1.5" style={{ fontSize: 10, letterSpacing: '0.08em' }}>
               Asset Board — GIFs &amp; Images
             </div>
             {dir.assets.length === 0 ? (
-              <div style={{
-                padding: '20px 20px',
-                background: 'var(--surface-mid)', border: '2px dashed var(--border-mid)',
-                borderRadius: themeId === 'brand-b' ? 16 : themeId === 'brand-a' ? 2 : 10,
-                textAlign: 'center',
-              }}>
+              <div
+                className="bg-surface-mid border-2 border-dashed border-border-mid text-center p-5"
+                style={{ borderRadius: cardRadius }}
+              >
                 <div style={{ fontSize: 20, marginBottom: 8 }}>🎞</div>
-                <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text)', marginBottom: 4 }}>
+                <div className="text-text font-medium" style={{ fontSize: 13, marginBottom: 4 }}>
                   Add GIF / image references here
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 400, margin: '0 auto' }}>
-                  Open <code style={{ background: 'var(--surface-high)', padding: '1px 5px', borderRadius: 3, fontSize: 11 }}>src/data/themes.ts</code> and add URLs to the <code style={{ background: 'var(--surface-high)', padding: '1px 5px', borderRadius: 3, fontSize: 11 }}>direction.assets[]</code> array for this theme.
+                <div className="text-text-muted mx-auto" style={{ fontSize: 12, lineHeight: 1.6, maxWidth: 400 }}>
+                  Open <code className="bg-surface-high px-1 rounded" style={{ fontSize: 11 }}>src/data/themes.ts</code> and add URLs to the <code className="bg-surface-high px-1 rounded" style={{ fontSize: 11 }}>direction.assets[]</code> array for this theme.
                 </div>
-                <div className="code-block" style={{ marginTop: 14, textAlign: 'left', fontSize: 11 }}>{`direction: {
+                <div className="code-block mt-3.5 text-left" style={{ fontSize: 11 }}>{`direction: {
   assets: [
     { url: 'https://media.giphy.com/xxx.gif', label: 'Fluid sim', type: 'gif' },
     { url: '/public/assets/motion-ref.gif',   label: 'Motion ref', type: 'gif' },
@@ -319,19 +326,19 @@ function DirectionTab({ themeId, accentColor }: { themeId: string; accentColor: 
 }`}</div>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+              <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}>
                 {dir.assets.map((a, i) => (
-                  <div key={i} style={{
-                    borderRadius: themeId === 'brand-b' ? 16 : themeId === 'brand-a' ? 2 : 10,
-                    overflow: 'hidden', border: '1px solid var(--border)',
-                    background: 'var(--surface-mid)',
-                  }}>
+                  <div
+                    key={i}
+                    className="overflow-hidden border border-border bg-surface-mid"
+                    style={{ borderRadius: cardRadius }}
+                  >
                     <img
                       src={a.url}
                       alt={a.label}
                       style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }}
                     />
-                    <div style={{ padding: '8px 10px', fontSize: 11, color: 'var(--text-muted)' }}>{a.label}</div>
+                    <div className="text-text-muted px-2.5 py-2" style={{ fontSize: 11 }}>{a.label}</div>
                   </div>
                 ))}
               </div>
@@ -339,12 +346,8 @@ function DirectionTab({ themeId, accentColor }: { themeId: string; accentColor: 
           </div>
         </>
       ) : (
-        <div style={{
-          padding: '20px', background: 'var(--surface-mid)',
-          border: '1px solid var(--border)', borderRadius: 10,
-          fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6,
-        }}>
-          No design direction defined for this theme yet. Add a <code style={{ background: 'var(--surface-high)', padding: '1px 5px', borderRadius: 3, fontSize: 11 }}>direction</code> field in <code style={{ background: 'var(--surface-high)', padding: '1px 5px', borderRadius: 3, fontSize: 11 }}>src/data/themes.ts</code> to unlock this tab.
+        <div className="bg-surface-mid border border-border rounded-[10px] p-5 text-text-muted" style={{ fontSize: 13, lineHeight: 1.6 }}>
+          No design direction defined for this theme yet. Add a <code className="bg-surface-high px-1 rounded" style={{ fontSize: 11 }}>direction</code> field in <code className="bg-surface-high px-1 rounded" style={{ fontSize: 11 }}>src/data/themes.ts</code> to unlock this tab.
         </div>
       )}
     </div>
@@ -352,12 +355,10 @@ function DirectionTab({ themeId, accentColor }: { themeId: string; accentColor: 
 }
 
 /* ── Main ThemeView ────────────────────────────────────────────── */
-type Tab = 'overview' | 'direction' | 'overrides'
 
 export function ThemeView({ id }: { id: string }) {
   const theme = getTheme(id)
   const { setActiveThemeId, activeTheme } = useDesignSystem()
-  const [tab, setTab] = useState<Tab>('overview')
 
   if (!theme) return null
   const isActive = activeTheme.id === id
@@ -370,83 +371,61 @@ export function ThemeView({ id }: { id: string }) {
     overridesByGroup[group].push(o)
   })
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: 'overview',   label: 'Overview' },
-    { id: 'direction',  label: 'Direction' },
-    { id: 'overrides',  label: `Token Overrides` },
-  ]
-
-  const hasDirction = !!theme.direction
+  const hasDirection = !!theme.direction
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+    <Tabs defaultValue="overview" className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div style={{
-        padding: '16px 24px 0',
-        borderBottom: '1px solid var(--border)',
-        flexShrink: 0,
-        background: 'var(--surface)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
+      <div className="px-6 pt-4 border-b border-border shrink-0 bg-surface">
+        <div className="flex items-start justify-between mb-2">
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+            <div className="flex items-center gap-2 mb-1">
               <div style={{
-                width: 18, height: 18, borderRadius: id === 'brand-b' ? 9999 : id === 'brand-a' ? 2 : 5,
+                width: 18, height: 18,
+                borderRadius: id === 'brand-b' ? 9999 : id === 'brand-a' ? 2 : 5,
                 background: theme.accentColor,
                 boxShadow: `0 0 12px ${theme.accentColor}66`,
               }} />
-              <h1 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em' }}>
+              <h1 className="text-lg font-bold" style={{ letterSpacing: '-0.02em' }}>
                 {theme.name}
               </h1>
-              <span className="chip default">{theme.overrides.length} overrides</span>
-              {isActive && <span className="chip green">Active</span>}
-              {hasDirction && <span className="chip accent">Direction ✓</span>}
+              <Badge variant="default">{theme.overrides.length} overrides</Badge>
+              {isActive && <Badge variant="green">Active</Badge>}
+              {hasDirection && <Badge variant="accent">Direction ✓</Badge>}
             </div>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>{theme.description}</p>
+            <p className="text-text-muted" style={{ fontSize: 13 }}>{theme.description}</p>
           </div>
-          <button
+          <Button
+            variant={isActive ? 'secondary' : 'outline'}
+            size="sm"
             onClick={() => setActiveThemeId(id)}
-            style={{
-              padding: '7px 14px', borderRadius: 'var(--radius-md)', flexShrink: 0,
-              border: isActive ? 'none' : '1px solid var(--border)',
-              background: isActive ? 'var(--green-subtle)' : 'var(--surface-mid)',
-              color: isActive ? 'var(--green)' : 'var(--text)',
-              fontSize: 12.5, fontWeight: 500, cursor: 'pointer',
-              transition: 'all 100ms',
-            }}
+            className={isActive ? 'bg-green-subtle text-green border-0' : ''}
           >
             {isActive ? '✓ Active' : 'Set Active'}
-          </button>
+          </Button>
         </div>
 
-        {/* Tabs */}
-        <div style={{ display: 'flex', gap: 2 }}>
-          {tabs.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} style={{
-              padding: '7px 14px', fontSize: 12.5, fontWeight: 500,
-              border: 'none', cursor: 'pointer',
-              borderBottom: `2px solid ${tab === t.id ? 'var(--accent)' : 'transparent'}`,
-              background: 'transparent',
-              color: tab === t.id ? 'var(--accent)' : 'var(--text-muted)',
-              transition: 'color 100ms, border-color 100ms',
-            }}>{t.label}</button>
-          ))}
-        </div>
+        <TabsList className="bg-transparent border-0 p-0 h-auto gap-0.5">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="direction">Direction</TabsTrigger>
+          <TabsTrigger value="overrides">Token Overrides</TabsTrigger>
+        </TabsList>
       </div>
 
       {/* Tab body */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
+      <div className="flex-1 overflow-y-auto px-6 py-5">
 
         {/* ── Overview ── */}
-        {tab === 'overview' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <TabsContent value="overview" className="mt-0">
+          <div className="flex flex-col gap-5">
             {/* Accent swatch */}
-            <div style={{
-              background: `linear-gradient(135deg, ${theme.accentColor}20, ${theme.accentColor}08)`,
-              border: `1px solid ${theme.accentColor}33`,
-              borderRadius: 'var(--radius-xl)', padding: '20px',
-              display: 'flex', alignItems: 'center', gap: 16,
-            }}>
+            <div
+              className="flex items-center gap-4 rounded-xl p-5"
+              style={{
+                background: `linear-gradient(135deg, ${theme.accentColor}20, ${theme.accentColor}08)`,
+                border: `1px solid ${theme.accentColor}33`,
+              }}
+            >
               <div style={{
                 width: 52, height: 52,
                 borderRadius: id === 'brand-b' ? 9999 : id === 'brand-a' ? 2 : 12,
@@ -454,15 +433,15 @@ export function ThemeView({ id }: { id: string }) {
                 boxShadow: `0 0 28px ${theme.accentColor}55`,
               }} />
               <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>
+                <div className="text-text font-semibold" style={{ fontSize: 14, marginBottom: 3 }}>
                   Accent: {theme.accentColor}
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                <div className="text-text-muted" style={{ fontSize: 12 }}>
                   {theme.overrides.length} semantic tokens overridden
                 </div>
               </div>
               {/* Mini radius personality */}
-              <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
+              <div className="ml-auto flex items-center gap-2">
                 {[4, 8, 14, 22].map((r, i) => {
                   const actualR = id === 'brand-b' ? (i < 2 ? 9999 : 16) : id === 'brand-a' ? 0 : r
                   return (
@@ -474,27 +453,22 @@ export function ThemeView({ id }: { id: string }) {
                     }} />
                   )
                 })}
-                <span style={{ fontSize: 10, color: 'var(--text-subtle)', marginLeft: 4 }}>
+                <span className="text-text-subtle ml-1" style={{ fontSize: 10 }}>
                   {id === 'brand-b' ? 'pill/full' : id === 'brand-a' ? 'sharp/0' : 'utopia'}
                 </span>
               </div>
             </div>
 
             {/* Token group summary */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            <div className="grid gap-2.5" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
               {Object.entries(overridesByGroup).map(([group, overrides]) => (
-                <div key={group} style={{
-                  padding: '12px 14px', background: 'var(--surface-mid)',
-                  border: '1px solid var(--border)', borderRadius: 'var(--radius-md)',
-                  cursor: 'pointer', transition: 'border-color 100ms',
-                }}
-                  onClick={() => setTab('overrides')}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+                <div
+                  key={group}
+                  className="bg-surface-mid border border-border rounded-md px-3.5 py-3 cursor-pointer transition-colors hover:border-accent"
                 >
-                  <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', textTransform: 'capitalize', marginBottom: 3 }}>{group}</div>
-                  <div style={{ fontSize: 11, color: 'var(--text-subtle)' }}>{overrides.length} overrides</div>
-                  <div style={{ display: 'flex', gap: 3, marginTop: 8, flexWrap: 'wrap' }}>
+                  <div className="text-text font-semibold capitalize" style={{ fontSize: 12, marginBottom: 3 }}>{group}</div>
+                  <div className="text-text-subtle" style={{ fontSize: 11 }}>{overrides.length} overrides</div>
+                  <div className="flex gap-0.5 mt-2 flex-wrap">
                     {overrides.slice(0, 6).map(o => (
                       /^#|^rgba/.test(o.value) ? (
                         <div key={o.semanticId} style={{
@@ -508,65 +482,57 @@ export function ThemeView({ id }: { id: string }) {
               ))}
             </div>
           </div>
-        )}
+        </TabsContent>
 
         {/* ── Direction ── */}
-        {tab === 'direction' && (
+        <TabsContent value="direction" className="mt-0">
           <DirectionTab themeId={id} accentColor={theme.accentColor} />
-        )}
+        </TabsContent>
 
         {/* ── Token Overrides ── */}
-        {tab === 'overrides' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <TabsContent value="overrides" className="mt-0">
+          <div className="flex flex-col gap-5">
             {theme.overrides.length === 0 ? (
-              <div style={{
-                background: 'var(--surface-mid)', border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-lg)', padding: '20px',
-              }}>
-                <div style={{ fontSize: 13, color: 'var(--text)', marginBottom: 6 }}>Base theme — no overrides</div>
-                <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+              <div className="bg-surface-mid border border-border rounded-lg p-5">
+                <div className="text-text" style={{ fontSize: 13, marginBottom: 6 }}>Base theme — no overrides</div>
+                <p className="text-text-muted" style={{ fontSize: 12, lineHeight: 1.6 }}>
                   All semantic tokens resolve to their primitive definitions directly.
                 </p>
               </div>
             ) : (
               Object.entries(overridesByGroup).map(([group, overrides]) => (
                 <div key={group}>
-                  <div style={{
-                    fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600,
-                    textTransform: 'capitalize', letterSpacing: '0.05em', marginBottom: 8,
-                    display: 'flex', alignItems: 'center', gap: 6,
-                  }}>
+                  <div className="flex items-center gap-1.5 text-text-subtle font-semibold capitalize mb-2" style={{ fontSize: 11, letterSpacing: '0.05em' }}>
                     <span>{group}</span>
                     <span className="chip default" style={{ fontSize: 9.5 }}>{overrides.length}</span>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  <div className="flex flex-col gap-0.5">
                     {overrides.map(o => {
                       const sem = getSemanticToken(o.semanticId)
                       const lightPrim = getPrimitive(sem?.primitiveRef ?? '')
                       return (
-                        <div key={o.semanticId} style={{
-                          display: 'grid', gridTemplateColumns: '1fr auto auto',
-                          alignItems: 'center', gap: 12,
-                          padding: '7px 12px', background: 'var(--surface-mid)',
-                          border: '1px solid var(--border)', borderRadius: 'var(--radius-md)',
-                        }}>
-                          <span style={{ fontSize: 12, fontFamily: 'monospace', color: 'var(--text)' }}>
+                        <div
+                          key={o.semanticId}
+                          className="grid items-center gap-3 bg-surface-mid border border-border rounded-md px-3 py-1.5"
+                          style={{ gridTemplateColumns: '1fr auto auto' }}
+                        >
+                          <span className="text-text" style={{ fontSize: 12, fontFamily: 'monospace' }}>
                             {o.semanticId}
                           </span>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                          <div className="flex items-center gap-1.5">
                             {lightPrim && /^#/.test(lightPrim.value) && (
                               <div style={{ width: 12, height: 12, borderRadius: 2, background: lightPrim.value, border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }} />
                             )}
-                            <span style={{ fontSize: 10.5, fontFamily: 'monospace', color: 'var(--text-subtle)' }}>
+                            <span className="text-text-subtle" style={{ fontSize: 10.5, fontFamily: 'monospace' }}>
                               {sem?.primitiveRef ?? '—'}
                             </span>
                           </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                            <span style={{ fontSize: 12, color: 'var(--accent)' }}>→</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-accent" style={{ fontSize: 12 }}>→</span>
                             {/^#|^rgba/.test(o.value) && (
                               <div style={{ width: 12, height: 12, borderRadius: 2, background: o.value, border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }} />
                             )}
-                            <span style={{ fontSize: 10.5, fontFamily: 'monospace', color: 'var(--accent)' }}>
+                            <span className="text-accent" style={{ fontSize: 10.5, fontFamily: 'monospace' }}>
                               {o.primitiveRef}
                             </span>
                           </div>
@@ -578,8 +544,8 @@ export function ThemeView({ id }: { id: string }) {
               ))
             )}
           </div>
-        )}
+        </TabsContent>
       </div>
-    </div>
+    </Tabs>
   )
 }

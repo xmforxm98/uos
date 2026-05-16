@@ -3,7 +3,7 @@
 import {
   Type, Ruler, Shapes, Zap, Circle,
   Component, Square, ToggleLeft, FormInput, LayoutDashboard,
-  Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search, Layers, Wind, MousePointer2, Fingerprint, Brain
+  Palette, Sparkles, GalleryHorizontal, MonitorSmartphone, Search, Wind, MousePointer2, Fingerprint, Brain, MessageSquare
 } from 'lucide-react'
 import { interactionStyles } from '@/data/interactionStyles'
 import { useDesignSystem } from '@/context/DesignSystemContext'
@@ -13,6 +13,9 @@ import { patterns } from '@/data/patterns'
 import type { SelectedItem } from '@/types'
 import { ThemeToggle } from './ThemeToggle'
 import { ScrollArea } from './ui/scroll-area'
+import { Badge } from './ui/badge'
+import { Input } from './ui/input'
+import { Button } from './ui/button'
 
 const componentIconMap: Record<string, React.ReactNode> = {
   button:  <Square size={12} />,
@@ -26,14 +29,7 @@ const componentIconMap: Record<string, React.ReactNode> = {
 function NavSection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div style={{
-        fontSize: '10px',
-        fontWeight: 600,
-        letterSpacing: '0.08em',
-        textTransform: 'uppercase',
-        color: 'var(--text-subtle)',
-        padding: '14px 12px 4px',
-      }}>
+      <div className="text-[10px] font-semibold tracking-[0.08em] uppercase text-text-subtle px-3 pt-3.5 pb-1">
         {label}
       </div>
       {children}
@@ -56,10 +52,10 @@ function NavItemRow({
       className={`nav-item w-full text-left ${selected ? 'active' : ''}`}
       style={{ border: 'none', background: selected ? undefined : 'transparent' }}
     >
-      <span style={{ opacity: 0.6, display: 'flex', alignItems: 'center' }}>{icon}</span>
-      <span style={{ flex: 1 }}>{label}</span>
+      <span className="opacity-60 flex items-center">{icon}</span>
+      <span className="flex-1">{label}</span>
       {badge && (
-        <span className="chip default" style={{ fontSize: '9.5px', padding: '1px 5px' }}>{badge}</span>
+        <Badge className="text-[9.5px] px-1.5 py-0">{badge}</Badge>
       )}
     </button>
   )
@@ -86,41 +82,14 @@ export function Sidebar() {
   }, {})
 
   return (
-    <aside style={{
-      width: 220,
-      minWidth: 220,
-      background: 'var(--surface)',
-      borderRight: '1px solid var(--border)',
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
-      flexShrink: 0,
-    }}>
+    <aside className="w-[220px] min-w-[220px] bg-surface border-r border-border flex flex-col overflow-hidden shrink-0">
       {/* Header */}
-      <div style={{
-        padding: '12px 14px',
-        borderBottom: '1px solid var(--border)',
-        flexShrink: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 8,
-      }}>
+      <div className="px-3.5 py-3 border-b border-border shrink-0 flex items-center justify-between gap-2">
         <div>
-          <div style={{
-            fontSize: 13,
-            fontWeight: 600,
-            color: 'var(--text)',
-            letterSpacing: '-0.01em',
-          }}>
+          <div className="text-[13px] font-semibold text-text tracking-[-0.01em]">
             DesignOS
           </div>
-          <div style={{
-            fontSize: 10,
-            color: 'var(--text-subtle)',
-            letterSpacing: '0.04em',
-            marginTop: 1,
-          }}>
+          <div className="text-[10px] text-text-subtle tracking-[0.04em] mt-px">
             Design System Explorer
           </div>
         </div>
@@ -128,70 +97,56 @@ export function Sidebar() {
       </div>
 
       {/* Search */}
-      <div style={{ padding: '8px 10px', flexShrink: 0, borderBottom: '1px solid var(--border)' }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          background: 'var(--surface-mid)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-md)',
-          padding: '5px 8px',
-        }}>
-          <Search size={11} color="var(--text-subtle)" />
-          <input
+      <div className="px-2.5 py-2 shrink-0 border-b border-border">
+        <div className="relative flex items-center">
+          <Search size={11} className="absolute left-2 text-text-subtle pointer-events-none" />
+          <Input
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search tokens..."
-            style={{
-              background: 'none', border: 'none', outline: 'none',
-              color: 'var(--text)', fontSize: 11.5, width: '100%',
-            }}
+            className="pl-6 h-7 text-[11.5px]"
           />
         </div>
       </div>
 
       {/* Theme switcher */}
-      <div style={{ padding: '8px 10px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
-        <div style={{ fontSize: 10, color: 'var(--text-subtle)', marginBottom: 5, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+      <div className="px-2.5 py-2 border-b border-border shrink-0">
+        <div className="text-[10px] text-text-subtle mb-1.5 font-semibold uppercase tracking-[0.08em]">
           Theme
         </div>
-        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        <div className="flex gap-1 flex-wrap">
           {themes.map(t => (
-            <button
+            <Button
               key={t.id}
               onClick={() => setActiveThemeId(t.id)}
               title={t.description}
-              style={{
-                padding: '3px 8px',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: 11,
-                fontWeight: 500,
-                border: '1px solid',
-                cursor: 'pointer',
-                background: activeTheme.id === t.id ? 'var(--accent-subtle)' : 'transparent',
-                borderColor: activeTheme.id === t.id ? 'var(--accent-border)' : 'var(--border)',
-                color: activeTheme.id === t.id ? 'var(--accent)' : 'var(--text-muted)',
-                transition: 'all 100ms',
-              }}
+              variant={activeTheme.id === t.id ? 'secondary' : 'ghost'}
+              size="sm"
+              className={
+                activeTheme.id === t.id
+                  ? 'h-6 px-2 text-[11px] bg-accent-subtle border border-accent-border text-accent'
+                  : 'h-6 px-2 text-[11px] text-text-muted'
+              }
             >
               {t.name}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       {/* Nav */}
-      <ScrollArea style={{ flex: 1 }}>
-        <nav style={{ padding: '4px 6px 16px' }}>
+      <ScrollArea className="flex-1">
+        <nav className="px-1.5 pt-1 pb-4">
           <NavSection label="Foundations">
-            <NavItemRow icon={<Palette size={12} />} label="Colors"      selected={isSelected({ type: 'primitive', id: 'color' })}      onClick={() => setSelected({ type: 'primitive', id: 'color' })} />
-            <NavItemRow icon={<Ruler size={12} />}   label="Spacing"     selected={isSelected({ type: 'primitive', id: 'spacing' })}    onClick={() => setSelected({ type: 'primitive', id: 'spacing' })} />
-            <NavItemRow icon={<Type size={12} />}    label="Typography"  selected={isSelected({ type: 'primitive', id: 'typography' })} onClick={() => setSelected({ type: 'primitive', id: 'typography' })} />
-            <NavItemRow icon={<Shapes size={12} />}  label="Radius"      selected={isSelected({ type: 'primitive', id: 'radius' })}     onClick={() => setSelected({ type: 'primitive', id: 'radius' })} />
-            <NavItemRow icon={<Zap size={12} />}     label="Motion"      selected={isSelected({ type: 'primitive', id: 'motion' })}     onClick={() => setSelected({ type: 'primitive', id: 'motion' })} />
-            <NavItemRow icon={<Shapes size={12} />}  label="Shadows"     selected={isSelected({ type: 'primitive', id: 'shadow' })}     onClick={() => setSelected({ type: 'primitive', id: 'shadow' })} />
-            <NavItemRow icon={<Zap size={12} />}     label="Icons"       selected={isSelected({ type: 'primitive', id: 'icons' })}      onClick={() => setSelected({ type: 'primitive', id: 'icons' })} />
-            <NavItemRow icon={<Wind size={12} />}       label="Liquid Glass"   selected={isSelected({ type: 'primitive', id: 'glass' })}       onClick={() => setSelected({ type: 'primitive', id: 'glass' })} />
-            <NavItemRow icon={<MousePointer2 size={12} />} label="Interaction"  selected={isSelected({ type: 'primitive', id: 'interaction' })} onClick={() => setSelected({ type: 'primitive', id: 'interaction' })} />
+            <NavItemRow icon={<Palette size={12} />}        label="Colors"       selected={isSelected({ type: 'primitive', id: 'color' })}        onClick={() => setSelected({ type: 'primitive', id: 'color' })} />
+            <NavItemRow icon={<Ruler size={12} />}          label="Spacing"      selected={isSelected({ type: 'primitive', id: 'spacing' })}      onClick={() => setSelected({ type: 'primitive', id: 'spacing' })} />
+            <NavItemRow icon={<Type size={12} />}           label="Typography"   selected={isSelected({ type: 'primitive', id: 'typography' })}   onClick={() => setSelected({ type: 'primitive', id: 'typography' })} />
+            <NavItemRow icon={<Shapes size={12} />}         label="Radius"       selected={isSelected({ type: 'primitive', id: 'radius' })}       onClick={() => setSelected({ type: 'primitive', id: 'radius' })} />
+            <NavItemRow icon={<Zap size={12} />}            label="Motion"       selected={isSelected({ type: 'primitive', id: 'motion' })}       onClick={() => setSelected({ type: 'primitive', id: 'motion' })} />
+            <NavItemRow icon={<Shapes size={12} />}         label="Shadows"      selected={isSelected({ type: 'primitive', id: 'shadow' })}       onClick={() => setSelected({ type: 'primitive', id: 'shadow' })} />
+            <NavItemRow icon={<Zap size={12} />}            label="Icons"        selected={isSelected({ type: 'primitive', id: 'icons' })}        onClick={() => setSelected({ type: 'primitive', id: 'icons' })} />
+            <NavItemRow icon={<Wind size={12} />}           label="Liquid Glass" selected={isSelected({ type: 'primitive', id: 'glass' })}        onClick={() => setSelected({ type: 'primitive', id: 'glass' })} />
+            <NavItemRow icon={<MousePointer2 size={12} />}  label="Interaction"  selected={isSelected({ type: 'primitive', id: 'interaction' })}  onClick={() => setSelected({ type: 'primitive', id: 'interaction' })} />
           </NavSection>
 
           <NavSection label="Semantic Tokens">
@@ -217,6 +172,13 @@ export function Sidebar() {
               />
             ))}
             <NavItemRow
+              icon={<MessageSquare size={12} />}
+              label="Chat Prototype"
+              selected={isSelected({ type: 'primitive', id: 'chat-prototype' })}
+              onClick={() => setSelected({ type: 'primitive', id: 'chat-prototype' })}
+              badge="new"
+            />
+            <NavItemRow
               icon={<Brain size={12} />}
               label="Compare All"
               selected={isSelected({ type: 'primitive', id: 'interaction-styles' })}
@@ -228,7 +190,7 @@ export function Sidebar() {
           <NavSection label="Components">
             {Object.entries(byCategory).map(([cat, comps]) => (
               <div key={cat}>
-                <div style={{ fontSize: 10.5, color: 'var(--text-subtle)', padding: '6px 10px 2px', fontWeight: 500 }}>{cat}</div>
+                <div className="text-[10.5px] text-text-subtle px-2.5 pt-1.5 pb-0.5 font-medium">{cat}</div>
                 {comps.map(c => (
                   <NavItemRow
                     key={c.id}

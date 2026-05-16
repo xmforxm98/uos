@@ -1,6 +1,51 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ─── Tailwind v4 theme bridge ──────────────────────────────────
+   Maps our CSS design tokens → Tailwind utility classes.
+   Use `bg-surface`, `text-accent`, `border-border` etc. everywhere.
+   DO NOT use arbitrary bg-[var(--x)] unless absolutely needed.
+──────────────────────────────────────────────────────────────── */
+@theme inline {
+  /* Backgrounds */
+  --color-background:   var(--background);
+  --color-surface:      var(--surface);
+  --color-surface-mid:  var(--surface-mid);
+  --color-surface-high: var(--surface-high);
+
+  /* Borders */
+  --color-border:        var(--border);
+  --color-border-mid:    var(--border-mid);
+  --color-border-strong: var(--border-strong);
+
+  /* Text */
+  --color-text:         var(--text);
+  --color-text-muted:   var(--text-muted);
+  --color-text-subtle:  var(--text-subtle);
+
+  /* Accent */
+  --color-accent:        var(--accent);
+  --color-accent-hover:  var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-accent-border: var(--accent-border);
+
+  /* Status */
+  --color-green:         var(--green);
+  --color-green-subtle:  var(--green-subtle);
+  --color-red:           var(--red);
+  --color-red-subtle:    var(--red-subtle);
+  --color-yellow:        var(--yellow);
+  --color-yellow-subtle: var(--yellow-subtle);
+  --color-purple:        var(--purple);
+  --color-purple-subtle: var(--purple-subtle);
+
+  /* Radius scale */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+}
+
 /* ─── OpenAI Design System ─────────────────────────────────── */
 @custom-variant dark (&:is(.dark *));
 

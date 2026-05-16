@@ -10,6 +10,7 @@ import { ThemeView } from '@/components/views/ThemeView'
 import { PatternView } from '@/components/views/PatternView'
 import { InteractionStylesView } from '@/components/views/InteractionStylesView'
 import { BehaviorProfileView } from '@/components/views/BehaviorProfileView'
+import { ChatPrototypeView } from '@/components/views/ChatPrototypeView'
 import { Layers } from 'lucide-react'
 
 function MainContent() {
@@ -32,6 +33,7 @@ function MainContent() {
 
   if (selected.type === 'component') return <ComponentView id={selected.id} />
   if (selected.type === 'primitive' && selected.id === 'interaction-styles') return <InteractionStylesView />
+  if (selected.type === 'primitive' && selected.id === 'chat-prototype') return <ChatPrototypeView />
   if (selected.type === 'primitive' && selected.id.startsWith('behavior-')) {
     return <BehaviorProfileView profileId={selected.id.replace('behavior-', '')} />
   }

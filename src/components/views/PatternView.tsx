@@ -6,6 +6,12 @@ import { getComponent } from '@/data/components'
 import { useDesignSystem } from '@/context/DesignSystemContext'
 import { resolveRadius } from '@/data/themes'
 import { CheckCircle, Layers, Sparkles, Eye } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Separator } from '@/components/ui/separator'
 
 function themeAccent(theme: string) {
   if (theme === 'dark')    return '#3b82f6'
@@ -31,14 +37,14 @@ function AuthPreview({ theme }: { theme: string }) {
   const rFull = resolveRadius('radius/full', theme)
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 480, padding: 24 }}>
+    <div className="flex justify-center items-center min-h-[480px] p-6">
       <div style={{
         background: 'var(--surface)', border: '1px solid var(--border-mid)',
         borderRadius: rCard, padding: '32px 28px', width: 340,
         boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
       }}>
         {/* Logo / brand */}
-        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+        <div className="text-center mb-6">
           <div style={{
             width: 40, height: 40, borderRadius: rFull,
             background: accent, margin: '0 auto 10px',
@@ -49,12 +55,12 @@ function AuthPreview({ theme }: { theme: string }) {
               <path d="M12 8v4l3 3"/>
             </svg>
           </div>
-          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>Sign in</div>
-          <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>to your account to continue</div>
+          <div className="text-[17px] font-bold text-text tracking-tight">Sign in</div>
+          <div className="text-xs text-text-muted mt-0.5">to your account to continue</div>
         </div>
 
         {/* OAuth */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
+        <div className="flex gap-2 mb-[18px]">
           {['Google', 'GitHub'].map(p => (
             <button key={p} style={{
               flex: 1, padding: '8px 10px', border: '1px solid var(--border-mid)',
@@ -66,22 +72,22 @@ function AuthPreview({ theme }: { theme: string }) {
               onMouseEnter={e => { e.currentTarget.style.borderColor = accent; e.currentTarget.style.background = subtle }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-mid)'; e.currentTarget.style.background = 'var(--surface-mid)' }}
             >
-              <span style={{ opacity: 0.6 }}>{p === 'Google' ? '🌐' : '⚙'}</span> {p}
+              <span className="opacity-60">{p === 'Google' ? '🌐' : '⚙'}</span> {p}
             </button>
           ))}
         </div>
 
         {/* Divider */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-          <span style={{ fontSize: 11, color: 'var(--text-subtle)' }}>or</span>
-          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="flex-1 h-px bg-border" />
+          <span className="text-[11px] text-text-subtle">or</span>
+          <div className="flex-1 h-px bg-border" />
         </div>
 
         {/* Form */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div className="flex flex-col gap-3">
           <div>
-            <label style={{ fontSize: 11.5, color: 'var(--text-muted)', display: 'block', marginBottom: 5, fontWeight: 500 }}>Email</label>
+            <label className="text-[11.5px] text-text-muted block mb-[5px] font-medium">Email</label>
             <input
               readOnly defaultValue="you@example.com"
               style={{
@@ -93,8 +99,8 @@ function AuthPreview({ theme }: { theme: string }) {
             />
           </div>
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-              <label style={{ fontSize: 11.5, color: 'var(--text-muted)', fontWeight: 500 }}>Password</label>
+            <div className="flex justify-between mb-[5px]">
+              <label className="text-[11.5px] text-text-muted font-medium">Password</label>
               <span style={{ fontSize: 11, color: accent, cursor: 'pointer' }}>Forgot?</span>
             </div>
             <input
@@ -122,14 +128,14 @@ function AuthPreview({ theme }: { theme: string }) {
         </div>
 
         {/* Footer */}
-        <p style={{ fontSize: 11, color: 'var(--text-subtle)', textAlign: 'center', marginTop: 16 }}>
+        <p className="text-[11px] text-text-subtle text-center mt-4">
           No account? <span style={{ color: accent, cursor: 'pointer' }}>Sign up free</span>
         </p>
-        <p style={{ fontSize: 10, color: 'var(--text-subtle)', textAlign: 'center', marginTop: 10 }}>
+        <p className="text-[10px] text-text-subtle text-center mt-2.5">
           By signing in you agree to our{' '}
-          <span style={{ color: 'var(--text-muted)', textDecoration: 'underline', cursor: 'pointer' }}>Terms</span>
+          <span className="text-text-muted underline cursor-pointer">Terms</span>
           {' & '}
-          <span style={{ color: 'var(--text-muted)', textDecoration: 'underline', cursor: 'pointer' }}>Privacy Policy</span>
+          <span className="text-text-muted underline cursor-pointer">Privacy Policy</span>
         </p>
       </div>
     </div>
@@ -151,22 +157,22 @@ function DashboardPreview({ theme }: { theme: string }) {
   ]
 
   const activity = [
-    { name: 'Alex Kim',  action: 'Upgraded to Pro',     time: '2m ago',  status: 'green' },
+    { name: 'Alex Kim',  action: 'Upgraded to Pro',         time: '2m ago',  status: 'green' },
     { name: 'Maya R.',   action: 'Submitted support ticket', time: '14m ago', status: 'yellow' },
     { name: 'Sam J.',    action: 'Cancelled subscription',   time: '1h ago',  status: 'red' },
-    { name: 'Tia L.',    action: 'Invited 3 teammates',  time: '3h ago',  status: 'green' },
+    { name: 'Tia L.',    action: 'Invited 3 teammates',      time: '3h ago',  status: 'green' },
   ]
 
   const initials = ['AK', 'MR', 'SJ', 'TL']
   const colors = [accent, '#d77a59', '#16a34a', '#dc2626']
 
   return (
-    <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div className="p-5 flex flex-col gap-4">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="flex items-center justify-between">
         <div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>Good morning, Alex 👋</div>
-          <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>Here&apos;s what&apos;s happening today.</div>
+          <div className="text-base font-bold text-text tracking-tight">Good morning, Alex 👋</div>
+          <div className="text-xs text-text-muted mt-0.5">Here&apos;s what&apos;s happening today.</div>
         </div>
         <button style={{
           padding: '7px 14px', borderRadius: rBtn,
@@ -178,7 +184,7 @@ function DashboardPreview({ theme }: { theme: string }) {
       </div>
 
       {/* Metrics Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+      <div className="grid grid-cols-2 gap-2.5">
         {metrics.map(m => (
           <div key={m.label} style={{
             background: 'var(--surface)', border: '1px solid var(--border-mid)',
@@ -188,8 +194,8 @@ function DashboardPreview({ theme }: { theme: string }) {
             onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.12)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
             onMouseLeave={e => { e.currentTarget.style.boxShadow = ''; e.currentTarget.style.transform = '' }}
           >
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6 }}>{m.label}</div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>{m.value}</div>
+            <div className="text-[11px] text-text-muted mb-1.5">{m.label}</div>
+            <div className="text-[20px] font-bold text-text tracking-tight">{m.value}</div>
             <span style={{
               display: 'inline-block', marginTop: 5, fontSize: 10.5, fontWeight: 600,
               padding: '2px 6px', borderRadius: rFull,
@@ -207,8 +213,8 @@ function DashboardPreview({ theme }: { theme: string }) {
         background: 'var(--surface)', border: '1px solid var(--border-mid)',
         borderRadius: rCard, overflow: 'hidden',
       }}>
-        <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Recent Activity</span>
+        <div className="px-4 py-3 border-b border-border flex justify-between items-center">
+          <span className="text-[13px] font-semibold text-text">Recent Activity</span>
           <span style={{ fontSize: 11, color: accent, cursor: 'pointer' }}>View all</span>
         </div>
         {activity.map((a, i) => (
@@ -228,19 +234,15 @@ function DashboardPreview({ theme }: { theme: string }) {
             }}>
               {initials[i]}
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--text)' }}>{a.name}</div>
-              <div style={{ fontSize: 11, color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{a.action}</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-xs font-medium text-text">{a.name}</div>
+              <div className="text-[11px] text-text-muted truncate">{a.action}</div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-              <span style={{
-                fontSize: 9.5, fontWeight: 600, padding: '2px 6px', borderRadius: rFull,
-                background: a.status === 'green' ? 'rgba(34,197,94,0.12)' : a.status === 'yellow' ? 'rgba(234,179,8,0.15)' : 'rgba(239,68,68,0.12)',
-                color: a.status === 'green' ? '#16a34a' : a.status === 'yellow' ? '#b45309' : '#dc2626',
-              }}>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <Badge variant={a.status as 'green' | 'yellow' | 'red'}>
                 {a.status === 'green' ? 'Success' : a.status === 'yellow' ? 'Pending' : 'Failed'}
-              </span>
-              <span style={{ fontSize: 10.5, color: 'var(--text-subtle)' }}>{a.time}</span>
+              </Badge>
+              <span className="text-[10.5px] text-text-subtle">{a.time}</span>
             </div>
           </div>
         ))}
@@ -279,85 +281,83 @@ function SettingsPreview({ theme }: { theme: string }) {
   }
 
   return (
-    <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <div className="p-5 flex flex-col gap-3.5">
       {/* Profile */}
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border-mid)', borderRadius: rCard, padding: '16px 18px' }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>Profile</div>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 14 }}>
-          <div style={{
-            width: 44, height: 44, borderRadius: rFull,
-            background: accent + '22', border: `2px solid ${accent}`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 14, fontWeight: 700, color: accent, flexShrink: 0,
-          }}>AK</div>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Alex Kim</div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>alex@example.com</div>
-          </div>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          {['Full name', 'Username'].map(f => (
-            <div key={f}>
-              <label style={{ fontSize: 11, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>{f}</label>
-              <input readOnly defaultValue={f === 'Full name' ? 'Alex Kim' : '@alexkim'} style={{
-                width: '100%', padding: '7px 9px',
-                border: '1px solid var(--border-mid)', borderRadius: rInput,
-                background: 'var(--surface-mid)', color: 'var(--text)',
-                fontSize: 12, outline: 'none', boxSizing: 'border-box',
-              }} />
+      <Card className="border-border-mid" style={{ borderRadius: rCard }}>
+        <CardHeader className="pb-3">
+          <CardTitle>Profile</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="flex gap-3 items-center mb-3.5">
+            <div style={{
+              width: 44, height: 44, borderRadius: rFull,
+              background: accent + '22', border: `2px solid ${accent}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 14, fontWeight: 700, color: accent, flexShrink: 0,
+            }}>AK</div>
+            <div>
+              <div className="text-[13px] font-semibold text-text">Alex Kim</div>
+              <div className="text-[11px] text-text-muted">alex@example.com</div>
             </div>
-          ))}
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
-          <button style={{
-            padding: '7px 14px', borderRadius: rBtn,
-            background: accent, color: '#fff', fontSize: 11.5, fontWeight: 600,
-            border: 'none', cursor: 'pointer',
-          }}>Save changes</button>
-        </div>
-      </div>
+          </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            {['Full name', 'Username'].map(f => (
+              <div key={f}>
+                <label className="text-[11px] text-text-muted block mb-1">{f}</label>
+                <input readOnly defaultValue={f === 'Full name' ? 'Alex Kim' : '@alexkim'} style={{
+                  width: '100%', padding: '7px 9px',
+                  border: '1px solid var(--border-mid)', borderRadius: rInput,
+                  background: 'var(--surface-mid)', color: 'var(--text)',
+                  fontSize: 12, outline: 'none', boxSizing: 'border-box',
+                }} />
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-end mt-2.5">
+            <button style={{
+              padding: '7px 14px', borderRadius: rBtn,
+              background: accent, color: '#fff', fontSize: 11.5, fontWeight: 600,
+              border: 'none', cursor: 'pointer',
+            }}>Save changes</button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Notifications */}
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border-mid)', borderRadius: rCard, padding: '16px 18px' }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 12 }}>Notifications</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <Card className="border-border-mid" style={{ borderRadius: rCard }}>
+        <CardHeader className="pb-3">
+          <CardTitle>Notifications</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0 flex flex-col gap-3">
           {[
             { key: 'emails', label: 'Email notifications', desc: 'Receive updates via email' },
             { key: 'push',   label: 'Push notifications',  desc: 'Browser push alerts' },
             { key: 'twofa',  label: 'Two-factor auth',     desc: 'Extra security layer' },
           ].map(({ key, label, desc }) => (
-            <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+            <div key={key} className="flex items-center justify-between gap-3">
               <div>
-                <div style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--text)' }}>{label}</div>
-                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{desc}</div>
+                <div className="text-[12.5px] font-medium text-text">{label}</div>
+                <div className="text-[11px] text-text-muted">{desc}</div>
               </div>
               <Toggle on={toggles[key as keyof typeof toggles]} onChange={() => setToggles(t => ({ ...t, [key]: !t[key as keyof typeof t] }))} />
             </div>
           ))}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Danger Zone */}
-      <div style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: rCard, padding: '14px 18px' }}>
-        <div style={{ fontSize: 12, fontWeight: 600, color: '#dc2626', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
+      <div className="bg-red-subtle border border-[rgba(239,68,68,0.25)] p-[14px_18px]" style={{ borderRadius: rCard }}>
+        <div className="text-xs font-semibold text-red mb-2 flex items-center gap-1.5">
           <span>⚠</span> Danger Zone
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <div className="flex items-center justify-between gap-3">
           <div>
-            <div style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--text)' }}>Delete account</div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Permanently remove your account and all data</div>
+            <div className="text-[12.5px] font-medium text-text">Delete account</div>
+            <div className="text-[11px] text-text-muted">Permanently remove your account and all data</div>
           </div>
-          <button style={{
-            padding: '6px 12px', borderRadius: rBtn, fontSize: 11.5, fontWeight: 600,
-            background: 'rgba(239,68,68,0.1)', color: '#dc2626',
-            border: '1px solid rgba(239,68,68,0.25)', cursor: 'pointer',
-            transition: 'background 100ms',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#dc2626'; e.currentTarget.style.color = '#fff' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; e.currentTarget.style.color = '#dc2626' }}
-          >
+          <Button variant="destructive" size="sm" style={{ borderRadius: rBtn }}>
             Delete
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -374,31 +374,27 @@ function BillingPreview({ theme }: { theme: string }) {
   const rFull = resolveRadius('radius/full', theme)
 
   const plans = [
-    { id: 'free',       name: 'Free',       price: '$0',   period: '/mo',  features: ['5 projects', '2 team members', '1 GB storage', 'Community support'], cta: 'Get started',  highlight: false },
-    { id: 'pro',        name: 'Pro',        price: '$29',  period: '/mo',  features: ['Unlimited projects', '10 team members', '50 GB storage', 'Priority support', 'Analytics'], cta: 'Upgrade to Pro', highlight: true },
-    { id: 'enterprise', name: 'Enterprise', price: 'Custom', period: '',   features: ['Everything in Pro', 'Unlimited members', 'SSO & SAML', 'SLA guarantee', 'Dedicated CSM'], cta: 'Contact sales', highlight: false },
+    { id: 'free',       name: 'Free',       price: '$0',    period: '/mo', features: ['5 projects', '2 team members', '1 GB storage', 'Community support'],                               cta: 'Get started',    highlight: false },
+    { id: 'pro',        name: 'Pro',        price: '$29',   period: '/mo', features: ['Unlimited projects', '10 team members', '50 GB storage', 'Priority support', 'Analytics'],         cta: 'Upgrade to Pro', highlight: true },
+    { id: 'enterprise', name: 'Enterprise', price: 'Custom', period: '',   features: ['Everything in Pro', 'Unlimited members', 'SSO & SAML', 'SLA guarantee', 'Dedicated CSM'],          cta: 'Contact sales',  highlight: false },
   ]
 
   return (
-    <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
+    <div className="p-5 flex flex-col gap-4 items-center">
       {/* Header */}
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>Choose your plan</div>
-        <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>Start free. Scale when you&apos;re ready.</div>
+      <div className="text-center">
+        <div className="text-base font-bold text-text tracking-tight">Choose your plan</div>
+        <div className="text-xs text-text-muted mt-0.5">Start free. Scale when you&apos;re ready.</div>
       </div>
 
       {/* Trial banner */}
-      <div style={{
-        background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.3)',
-        borderRadius: rBtn, padding: '8px 14px',
-        display: 'flex', alignItems: 'center', gap: 6,
-      }}>
-        <span style={{ fontSize: 11, color: '#b45309', fontWeight: 500 }}>⏰ Trial ends in 7 days</span>
-        <span style={{ fontSize: 10.5, color: '#b45309', opacity: 0.8 }}>— upgrade to keep access</span>
+      <div className="bg-yellow-subtle border border-[rgba(234,179,8,0.3)] px-3.5 py-2 flex items-center gap-1.5" style={{ borderRadius: rBtn }}>
+        <span className="text-[11px] text-yellow font-medium">⏰ Trial ends in 7 days</span>
+        <span className="text-[10.5px] text-yellow opacity-80">— upgrade to keep access</span>
       </div>
 
       {/* Plan cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, width: '100%' }}>
+      <div className="grid grid-cols-3 gap-2.5 w-full">
         {plans.map(p => (
           <div key={p.id}
             onClick={() => setSel(p.id)}
@@ -418,16 +414,16 @@ function BillingPreview({ theme }: { theme: string }) {
                 letterSpacing: '0.04em',
               }}>POPULAR</div>
             )}
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{p.name}</div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 12 }}>
+            <div className="text-[13px] font-bold text-text mb-1">{p.name}</div>
+            <div className="flex items-baseline gap-0.5 mb-3">
               <span style={{ fontSize: p.price === 'Custom' ? 16 : 22, fontWeight: 800, color: p.highlight ? accent : 'var(--text)', letterSpacing: '-0.03em' }}>{p.price}</span>
-              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{p.period}</span>
+              <span className="text-[11px] text-text-muted">{p.period}</span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginBottom: 14 }}>
+            <div className="flex flex-col gap-[5px] mb-3.5">
               {p.features.map(f => (
-                <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                <div key={f} className="flex items-center gap-[5px]">
                   <div style={{ width: 5, height: 5, borderRadius: '50%', background: p.highlight ? accent : 'var(--text-subtle)', flexShrink: 0 }} />
-                  <span style={{ fontSize: 10.5, color: 'var(--text-muted)' }}>{f}</span>
+                  <span className="text-[10.5px] text-text-muted">{f}</span>
                 </div>
               ))}
             </div>
@@ -446,9 +442,9 @@ function BillingPreview({ theme }: { theme: string }) {
       </div>
 
       {/* Trust */}
-      <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <div className="flex gap-4 items-center">
         {['🔒 SSL secured', '✓ No hidden fees', '↺ Cancel anytime'].map(t => (
-          <span key={t} style={{ fontSize: 10.5, color: 'var(--text-subtle)' }}>{t}</span>
+          <span key={t} className="text-[10.5px] text-text-subtle">{t}</span>
         ))}
       </div>
     </div>
@@ -470,9 +466,9 @@ function OnboardingPreview({ theme }: { theme: string }) {
       title: 'Create your workspace',
       desc: 'Give your team a home base.',
       content: (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="flex flex-col gap-2.5">
           <div>
-            <label style={{ fontSize: 11.5, color: 'var(--text-muted)', display: 'block', marginBottom: 5 }}>Workspace name</label>
+            <label className="text-[11.5px] text-text-muted block mb-[5px]">Workspace name</label>
             <input readOnly defaultValue="Acme Corp" style={{
               width: '100%', padding: '8px 10px', boxSizing: 'border-box',
               border: '1px solid var(--border-mid)', borderRadius: rInput,
@@ -480,7 +476,7 @@ function OnboardingPreview({ theme }: { theme: string }) {
             }} />
           </div>
           <div>
-            <label style={{ fontSize: 11.5, color: 'var(--text-muted)', display: 'block', marginBottom: 5 }}>Industry</label>
+            <label className="text-[11.5px] text-text-muted block mb-[5px]">Industry</label>
             <select style={{
               width: '100%', padding: '8px 10px', boxSizing: 'border-box',
               border: '1px solid var(--border-mid)', borderRadius: rInput,
@@ -498,9 +494,9 @@ function OnboardingPreview({ theme }: { theme: string }) {
       title: 'Invite your team',
       desc: 'Collaboration is better together.',
       content: (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="flex flex-col gap-2.5">
           {['sarah@acme.com', 'mike@acme.com'].map((e, i) => (
-            <div key={i} style={{ display: 'flex', gap: 8 }}>
+            <div key={i} className="flex gap-2">
               <input readOnly defaultValue={e} style={{
                 flex: 1, padding: '8px 10px',
                 border: '1px solid var(--border-mid)', borderRadius: rInput,
@@ -521,8 +517,8 @@ function OnboardingPreview({ theme }: { theme: string }) {
       title: 'Customize your theme',
       desc: 'Make it yours from day one.',
       content: (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+        <div className="flex flex-col gap-3">
+          <div className="grid grid-cols-3 gap-2">
             {[
               { name: 'Ocean', color: '#3b82f6' },
               { name: 'Forest', color: '#16a34a' },
@@ -535,7 +531,7 @@ function OnboardingPreview({ theme }: { theme: string }) {
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
               }}>
                 <div style={{ width: 20, height: 20, borderRadius: '50%', background: c.color }} />
-                <span style={{ fontSize: 10.5, color: 'var(--text-muted)', fontWeight: 500 }}>{c.name}</span>
+                <span className="text-[10.5px] text-text-muted font-medium">{c.name}</span>
               </button>
             ))}
           </div>
@@ -546,16 +542,16 @@ function OnboardingPreview({ theme }: { theme: string }) {
       title: 'You\'re all set! 🎉',
       desc: 'Welcome to the team.',
       content: (
-        <div style={{ textAlign: 'center', padding: '8px 0 4px' }}>
+        <div className="text-center py-2">
           <div style={{
             width: 60, height: 60, borderRadius: rFull,
             background: 'rgba(34,197,94,0.12)', border: '2px solid #16a34a',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 26, margin: '0 auto 12px',
           }}>✓</div>
-          <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.6, marginBottom: 8 }}>
+          <div className="text-[13px] text-text leading-relaxed mb-2">
             Your workspace is ready.<br />
-            <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>3 teammates invited · Ocean theme applied</span>
+            <span className="text-text-muted text-xs">3 teammates invited · Ocean theme applied</span>
           </div>
         </div>
       ),
@@ -565,19 +561,19 @@ function OnboardingPreview({ theme }: { theme: string }) {
   const total = steps.length
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 460, padding: 24 }}>
+    <div className="flex justify-center items-center min-h-[460px] p-6">
       <div style={{
         background: 'var(--surface)', border: '1px solid var(--border-mid)',
         borderRadius: rCard, padding: '28px 28px 24px', width: 360,
         boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
       }}>
         {/* Progress */}
-        <div style={{ marginBottom: 24 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontSize: 10.5, color: 'var(--text-muted)', fontWeight: 600 }}>STEP {step + 1} OF {total}</span>
+        <div className="mb-6">
+          <div className="flex justify-between mb-2">
+            <span className="text-[10.5px] text-text-muted font-semibold">STEP {step + 1} OF {total}</span>
             <span style={{ fontSize: 10.5, color: accent, fontWeight: 600 }}>{Math.round((step / (total - 1)) * 100)}%</span>
           </div>
-          <div style={{ height: 4, background: 'var(--surface-high)', borderRadius: rFull, overflow: 'hidden' }}>
+          <div className="h-1 bg-surface-high overflow-hidden" style={{ borderRadius: rFull }}>
             <div style={{
               height: '100%', borderRadius: rFull,
               background: accent,
@@ -586,7 +582,7 @@ function OnboardingPreview({ theme }: { theme: string }) {
             }} />
           </div>
           {/* Step dots */}
-          <div style={{ display: 'flex', gap: 6, marginTop: 10, justifyContent: 'center' }}>
+          <div className="flex gap-1.5 mt-2.5 justify-center">
             {steps.map((_, i) => (
               <div key={i} style={{
                 width: i === step ? 20 : 8, height: 8,
@@ -598,16 +594,16 @@ function OnboardingPreview({ theme }: { theme: string }) {
         </div>
 
         {/* Step content */}
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: 4 }}>
+        <div className="mb-5">
+          <div className="text-base font-bold text-text tracking-tight mb-1">
             {steps[step].title}
           </div>
-          <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>{steps[step].desc}</div>
+          <div className="text-xs text-text-muted mb-4">{steps[step].desc}</div>
           {steps[step].content}
         </div>
 
         {/* Navigation */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+        <div className="flex justify-between gap-2.5">
           <button
             onClick={() => setStep(s => Math.max(0, s - 1))}
             disabled={step === 0}
@@ -680,7 +676,7 @@ function AIChatPreview({ theme }: { theme: string }) {
         borderBottom: glassBorder, boxShadow: isApple ? '0 1px 0 rgba(255,255,255,0.5)' : 'none',
         flexShrink: 0,
       } as React.CSSProperties}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div className="flex items-center gap-2.5">
           <div style={{
             width: 32, height: 32, borderRadius: rFull,
             background: isApple ? `linear-gradient(135deg, ${accent}, ${accent}aa)` : accent,
@@ -696,7 +692,7 @@ function AIChatPreview({ theme }: { theme: string }) {
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div className="flex gap-1.5">
           {['⋯', '+'].map(s => (
             <button key={s} style={{
               width: 28, height: 28, borderRadius: rFull,
@@ -709,7 +705,7 @@ function AIChatPreview({ theme }: { theme: string }) {
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 8px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div className="flex-1 overflow-y-auto p-4 pb-2 flex flex-col gap-3">
         {messages.map((m, i) => (
           <div key={i} style={{ display: 'flex', flexDirection: m.role === 'user' ? 'row-reverse' : 'row', gap: 8, alignItems: 'flex-end' }}>
             {m.role === 'assistant' && (
@@ -722,7 +718,7 @@ function AIChatPreview({ theme }: { theme: string }) {
             <div style={{
               maxWidth: '72%',
               background: m.role === 'user'
-                ? (isApple ? accent : accent)
+                ? accent
                 : (isApple ? 'rgba(255,255,255,0.75)' : 'var(--surface)'),
               backdropFilter: m.role === 'assistant' && isApple ? 'blur(16px)' : 'none',
               WebkitBackdropFilter: m.role === 'assistant' && isApple ? 'blur(16px)' : 'none',
@@ -734,13 +730,13 @@ function AIChatPreview({ theme }: { theme: string }) {
               padding: '10px 14px',
               color: m.role === 'user' ? '#fff' : (isApple ? '#1c1c1e' : 'var(--text)'),
             } as React.CSSProperties}>
-              <div style={{ fontSize: 12.5, lineHeight: 1.55, whiteSpace: 'pre-wrap' }}>
+              <div className="text-[12.5px] leading-[1.55] whitespace-pre-wrap">
                 {m.text.replace(/\*\*(.*?)\*\*/g, '$1')}
               </div>
               {m.role === 'assistant' && (
-                <div style={{ display: 'flex', gap: 10, marginTop: 8, opacity: 0.5 }}>
+                <div className="flex gap-2.5 mt-2 opacity-50">
                   {['↺', '📋', '👍', '👎'].map(a => (
-                    <button key={a} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, padding: 0 }}>{a}</button>
+                    <button key={a} className="bg-transparent border-none cursor-pointer text-[11px] p-0">{a}</button>
                   ))}
                 </div>
               )}
@@ -749,7 +745,7 @@ function AIChatPreview({ theme }: { theme: string }) {
         ))}
 
         {/* Typing indicator */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+        <div className="flex items-end gap-2">
           <div style={{
             width: 26, height: 26, borderRadius: rFull, flexShrink: 0,
             background: isApple ? `linear-gradient(135deg, ${accent}, ${accent}aa)` : accent,
@@ -864,7 +860,7 @@ We're looking for an exceptional Product Design Lead to shape the interfaces tha
         border: `1px solid ${glassBorder}`, borderRadius: rCard, padding: '10px 14px',
         boxShadow: isApple ? '0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)' : 'none',
       } as React.CSSProperties}>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div className="flex gap-2 items-center">
           <select style={{
             padding: '5px 10px', borderRadius: rBtn, fontSize: 12, fontWeight: 500,
             border: `1px solid ${glassBorder}`, cursor: 'pointer',
@@ -875,7 +871,7 @@ We're looking for an exceptional Product Design Lead to shape the interfaces tha
             <option>claude-3.5-sonnet</option>
             <option>gemini-1.5-pro</option>
           </select>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div className="flex items-center gap-1.5">
             <span style={{ fontSize: 11, color: isApple ? 'rgba(60,60,67,0.5)' : 'var(--text-subtle)' }}>Temp</span>
             <div style={{ width: 60, height: 4, background: isApple ? 'rgba(0,0,0,0.1)' : 'var(--border-mid)', borderRadius: 2, position: 'relative' }}>
               <div style={{ width: '40%', height: '100%', background: accent, borderRadius: 2 }} />
@@ -884,7 +880,7 @@ We're looking for an exceptional Product Design Lead to shape the interfaces tha
             <span style={{ fontSize: 11, fontFamily: 'monospace', color: accent }}>0.7</span>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+        <div className="flex gap-1.5 items-center">
           <span style={{ fontSize: 10.5, color: isApple ? 'rgba(60,60,67,0.5)' : 'var(--text-subtle)' }}>342 / 4096 tokens</span>
         </div>
       </div>
@@ -939,15 +935,15 @@ We're looking for an exceptional Product Design Lead to shape the interfaces tha
           border: `1px solid ${glassBorder}`, borderRadius: rCard, padding: '14px 16px',
           boxShadow: isApple ? '0 4px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7)' : 'none',
         } as React.CSSProperties}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <div className="flex justify-between items-center mb-2.5">
+            <div className="flex gap-1.5 items-center">
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: streaming ? '#30d158' : accent, boxShadow: streaming ? '0 0 6px rgba(48,209,88,0.8)' : 'none' }} />
               <span style={{ fontSize: 11, fontWeight: 600, color: isApple ? 'rgba(60,60,67,0.6)' : 'var(--text-muted)' }}>
                 {streaming ? 'Generating…' : 'Output'}
               </span>
             </div>
             {!streaming && (
-              <div style={{ display: 'flex', gap: 6 }}>
+              <div className="flex gap-1.5">
                 {['📋 Copy', '↺ Retry'].map(a => (
                   <button key={a} style={{
                     padding: '4px 10px', borderRadius: rBtn, fontSize: 11,
@@ -987,16 +983,16 @@ function AICommandPreview({ theme }: { theme: string }) {
     {
       label: 'Actions',
       items: [
-        { icon: '⊕', text: 'New Project',           sub: '⌘N', accent: false },
+        { icon: '⊕', text: 'New Project',           sub: '⌘N',   accent: false },
         { icon: '⟲', text: 'Share with team…',     sub: '⌘⇧S', accent: false },
-        { icon: '⊘', text: 'Archive current space', sub: '', accent: false },
+        { icon: '⊘', text: 'Archive current space', sub: '',      accent: false },
       ],
     },
     {
       label: 'Recent',
       items: [
-        { icon: '⊙', text: 'Q3 Financial Report',  sub: 'Document · 2h ago', accent: false },
-        { icon: '⊙', text: 'Design System v2',     sub: 'Project · yesterday', accent: false },
+        { icon: '⊙', text: 'Q3 Financial Report', sub: 'Document · 2h ago',   accent: false },
+        { icon: '⊙', text: 'Design System v2',    sub: 'Project · yesterday', accent: false },
       ],
     },
   ]
@@ -1035,9 +1031,9 @@ function AICommandPreview({ theme }: { theme: string }) {
       )}
 
       {/* Backdrop scrim */}
-      <div style={{ position: 'relative', width: '100%', maxWidth: 520, zIndex: 1 }}>
+      <div className="relative w-full max-w-[520px] z-[1]">
         {/* Hint badge */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+        <div className="flex justify-center mb-3">
           <div style={{
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '5px 12px', borderRadius: rFull,
@@ -1091,7 +1087,7 @@ function AICommandPreview({ theme }: { theme: string }) {
           </div>
 
           {/* Results */}
-          <div style={{ maxHeight: 300, overflowY: 'auto' }}>
+          <div className="max-h-[300px] overflow-y-auto">
             {groups.map((g, gi) => (
               <div key={gi}>
                 <div style={{
@@ -1116,7 +1112,7 @@ function AICommandPreview({ theme }: { theme: string }) {
                       fontSize: 13, color: item.accent ? '#fff' : (isApple ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)'),
                       flexShrink: 0, boxShadow: item.accent ? `0 2px 12px ${accent}66` : 'none',
                     }}>{item.icon}</div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="flex-1 min-w-0">
                       <div style={{ fontSize: 13, color: isApple ? 'rgba(255,255,255,0.92)' : 'var(--text)', fontWeight: item.accent ? 500 : 400 }}>{item.text}</div>
                       {item.sub && <div style={{ fontSize: 11, color: isApple ? 'rgba(255,255,255,0.4)' : 'var(--text-subtle)', marginTop: 1 }}>{item.sub}</div>}
                     </div>
@@ -1141,7 +1137,7 @@ function AICommandPreview({ theme }: { theme: string }) {
             display: 'flex', gap: 14,
           }}>
             {[['↵', 'Select'], ['↑↓', 'Navigate'], ['⌘↵', 'Ask AI']].map(([key, label]) => (
-              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div key={key} className="flex items-center gap-1">
                 <kbd style={{
                   fontSize: 10,
                   background: isApple ? 'rgba(255,255,255,0.1)' : 'var(--surface-high)',
@@ -1169,171 +1165,128 @@ function PatternPreview({ id, theme }: { id: string; theme: string }) {
   if (id === 'ai-chat')        return <AIChatPreview theme={theme} />
   if (id === 'ai-generation')  return <AIGenerationPreview theme={theme} />
   if (id === 'ai-command')     return <AICommandPreview theme={theme} />
-  return <div style={{ padding: 32, color: 'var(--text-muted)', fontSize: 13 }}>Preview not available for this pattern.</div>
+  return <div className="p-8 text-text-muted text-[13px]">Preview not available for this pattern.</div>
 }
-
-/* ── Tab types ──────────────────────────────────────────────────── */
-type Tab = 'preview' | 'composition' | 'rules'
 
 /* ── Main PatternView ──────────────────────────────────────────── */
 export function PatternView({ id }: { id: string }) {
   const pattern = getPattern(id)
   const { setSelected, activeTheme } = useDesignSystem()
-  const [tab, setTab] = useState<Tab>('preview')
 
   if (!pattern) {
     return (
-      <div style={{ padding: 32, color: 'var(--text-muted)' }}>Pattern not found.</div>
+      <div className="p-8 text-text-muted">Pattern not found.</div>
     )
   }
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: 'preview',     label: 'Preview' },
-    { id: 'composition', label: 'Composition' },
-    { id: 'rules',       label: 'AI Rules' },
-  ]
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div style={{
-        padding: '16px 24px 0',
-        borderBottom: '1px solid var(--border)',
-        flexShrink: 0,
-        background: 'var(--surface)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <h1 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em' }}>
+      <div className="px-6 pt-4 pb-0 border-b border-border shrink-0 bg-surface">
+        <div className="flex items-center gap-2 mb-1">
+          <h1 className="text-[18px] font-bold tracking-tight text-text">
             {pattern.name}
           </h1>
-          <span className="chip purple">Pattern</span>
-          <span className="chip default">{pattern.category}</span>
+          <Badge variant="purple">Pattern</Badge>
+          <Badge variant="default">{pattern.category}</Badge>
         </div>
-        <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 12 }}>
+        <p className="text-[13px] text-text-muted leading-relaxed mb-3">
           {pattern.description}
         </p>
-        {/* Tabs */}
-        <div style={{ display: 'flex', gap: 2 }}>
-          {tabs.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              style={{
-                padding: '6px 14px', fontSize: 12.5, fontWeight: 500,
-                border: 'none', cursor: 'pointer',
-                borderBottom: `2px solid ${tab === t.id ? 'var(--accent)' : 'transparent'}`,
-                background: 'transparent',
-                color: tab === t.id ? 'var(--accent)' : 'var(--text-muted)',
-                transition: 'color 100ms, border-color 100ms',
-              }}
+        {/* Tabs rendered as Shadcn Tabs — we manage active state internally */}
+        <Tabs defaultValue="preview" className="w-full">
+          <TabsList className="bg-transparent p-0 h-auto gap-0 border-none">
+            <TabsTrigger
+              value="preview"
+              className="px-3.5 py-1.5 text-[12.5px] font-medium rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:text-accent data-[state=inactive]:text-text-muted bg-transparent shadow-none"
             >
-              {t.id === 'preview' && <Eye size={11} style={{ marginRight: 5, display: 'inline', verticalAlign: 'middle' }} />}
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
+              <Eye size={11} className="mr-[5px] inline align-middle" />
+              Preview
+            </TabsTrigger>
+            <TabsTrigger
+              value="composition"
+              className="px-3.5 py-1.5 text-[12.5px] font-medium rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:text-accent data-[state=inactive]:text-text-muted bg-transparent shadow-none"
+            >
+              Composition
+            </TabsTrigger>
+            <TabsTrigger
+              value="rules"
+              className="px-3.5 py-1.5 text-[12.5px] font-medium rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:text-accent data-[state=inactive]:text-text-muted bg-transparent shadow-none"
+            >
+              AI Rules
+            </TabsTrigger>
+          </TabsList>
 
-      {/* Tab body */}
-      <div style={{ flex: 1, overflowY: 'auto' }}>
-        {tab === 'preview' && (
-          <div style={{ background: 'var(--surface-mid)', minHeight: '100%' }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
-              padding: '8px 16px', borderBottom: '1px solid var(--border)',
-              background: 'var(--surface)',
-            }}>
-              <span style={{ fontSize: 11, color: 'var(--text-subtle)' }}>
-                Theme: <strong style={{ color: 'var(--text-muted)' }}>{activeTheme.name}</strong>
-              </span>
-            </div>
-            <PatternPreview id={pattern.id} theme={activeTheme.id} />
-          </div>
-        )}
+          {/* Tab body — lifted outside header padding via negative margin trick */}
+          <div className="flex-1 overflow-y-auto mt-0">
+            <TabsContent value="preview" className="m-0 bg-surface-mid min-h-full">
+              <div className="flex items-center justify-end px-4 py-2 border-b border-border bg-surface">
+                <span className="text-[11px] text-text-subtle">
+                  Theme: <strong className="text-text-muted">{activeTheme.name}</strong>
+                </span>
+              </div>
+              <PatternPreview id={pattern.id} theme={activeTheme.id} />
+            </TabsContent>
 
-        {tab === 'composition' && (
-          <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {/* Semantic purpose */}
-            <div style={{
-              background: 'var(--accent-subtle)', border: '1px solid rgba(91,110,247,0.2)',
-              borderRadius: 'var(--radius-lg)', padding: '14px 16px',
-              display: 'flex', gap: 12, alignItems: 'flex-start',
-            }}>
-              <Sparkles size={16} color="var(--accent)" style={{ flexShrink: 0, marginTop: 1 }} />
+            <TabsContent value="composition" className="m-0 p-5 flex flex-col gap-4">
+              {/* Semantic purpose */}
+              <div className="bg-accent-subtle border border-accent-border rounded-lg p-[14px_16px] flex gap-3 items-start">
+                <Sparkles size={16} className="text-accent shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-[10px] text-accent uppercase tracking-widest font-semibold mb-1">
+                    Semantic Purpose
+                  </div>
+                  <p className="text-[13px] text-text leading-relaxed">
+                    {pattern.semanticPurpose}
+                  </p>
+                </div>
+              </div>
+
+              {/* Component grid */}
               <div>
-                <div style={{ fontSize: 10, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 4 }}>
-                  Semantic Purpose
+                <div className="text-[11px] text-text-subtle font-semibold uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
+                  <Layers size={12} />
+                  Component Composition
                 </div>
-                <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.6 }}>
-                  {pattern.semanticPurpose}
-                </p>
-              </div>
-            </div>
-
-            {/* Component grid */}
-            <div>
-              <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Layers size={12} />
-                Component Composition
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
-                {pattern.components.map(cId => {
-                  const comp = getComponent(cId)
-                  return (
-                    <button
-                      key={cId}
-                      onClick={() => setSelected({ type: 'component', id: cId })}
-                      style={{
-                        background: 'var(--surface-mid)', border: '1px solid var(--border)',
-                        borderRadius: 'var(--radius-lg)', padding: '12px 14px',
-                        textAlign: 'left', cursor: 'pointer',
-                        transition: 'all 100ms',
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.borderColor = 'var(--accent)'
-                        e.currentTarget.style.background = 'var(--accent-subtle)'
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.borderColor = 'var(--border)'
-                        e.currentTarget.style.background = 'var(--surface-mid)'
-                      }}
-                    >
-                      <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text)', textTransform: 'capitalize', marginBottom: 3 }}>
-                        {comp?.name ?? cId}
-                      </div>
-                      {comp && (
-                        <div style={{ fontSize: 11, color: 'var(--text-subtle)' }}>{comp.category}</div>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {tab === 'rules' && (
-          <div style={{ padding: '20px 24px' }}>
-            <div style={{ fontSize: 11, color: 'var(--text-subtle)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Sparkles size={12} />
-              AI Generation Rules
-              <span className="chip accent">{pattern.aiConstraints.length} constraints</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {pattern.aiConstraints.map((rule, i) => (
-                <div key={i} style={{
-                  display: 'flex', gap: 10, alignItems: 'flex-start',
-                  padding: '10px 14px',
-                  background: 'var(--green-subtle)', border: '1px solid rgba(45,213,120,0.2)',
-                  borderRadius: 'var(--radius-md)',
-                }}>
-                  <CheckCircle size={13} color="var(--green)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <span style={{ fontSize: 12.5, lineHeight: 1.5, color: 'var(--text)' }}>{rule}</span>
+                <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }}>
+                  {pattern.components.map(cId => {
+                    const comp = getComponent(cId)
+                    return (
+                      <button
+                        key={cId}
+                        onClick={() => setSelected({ type: 'component', id: cId })}
+                        className="bg-surface-mid border border-border rounded-lg p-[12px_14px] text-left cursor-pointer transition-all hover:border-accent hover:bg-accent-subtle"
+                      >
+                        <div className="text-[13px] font-medium text-text capitalize mb-0.5">
+                          {comp?.name ?? cId}
+                        </div>
+                        {comp && (
+                          <div className="text-[11px] text-text-subtle">{comp.category}</div>
+                        )}
+                      </button>
+                    )
+                  })}
                 </div>
-              ))}
-            </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="rules" className="m-0 p-5">
+              <div className="text-[11px] text-text-subtle font-semibold uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
+                <Sparkles size={12} />
+                AI Generation Rules
+                <Badge variant="accent">{pattern.aiConstraints.length} constraints</Badge>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                {pattern.aiConstraints.map((rule, i) => (
+                  <div key={i} className="flex gap-2.5 items-start px-3.5 py-2.5 bg-green-subtle border border-[rgba(45,213,120,0.2)] rounded-md">
+                    <CheckCircle size={13} className="text-green shrink-0 mt-0.5" />
+                    <span className="text-[12.5px] leading-relaxed text-text">{rule}</span>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
           </div>
-        )}
+        </Tabs>
       </div>
     </div>
   )
