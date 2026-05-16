@@ -593,6 +593,19 @@ function PreviewDialog() {
 
 export function ComponentPreview({ component }: { component: ComponentDef }) {
   const { activeTheme } = useDesignSystem()
+  const accent = themeAccent(activeTheme.id)
+
+  // Inject theme accent into CSS variables so ALL previews (custom + Shadcn) respond to theme switching.
+  // Shadcn components use --color-primary / --color-ring; our custom ones use --accent.
+  const themeVars = {
+    '--accent':        accent,
+    '--accent-hover':  accent + 'dd',
+    '--accent-subtle': accent + '18',
+    '--accent-border': accent + '44',
+    '--color-accent':  accent,
+    '--color-primary': accent,
+    '--color-ring':    accent,
+  } as React.CSSProperties
 
   const renders: Record<string, React.ReactNode> = {
     button:    <PreviewButton theme={activeTheme.id} />,
@@ -613,7 +626,7 @@ export function ComponentPreview({ component }: { component: ComponentDef }) {
   }
 
   return (
-    <div>
+    <div style={themeVars}>
       <div className="preview-canvas">
         {renders[component.previewType] ?? (
           <span style={{ color: 'var(--text-subtle)', fontSize: 12 }}>Preview not available</span>
